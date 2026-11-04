@@ -1,0 +1,9 @@
+# Dependencias del proyecto. Solo visión clásica y ML tradicional:
+# NO añadir torch, tensorflow, keras, onnxruntime ni similares (ver AGENTS.md).
+opencv-contrib-python>=4.8,<5  # el manual de prácticas usa OpenCV 4.x
+numpy>=1.24
+pandas>=2.0
+scikit-image>=0.21
+scikit-learn>=1.3
+matplotlib>=3.7
+# streamlit  -> solo cuando se construya la interfaz (fase posterior)

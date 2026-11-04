@@ -1,0 +1,43 @@
+# --- Datos: nunca se versionan (ver data/README.md) ---
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.JPG
+data/**/*.png
+data/**/*.zip
+
+# Inventarios grandes regenerables
+reports/**/inventory*.csv
+
+# --- Modelos y cachés de características ---
+models/
+*.joblib
+*.pkl
+*.npy
+*.npz
+experiments/**/cache/
+
+# --- Secretos ---
+kaggle.json
+.kaggle/
+.env
+*.pem
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.ipynb_checkpoints/
+
+# --- Editores / SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias (OpenCV headless en CI)
+        run: |
+          sed 's/^opencv-contrib-python\b/opencv-contrib-python-headless/' requirements.txt > /tmp/requirements-ci.txt
+          pip install -r /tmp/requirements-ci.txt -r requirements-dev.txt
+
+      - name: Ficheros versionados < 2 MB (sin datasets ni modelos en git)
+        run: |
+          big=$(git ls-files -z | xargs -0 -r du -k | awk '$1 > 2048 {print $2 " (" $1 " KB)"}')
+          if [ -n "$big" ]; then echo "Ficheros demasiado grandes:"; echo "$big"; exit 1; fi
+
+      - name: Ruff
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Tests (incluye la guarda anti deep learning)
+        run: pytest

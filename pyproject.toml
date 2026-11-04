@@ -1,0 +1,14 @@
+# Solo configuración de herramientas (no es un paquete instalable).
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# E/W: estilo, F: errores, I: orden de imports, B: bugs habituales, UP: sintaxis moderna
+select = ["E", "W", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
