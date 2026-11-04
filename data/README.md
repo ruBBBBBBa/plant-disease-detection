@@ -62,9 +62,9 @@ las imágenes), y descargando una clase pequeña para probar el comando de desca
 - La correspondencia de la última columna es una propuesta; el mapeo definitivo se fija en T02
   en `configs/` de forma explícita.
 
-**Sin comprobar todavía (tarea T01):** contenido y formato de `leaf_grouping/`, `leaf-map.json`
-y `*_mapping.txt`; resoluciones; imágenes ilegibles; duplicados dentro y entre fuentes;
-correspondencia 1:1 entre `color` y `segmented`.
+**Auditado en T01** (`scripts/audit_dataset.py`): recuentos confirmados; resoluciones, ilegibles,
+duplicados, `color` ↔ `segmented` y agrupación por hoja en `reports/audit/*/summary.md` y en la
+«Entrega» de `docs/tasks/T01-descarga-y-auditoria.md`.
 
 ## Descarga (solo tomate, descarga parcial con git)
 
