@@ -1,12 +1,30 @@
 # T02 — Mapeo de etiquetas, manifiesto y splits sin fugas
 
-- **Estado:** Bloqueada por T01 (y por las decisiones del alumno al cerrarla)
+- **Estado:** En curso
 - **Rama:** `t02-prepare-dataset`
 - **Depende de:** T01
 - **Referencias:** `PROJECT_CONTEXT.md` §5 y §10 (pasos 4–7)
 
-> Borrador. Antes de empezar, el alumno revisa este fichero con los hallazgos de T01 y apunta
-> sus decisiones en `docs/DECISIONS.md`. Si algo de aquí choca con lo descubierto en T01, manda T01.
+## Decisiones del alumno tras T01 (mandan sobre el resto del fichero)
+
+1. **Partición (D006).** `train`/`val`/`test` solo con imágenes de PlantVillage con hoja conocida
+   según `leaf-map.json` (lógica de D009). Las que no la tienen van al manifiesto con
+   `split = excluded` y el motivo (`exclusion_reason`), y se cuentan en el resumen.
+   - *Target_Spot*: si los números de `Com.G_TgS_FL nnnn` coinciden 1:1 con los `Com.G_FL nnnn`
+     de su CSV, se usan para asignar la hoja y se genera una rejilla con las fotos de 3 hojas al
+     azar para comprobarlo visualmente; si no, *Target_Spot* queda excluida.
+   - No se usa la numeración del nombre (p. ej. `GH_HL Leaf 259.1`): solo se anota como posible ampliación.
+   - Agrupada por `leaf_group_id`, estratificada por enfermedad, 70/15/15, semilla 42.
+   - Duplicados exactos y casi-duplicados se unen en el mismo grupo.
+   - Comprobación: contar y reportar imágenes cuyo `leaf_id` es de una clase distinta a su carpeta
+     (`resolve_leaf_id` acepta un candidato único sin mirar la clase).
+2. **Subconjunto (D007).** Después de la partición, `in_subset` marca 500 sanas y 500 enfermas;
+   las enfermas a partes iguales entre las enfermedades disponibles, muestreando hojas completas
+   dentro de cada split para mantener el 70/15/15. Semilla 42.
+3. **PlantDoc (D010).** Todo el tomate es `external_test`. Se quitan los duplicados exactos
+   (se conserva una copia). `tomato_V8.jpg`: `binary_label = diseased` y `disease_name` marcado como
+   conflictivo. *Spider mites* y *yellow virus* se mantienen (para el binario son `diseased`).
+4. **`segmented` (D011).** Solo referencia para evaluar la segmentación; no entra en el manifiesto.
 
 ## Objetivo
 
