@@ -1,6 +1,6 @@
 # T02 — Mapeo de etiquetas, manifiesto y splits sin fugas
 
-- **Estado:** En curso
+- **Estado:** En revisión
 - **Rama:** `t02-prepare-dataset`
 - **Depende de:** T01
 - **Referencias:** `PROJECT_CONTEXT.md` §5 y §10 (pasos 4–7)
@@ -77,8 +77,74 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
 
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
-- **Decisiones del alumno aplicadas:**
+- **Decisiones del alumno aplicadas:** D006, D007, D010 y D011 tal como están arriba; D008 y D009
+  pasan a «Aceptada». Antes de implementar, dos choques con los datos reales que el alumno resolvió:
+  - **Subconjunto:** hay 8 enfermedades con hoja conocida y 500/8 = 62,5. Además, las hojas tienen
+    3–4 fotos. Decisión: objetivo por (enfermedad, split) redondeado, con el resto repartido por
+    semilla (4 enfermedades con 63 y 4 con 62), y se añaden hojas completas **sin pasarse**.
+  - **Umbral de casi-duplicados = 2** (configurable con `--near-dup-threshold`). Motivo en
+    «Resultados».
+  - Target_Spot: la correspondencia 1:1 se cumple, así que se usa (ver abajo).
+    **El alumno debe revisar `reports/data/target_spot_leaves.jpg`**: 3 hojas al azar, una fila por hoja.
+  - Clase del `leaf_id` distinta de la carpeta de la imagen: **0 casos**.
 - **Comandos ejecutados:**
-- **Resultados reales (distribución por split, casi-duplicados encontrados):**
+
+  ```bash
+  python scripts/prepare_dataset.py --help
+  python scripts/prepare_dataset.py            # seed 42, 70/15/15, umbral 2, 500/500 (~90 s)
+  sha1sum data/metadata.csv reports/data/split_summary.md   # 3 ejecuciones → mismos hashes
+  python scripts/prepare_dataset.py --near-dup-threshold 4 --out <tmp>/metadata.csv --reports <tmp>   # comparación de umbral
+  python scripts/audit_dataset.py --source plantvillage && python scripts/audit_dataset.py --source plantdoc --compare-with reports/audit/plantvillage/inventory.csv   # informes de T01 sin cambios tras mover md_table
+  ruff check . && ruff format --check . && pytest   # 28 passed
+  git -C data/raw/plantvillage status --short | wc -l   # 0  (igual en plantdoc)
+  ```
+
+- **Resultados reales (distribución por split, casi-duplicados encontrados):** detalle en
+  `reports/data/split_summary.md`.
+  - Manifiesto: 18.906 filas (18.160 PlantVillage + 746 PlantDoc). Usadas 13.558, excluidas 5.348.
+  - Excluidas: 5.345 de PlantVillage por `no_leaf_id` (healthy 592, late_blight 989,
+    septoria 771, YLCV 2.619, mosaic_virus 373 (entera) y early_blight 1). Además, 3 copias exactas
+    de PlantDoc (`exact_duplicate_of:<image_id>`). Ilegibles: 0.
+  - **Target_Spot:** 1.404 ficheros, 1.404 números distintos y 1.404 números en el CSV, que coinciden
+    1:1. Las 1.404 imágenes entran con su hoja del CSV.
+  - Splits de PlantVillage (imágenes / hojas): **train 8.987 / 2.248, val 1.928 / 482,
+    test 1.900 / 475**. Cada enfermedad queda ≈ 70/15/15 (p. ej. healthy 703/148/148,
+    YLCV 1.918/412/408). Las sanas usadas son 999 de 12.815 (≈ 1:12).
+  - `external_test` (PlantDoc): 743 imágenes. Entre ellas, `tomato_V8.jpg` con
+    `disease_name = conflict:bacterial_spot|septoria_leaf_spot` y `binary_label = diseased`.
+  - **Subconjunto (`in_subset`): 959 imágenes = 492 sanas (348/72/72) + 467 enfermas (56–60
+    por enfermedad; 8 en val y 8 en test por enfermedad).** Se queda por debajo de 500/500 porque
+    casi todas las hojas tienen 4 fotos: un objetivo de 9 en val solo admite 8.
+  - **Casi-duplicados:** dHash de 64 bits con distancia de Hamming ≤ 2 → **0 parejas** entre las
+    12.815 imágenes usadas de PlantVillage. También 0 duplicados exactos entre las usadas (las 14
+    parejas de T01 caen en lotes excluidos). `check_leakage` también compara PlantDoc con
+    PlantVillage: sin fugas.
+    Con `--near-dup-threshold 4`: 38 parejas, 3.205 → 3.169 grupos, y **14 grupos mezclan
+    enfermedades distintas**. Las parejas que revisé con distancia 3–4 eran hojas distintas sobre el
+    mismo fondo gris (falsos positivos): con un umbral alto se unirían hojas que no tienen nada que ver.
+  - Determinismo: tres ejecuciones con semilla 42 → `metadata.csv` y `split_summary.md` idénticos (SHA-1).
+  - `metadata.csv` pesa 6,0 MB (> 2 MB): **no se versiona** (añadido a `.gitignore`). Se regenera
+    con el comando de arriba.
+
 - **Riesgo residual de fugas:**
+  - La agrupación depende de las hojas de cálculo originales de PlantVillage. Si la misma hoja física
+    tiene dos números distintos (p. ej. en dos sesiones de captura), quedaría repartida y no se puede
+    detectar con estos datos. Un mismo número de hoja usado para dos hojas distintas solo une de más
+    (dirección segura).
+  - Fotos de hojas **distintas** de la misma planta o sesión (mismo fondo, luz y cámara) pueden caer en
+    splits distintos. No es una fuga por definición, pero hace el test interno optimista: por eso
+    existe PlantDoc como `external_test`.
+  - dHash con umbral 2 solo detecta casi-copias (recompresión, brillo). No detecta recortes, giros ni
+    cambios de escala; PlantVillage original no trae aumentos, pero no está verificado imagen a imagen.
+  - PlantDoc: solo se quitan duplicados exactos. Versiones redimensionadas de la misma imagen web
+    seguirían contando dos veces dentro de `external_test` (no es fuga, pero infla el recuento).
+
 - **Pendientes antes de empezar la segmentación:**
+  - El alumno revisa `reports/data/target_spot_leaves.jpg`. Si no parecen la misma hoja por fila,
+    Target_Spot debe pasar a excluida (D006).
+  - Aceptar o ajustar el subconjunto de 959 (492 + 467) y el tamaño minúsculo de val/test por
+    enfermedad (8 imágenes, 2 hojas): sirve para el binario, no para métricas por enfermedad.
+  - Posible ampliación anotada (no implementada): usar el número de hoja del nombre
+    (`GH_HL Leaf 259.1`, `GHLB_PS Leaf 24 Day 16`) para recuperar parte de las 5.345 excluidas.
+  - Casi-duplicados dentro de PlantDoc (redimensionados) si se quiere un `external_test` más limpio.
+  - `PROJECT_CONTEXT.md` §5 dice que `data/metadata.csv` se versiona; ahora se regenera porque pesa > 2 MB.
