@@ -148,3 +148,25 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
     (`GH_HL Leaf 259.1`, `GHLB_PS Leaf 24 Day 16`) para recuperar parte de las 5.345 excluidas.
   - Casi-duplicados dentro de PlantDoc (redimensionados) si se quiere un `external_test` más limpio.
   - `PROJECT_CONTEXT.md` §5 dice que `data/metadata.csv` se versiona; ahora se regenera porque pesa > 2 MB.
+
+## Revisión Codex
+
+- **P0 corregido (protección de originales):** `--out` y `--reports` podían apuntar a
+  `data/raw/` o a las raíces de los datasets. Ahora se rechazan antes de leer los datos,
+  resolviendo también enlaces simbólicos. No se ha escrito en los originales.
+- **P1 corregido (parámetros CLI):** un umbral negativo desactivaba silenciosamente la
+  detección de casi-duplicados. Se exige un umbral entre 0 y 64, fracciones finitas no
+  negativas que sumen 1 y tamaños de subconjunto no negativos. Pruebas de regresión incluidas.
+- **Verificación ejecutada:** `ruff check .`, `ruff format --check .` y `pytest`
+  (35 passed). Dos ejecuciones de `prepare_dataset.py --seed 42`, comparadas con `cmp`,
+  generan CSV idénticos byte a byte: SHA-1 `ad75a61155e45a37fd8703ff844c09ffa93301db`.
+  Ambas pasan `check_leakage`: 18.906 filas, 959 imágenes en el subconjunto,
+  train/val/test/external_test = 8.987/1.928/1.900/743; excluidas 5.348.
+  Se repitieron las auditorías de PlantVillage y PlantDoc con comparación entre fuentes:
+  18.160 y 746 ficheros, respectivamente; informes versionados sin cambios.
+  `git -C data/raw/plantvillage status --short` y su equivalente de PlantDoc sin cambios.
+- **Para el alumno:** revisar visualmente Target_Spot y aceptar o ajustar el subconjunto
+  de 959 imágenes. Se mantienen los riesgos residuales documentados: dHash no garantiza
+  detectar recortes o giros. Sin cambio del enfoque ni tareas posteriores implementadas.
+- **Referencia:** la tarea real de esta rama es `T02-manifiesto-y-splits.md`;
+  `T02-descarga-y-auditoria.md` no existe.
