@@ -17,6 +17,7 @@ Ejemplo:
 from __future__ import annotations
 
 import argparse
+import math
 import random
 import sys
 from pathlib import Path
@@ -72,12 +73,24 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--subset-healthy", type=int, default=500)
     parser.add_argument("--subset-diseased", type=int, default=500)
     args = parser.parse_args(argv)
-    if abs(sum(args.fractions) - 1) > 1e-9:
-        parser.error("--fractions debe sumar 1")
+    if (
+        any(not math.isfinite(f) or f < 0 for f in args.fractions)
+        or abs(sum(args.fractions) - 1) > 1e-9
+    ):
+        parser.error("--fractions debe contener valores finitos no negativos y sumar 1")
+    if not 0 <= args.near_dup_threshold <= 64:
+        parser.error("--near-dup-threshold debe estar entre 0 y 64")
+    if args.subset_healthy < 0 or args.subset_diseased < 0:
+        parser.error("Los tamaños del subconjunto deben ser no negativos")
     # Rutas relativas a la raíz del repo (no al directorio desde el que se ejecuta).
     for name in ("plantvillage_root", "plantdoc_root", "mapping", "out", "reports"):
         path = getattr(args, name)
         setattr(args, name, path if path.is_absolute() else REPO_ROOT / path)
+    # Resolver también enlaces simbólicos para proteger los originales (D006).
+    protected = [REPO_ROOT / "data/raw", args.plantvillage_root, args.plantdoc_root]
+    for output in (args.out, args.reports):
+        if any(output.resolve().is_relative_to(root.resolve()) for root in protected):
+            parser.error("Las salidas no pueden estar dentro de data/raw ni de los datasets")
     return args
 
 

@@ -223,3 +223,33 @@ def test_prepare_end_to_end(fake_raw: dict[str, Path]) -> None:
     m2 = run_prepare(fake_raw, "m2.csv")
     pd.testing.assert_frame_equal(m, m2)
     assert (fake_raw["tmp"] / "reports" / "split_summary.md").is_file()
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        ["--near-dup-threshold", "-1"],
+        ["--near-dup-threshold", "65"],
+        ["--fractions", "1", "-0.1", "0.1"],
+        ["--fractions", "nan", "0", "1"],
+        ["--subset-healthy", "-1"],
+    ],
+)
+def test_invalid_cli_parameters(options: list[str]) -> None:
+    """Rechaza parámetros que invalidan la partición o desactivan el control perceptual."""
+    with pytest.raises(SystemExit, match="2"):
+        prepare_dataset.parse_args(options)
+
+
+@pytest.mark.parametrize("option", ["--out", "--reports"])
+def test_outputs_cannot_write_raw(option: str, tmp_path: Path) -> None:
+    """Protege los datos originales incluso si la salida usa un enlace simbólico."""
+    raw = tmp_path / "originals"
+    raw.mkdir()
+    link = tmp_path / "link"
+    link.symlink_to(raw, target_is_directory=True)
+    with pytest.raises(SystemExit, match="2"):
+        prepare_dataset.parse_args(["--plantvillage-root", str(raw), option, str(link / "output")])
+    with pytest.raises(SystemExit, match="2"):
+        prepare_dataset.parse_args([option, "data/raw/output"])
+    assert list(raw.iterdir()) == []
