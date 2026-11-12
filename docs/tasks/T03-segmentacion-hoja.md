@@ -236,7 +236,7 @@ fotos propias, vídeo e interfaz. Probar técnicas no vistas en el curso sin jus
   - Mejor IoU media y p10 en enfermas.
   - Mayor cobertura no verde: no supone que la hoja sea verde, que es el punto clave de la tarea.
   - Gana con claridad en *late_blight*.
-  - Rápido (≈ 6 ms/img).
+  - Tiempo con postprocesado en la ejecución de val conservada: 18,0 ms/img.
   - Su fallo principal (sombras) está documentado. hsv_green + post es la alternativa más cercana
     en cobertura y la mejor en *yellow_leaf_curl_virus*.
 
