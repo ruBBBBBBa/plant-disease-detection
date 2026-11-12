@@ -172,9 +172,9 @@ def main(argv: list[str] | None = None) -> int:
     records, masks = [], {}
     for row in images.itertuples(index=False):
         color_path = REPO_ROOT / row.image_path
-        image = cv2.imread(str(color_path))
+        image = seg.read_image(color_path)
         ref = seg.reference_mask(
-            cv2.imread(str(seg.segmented_path(color_path))), config["reference_threshold"]
+            seg.read_image(seg.segmented_path(color_path)), config["reference_threshold"]
         )
         non_green = seg.non_green_mask(image, ref, **config["non_green"])
         rim = seg.rim_fraction(non_green, ref)
@@ -216,9 +216,9 @@ def write_overlays(df, masks, images, config, out: Path) -> None:
         tiles = []
         for case in pd.concat([typical, worst]).itertuples(index=False):
             color_path = REPO_ROOT / paths[case.image_id]
-            image = cv2.imread(str(color_path))
+            image = seg.read_image(color_path)
             ref = seg.reference_mask(
-                cv2.imread(str(seg.segmented_path(color_path))), config["reference_threshold"]
+                seg.read_image(seg.segmented_path(color_path)), config["reference_threshold"]
             )
             label = f"{case.disease_name[:12]} {case.iou:.2f}"
             tiles.append(overlay(image, ref, masks[(case.image_id, method, post)], label))

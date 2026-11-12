@@ -19,6 +19,18 @@ import pandas as pd
 # --------------------------------------------------------------------------- utilidades
 
 
+def read_image(path: Path) -> np.ndarray:
+    """Lee una imagen BGR y detiene el CLI con ayuda si falta o no se puede decodificar."""
+    image = cv2.imread(str(path))
+    if image is None:
+        raise SystemExit(
+            f"Error: no se puede leer la imagen {path}. "
+            "Comprueba que existe y no está corrupta. Descarga los datos color y segmented "
+            "siguiendo data/README.md."
+        )
+    return image
+
+
 def to_mask(binary: np.ndarray) -> np.ndarray:
     """Convierte cualquier matriz booleana o 0/1 en máscara ``uint8`` 0/255."""
     return np.where(binary, 255, 0).astype(np.uint8)

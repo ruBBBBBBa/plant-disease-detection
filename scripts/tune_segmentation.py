@@ -148,8 +148,8 @@ def main(argv: list[str] | None = None) -> int:
         sys.exit("Error: falta data/metadata.csv. Genéralo con python scripts/prepare_dataset.py.")
     metadata = pd.read_csv(args.metadata, keep_default_na=False)
     rows = seg.select_images(metadata, "train", args.sample_per_class, args.seed)
-    images = [cv2.imread(str(REPO_ROOT / p)) for p in rows["image_path"]]
-    segmented = [cv2.imread(str(seg.segmented_path(REPO_ROOT / p))) for p in rows["image_path"]]
+    images = [seg.read_image(REPO_ROOT / p) for p in rows["image_path"]]
+    segmented = [seg.read_image(seg.segmented_path(REPO_ROOT / p)) for p in rows["image_path"]]
     ref_threshold = reference_threshold(segmented)
     samples = []
     for image, segmented_image in zip(images, segmented, strict=True):

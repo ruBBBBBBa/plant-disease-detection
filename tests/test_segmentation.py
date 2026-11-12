@@ -133,3 +133,52 @@ def test_rim_fraction() -> None:
     cv2.circle(center, (30, 30), 4, 255, -1)
     assert seg.rim_fraction(ring, ref) == 1.0
     assert seg.rim_fraction(center, ref) == 0.0
+
+
+@pytest.mark.parametrize("script_name", ["evaluate_segmentation", "tune_segmentation"])
+@pytest.mark.parametrize("missing", ["color", "segmented"])
+@pytest.mark.parametrize("corrupt", [False, True])
+def test_cli_reports_unreadable_images(
+    script_name: str, missing: str, corrupt: bool, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Evaluación y ajuste identifican imágenes ausentes/corruptas antes de generar salidas."""
+    import json
+
+    from scripts import tune_segmentation
+
+    script = evaluate_segmentation if script_name == "evaluate_segmentation" else tune_segmentation
+    monkeypatch.setattr(script, "REPO_ROOT", tmp_path)
+    color = tmp_path / "raw/color/Tomato___healthy/leaf.JPG"
+    reference = tmp_path / "raw/segmented/Tomato___healthy/leaf_final_masked.jpg"
+    bad_path = color if missing == "color" else reference
+    for path in (color, reference):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path == bad_path:
+            if corrupt:
+                path.write_text("imagen ilegible")
+        else:
+            assert cv2.imwrite(str(path), synthetic_leaf()[0])
+    split = "val" if script is evaluate_segmentation else "train"
+    metadata = tmp_path / "metadata.csv"
+    pd.DataFrame(
+        [
+            {
+                "image_path": color.relative_to(tmp_path).as_posix(),
+                "source": "plantvillage",
+                "split": split,
+                "in_subset": True,
+                "disease_name": "healthy",
+            }
+        ]
+    ).to_csv(metadata, index=False)
+    config = tmp_path / "config.json"
+    config.write_text(json.dumps({"postprocess_kernel": 3, "reference_threshold": 22}))
+    out = tmp_path / "out"
+    args = ["--metadata", str(metadata), "--config", str(config), "--out", str(out)]
+    if script is evaluate_segmentation:
+        args += ["--split", "val"]
+    with pytest.raises(SystemExit) as error:
+        script.main(args)
+    assert str(bad_path) in str(error.value)
+    assert "data/README.md" in str(error.value)
+    assert not out.exists()
