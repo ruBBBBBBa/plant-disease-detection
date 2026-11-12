@@ -96,6 +96,25 @@ def test_select_subset_uses_whole_leaves_without_exceeding_targets() -> None:
         assert counts.sum() <= 30
 
 
+def test_select_subset_default_uses_all_healthy_and_matches_per_split() -> None:
+    """Por defecto: todas las sanas y, en cada split, casi tantas enfermas (nunca más)."""
+    # 20 hojas sanas y 40 enfermas (20 + 20), 4 fotos cada una: hay enfermas de sobra.
+    diseases = ["healthy"] * 20 + ["early_blight"] * 20 + ["late_blight"] * 20
+    df = pd.DataFrame(
+        [{"leaf_group_id": f"leaf{g:02d}", "disease_name": d} for g, d in enumerate(diseases)] * 4
+    )
+    df["split"] = df["leaf_group_id"].map(mf.split_groups(df, (0.7, 0.15, 0.15), seed=0))
+    df["in_subset"] = mf.select_subset(df, None, None, (0.7, 0.15, 0.15), seed=0)
+
+    healthy = df[df["disease_name"] == "healthy"]
+    assert healthy["in_subset"].all()
+    chosen = df[df["in_subset"] & (df["disease_name"] != "healthy")]
+    for split, n_healthy in healthy["split"].value_counts().items():
+        n_diseased = (chosen["split"] == split).sum()
+        assert n_healthy - 4 < n_diseased <= n_healthy  # a menos de una hoja del objetivo
+    assert set(chosen["disease_name"]) == {"early_blight", "late_blight"}
+
+
 def test_per_disease_targets_split_remainder() -> None:
     """500 entre 8 enfermedades: cuatro reciben 63 y cuatro 62; total exacto."""
     targets = mf.per_disease_targets([f"d{i}" for i in range(8)], 500, seed=42)

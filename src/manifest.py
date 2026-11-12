@@ -227,34 +227,53 @@ def split_targets(n: int, fractions: tuple[float, float, float]) -> dict[str, in
 
 def select_subset(
     df: pd.DataFrame,
-    n_healthy: int,
-    n_diseased: int,
+    n_healthy: int | None,
+    n_diseased: int | None,
     fractions: tuple[float, float, float],
     seed: int,
 ) -> pd.Series:
-    """Marca ``in_subset`` con hojas completas, sin superar el objetivo de cada celda.
+    """Marca ``in_subset`` con hojas completas, sin superar ningún objetivo (D007).
 
-    Objetivo por (enfermedad, split): sanas → ``n_healthy`` repartidas 70/15/15; enfermas →
-    ``n_diseased`` a partes iguales entre enfermedades y luego 70/15/15. En cada celda se
-    barajan las hojas (semilla) y se añade una hoja entera si cabe sin pasarse del objetivo,
-    así que el total puede quedar algo por debajo (decisión del alumno, D007).
+    - Sanas: ``n_healthy=None`` → todas las disponibles; con un número, se reparte 70/15/15.
+    - Enfermas, split a split: ``n_diseased=None`` → tantas como sanas elegidas en ese split;
+      con un número, se reparte 70/15/15. El total del split se divide a partes iguales entre
+      enfermedades (``per_disease_targets``).
+    - En cada celda (enfermedad, split) se barajan las hojas (semilla) y se añade una hoja entera
+      si cabe sin pasarse. Lo que una enfermedad no llena (las hojas tienen 3–4 fotos) pasa a la
+      siguiente, así que el total del split queda a pocas imágenes del objetivo.
     """
-    diseases = sorted(set(df["disease_name"]) - {"healthy"})
-    targets = per_disease_targets(diseases, n_diseased, seed) | {"healthy": n_healthy}
     sizes = df.groupby("leaf_group_id").size()
     strata = group_strata(df)
     group_split = df.groupby("leaf_group_id")["split"].first()
     rng = random.Random(seed)
-    chosen = set()
-    for disease in sorted(targets):
-        for split, target in split_targets(targets[disease], fractions).items():
-            groups = sorted(strata.index[(strata == disease) & (group_split == split)])
-            rng.shuffle(groups)
-            count = 0
-            for group in groups:
-                if count + sizes[group] <= target:
-                    chosen.add(group)
-                    count += sizes[group]
+    chosen: set[str] = set()
+
+    def take(disease: str, split: str, target: int) -> int:
+        """Añade hojas completas de (enfermedad, split) sin superar ``target``; devuelve cuántas."""
+        groups = sorted(strata.index[(strata == disease) & (group_split == split)])
+        rng.shuffle(groups)
+        count = 0
+        for group in groups:
+            if count + sizes[group] <= target:
+                chosen.add(group)
+                count += sizes[group]
+        return count
+
+    available = df[df["disease_name"] == "healthy"]["split"].value_counts()
+    healthy_targets = (
+        {s: int(available.get(s, 0)) for s in ("train", "val", "test")}
+        if n_healthy is None
+        else split_targets(n_healthy, fractions)
+    )
+    healthy_taken = {s: take("healthy", s, t) for s, t in healthy_targets.items()}
+
+    diseases = sorted(set(df["disease_name"]) - {"healthy"})
+    diseased_totals = healthy_taken if n_diseased is None else split_targets(n_diseased, fractions)
+    for split, total in diseased_totals.items():
+        carry = 0
+        for disease, share in per_disease_targets(diseases, total, seed).items():
+            target = share + carry
+            carry = target - take(disease, split, target)
     return df["leaf_group_id"].isin(chosen)
 
 

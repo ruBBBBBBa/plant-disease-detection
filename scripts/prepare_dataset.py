@@ -17,8 +17,10 @@ Ejemplo:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import math
 import random
+import subprocess
 import sys
 from pathlib import Path
 
@@ -70,8 +72,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=2,
         help="Distancia de Hamming máxima entre dHash (64 bits) para considerar casi-duplicados.",
     )
-    parser.add_argument("--subset-healthy", type=int, default=500)
-    parser.add_argument("--subset-diseased", type=int, default=500)
+    parser.add_argument(
+        "--subset-healthy",
+        type=int,
+        help="Sanas en el subconjunto (por defecto: todas las de hoja conocida, D007).",
+    )
+    parser.add_argument(
+        "--subset-diseased",
+        type=int,
+        help="Enfermas en el subconjunto (por defecto: tantas como sanas en cada split, D007).",
+    )
     args = parser.parse_args(argv)
     if (
         any(not math.isfinite(f) or f < 0 for f in args.fractions)
@@ -80,7 +90,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         parser.error("--fractions debe contener valores finitos no negativos y sumar 1")
     if not 0 <= args.near_dup_threshold <= 64:
         parser.error("--near-dup-threshold debe estar entre 0 y 64")
-    if args.subset_healthy < 0 or args.subset_diseased < 0:
+    if any(n is not None and n < 0 for n in (args.subset_healthy, args.subset_diseased)):
         parser.error("Los tamaños del subconjunto deben ser no negativos")
     # Rutas relativas a la raíz del repo (no al directorio desde el que se ejecuta).
     for name in ("plantvillage_root", "plantdoc_root", "mapping", "out", "reports"):
@@ -249,8 +259,33 @@ def count_table(df: pd.DataFrame, rows: list[str], column: str = "split") -> pd.
     return table.reset_index()
 
 
-def write_summary(manifest: pd.DataFrame, info: dict, args: argparse.Namespace, leaves) -> str:
-    """Escribe ``split_summary.md`` con distribución original, usada, subconjunto y fugas."""
+def git_commit(path: Path) -> str:
+    """Commit de un repositorio de datos (``data/raw/<fuente>``), o «desconocido» si no es git."""
+    result = subprocess.run(
+        ["git", "-C", str(path), "rev-parse", "HEAD"], capture_output=True, text=True, check=False
+    )
+    return result.stdout.strip() if result.returncode == 0 else "desconocido"
+
+
+def command_line(args: argparse.Namespace) -> str:
+    """Comando que reproduce esta ejecución (solo opciones de los datos y del muestreo)."""
+    parts = [
+        "python scripts/prepare_dataset.py",
+        f"--seed {args.seed}",
+        f"--fractions {' '.join(str(f) for f in args.fractions)}",
+        f"--near-dup-threshold {args.near_dup_threshold}",
+    ]
+    if args.subset_healthy is not None:
+        parts.append(f"--subset-healthy {args.subset_healthy}")
+    if args.subset_diseased is not None:
+        parts.append(f"--subset-diseased {args.subset_diseased}")
+    return " ".join(parts)
+
+
+def write_summary(
+    manifest: pd.DataFrame, info: dict, args: argparse.Namespace, leaves, csv_sha1: str
+) -> str:
+    """Escribe ``split_summary.md`` con procedencia, distribuciones, subconjunto y fugas."""
     used = manifest[manifest["split"] != "excluded"]
     excluded = manifest[manifest["split"] == "excluded"]
     subset = manifest[manifest["in_subset"]]
@@ -259,10 +294,13 @@ def write_summary(manifest: pd.DataFrame, info: dict, args: argparse.Namespace, 
     lines = [
         "# Manifiesto y splits — resumen",
         "",
-        f"Generado con `python scripts/prepare_dataset.py --seed {args.seed} "
-        f"--fractions {' '.join(str(f) for f in args.fractions)} "
-        f"--near-dup-threshold {args.near_dup_threshold} --subset-healthy {args.subset_healthy} "
-        f"--subset-diseased {args.subset_diseased}`. Decisiones: D006–D011 (`docs/DECISIONS.md`).",
+        f"Generado con `{command_line(args)}`. Decisiones: `docs/DECISIONS.md` (D006–D014).",
+        "",
+        "## Procedencia",
+        "",
+        f"- `{rel(args.out)}` (no versionado): SHA-1 `{csv_sha1}`.",
+        f"- Commit de `{rel(args.plantvillage_root)}`: `{git_commit(args.plantvillage_root)}`.",
+        f"- Commit de `{rel(args.plantdoc_root)}`: `{git_commit(args.plantdoc_root)}`.",
         "",
         f"- Filas del manifiesto: **{len(manifest)}** ({rel(args.out)}).",
         f"- Usadas: **{len(used)}**; excluidas: **{len(excluded)}**.",
@@ -329,7 +367,8 @@ def main(argv: list[str] | None = None) -> int:
     leaves = None
     if info["ts_map"]:
         leaves = target_spot_grid(manifest, args.seed, args.reports / "target_spot_leaves.jpg")
-    summary = write_summary(manifest, info, args, leaves)
+    csv_sha1 = hashlib.sha1(args.out.read_bytes()).hexdigest()
+    summary = write_summary(manifest, info, args, leaves, csv_sha1)
     (args.reports / "split_summary.md").write_text(summary, encoding="utf-8")
     counts = manifest["split"].value_counts().to_dict()
     print(f"Manifiesto: {rel(args.out)} ({len(manifest)} filas) {counts}")
