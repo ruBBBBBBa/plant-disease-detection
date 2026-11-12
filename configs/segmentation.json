@@ -1,0 +1,44 @@
+{
+  "_comment": "Parámetros ajustados con train (scripts/tune_segmentation.py). default_* se eligen con val y se conservan al volver a ajustar.",
+  "tuned_on": {
+    "split": "train",
+    "sample_per_class": 30,
+    "seed": 42
+  },
+  "tuning_criterion": "media por imagen de (IoU + cobertura no verde) / 2",
+  "reference_threshold": 22,
+  "non_green": {
+    "h_min": 30,
+    "h_max": 90,
+    "s_min": 40
+  },
+  "postprocess_kernel": 3,
+  "methods": {
+    "hsv_green": {
+      "h_min": 20,
+      "h_max": 95,
+      "s_min": 30,
+      "v_min": 20
+    },
+    "otsu": {
+      "channel_name": "ExG"
+    },
+    "kmeans": {
+      "k": 3,
+      "border_share": 0.3,
+      "features": "ab",
+      "seed": 42
+    },
+    "grabcut": {
+      "channel_name": "ExG",
+      "iterations": 3
+    },
+    "watershed": {
+      "channel_name": "ExG",
+      "erode": 5,
+      "dilate": 15
+    }
+  },
+  "default_method": "kmeans",
+  "default_postprocess": true
+}
