@@ -283,6 +283,14 @@ def svm_split_leakage(
     return result
 
 
+def md_table(df: pd.DataFrame) -> str:
+    """Convierte un DataFrame en una tabla Markdown sencilla (sin dependencias extra)."""
+    header = "| " + " | ".join(str(c) for c in df.columns) + " |"
+    sep = "|" + "---|" * len(df.columns)
+    rows = ["| " + " | ".join(str(v) for v in row) + " |" for row in df.itertuples(index=False)]
+    return "\n".join([header, sep, *rows])
+
+
 # --------------------------------------------------------------------------- ejemplos visuales
 
 

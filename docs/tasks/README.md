@@ -8,8 +8,8 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
 | T00 | Setup del repositorio, reglas para agentes y CI | Hecha | `main` |
-| [T01](T01-descarga-y-auditoria.md) | Descarga y auditoría de los datos de tomate | En revisión | `t01-audit-dataset` |
-| [T02](T02-manifiesto-y-splits.md) | Mapeo de etiquetas, manifiesto y splits sin fugas | Bloqueada por T01 y sus decisiones | `t02-prepare-dataset` |
+| [T01](T01-descarga-y-auditoria.md) | Descarga y auditoría de los datos de tomate | Hecha | `t01-audit-dataset` |
+| [T02](T02-manifiesto-y-splits.md) | Mapeo de etiquetas, manifiesto y splits sin fugas | En revisión | `t02-prepare-dataset` |
 
 **Al cerrar la fase 1 se para**: se revisa lo aprendido de los datos y se detallan las tareas
 siguientes con resultados reales delante.

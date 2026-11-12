@@ -1,0 +1,20 @@
+source,folder,species,disease_name,binary_label,notes
+plantvillage,Tomato___healthy,tomato,healthy,healthy,
+plantvillage,Tomato___Bacterial_spot,tomato,bacterial_spot,diseased,
+plantvillage,Tomato___Early_blight,tomato,early_blight,diseased,
+plantvillage,Tomato___Late_blight,tomato,late_blight,diseased,
+plantvillage,Tomato___Leaf_Mold,tomato,leaf_mold,diseased,
+plantvillage,Tomato___Septoria_leaf_spot,tomato,septoria_leaf_spot,diseased,
+plantvillage,Tomato___Spider_mites Two-spotted_spider_mite,tomato,spider_mites,diseased,plaga (ácaro); visualmente daño foliar
+plantvillage,Tomato___Target_Spot,tomato,target_spot,diseased,
+plantvillage,Tomato___Tomato_Yellow_Leaf_Curl_Virus,tomato,yellow_leaf_curl_virus,diseased,
+plantvillage,Tomato___Tomato_mosaic_virus,tomato,mosaic_virus,diseased,
+plantdoc,Tomato leaf,tomato,healthy,healthy,
+plantdoc,Tomato Early blight leaf,tomato,early_blight,diseased,
+plantdoc,Tomato Septoria leaf spot,tomato,septoria_leaf_spot,diseased,
+plantdoc,Tomato leaf bacterial spot,tomato,bacterial_spot,diseased,
+plantdoc,Tomato leaf late blight,tomato,late_blight,diseased,
+plantdoc,Tomato leaf mosaic virus,tomato,mosaic_virus,diseased,
+plantdoc,Tomato leaf yellow virus,tomato,yellow_virus,diseased,"nombre propio: correspondencia con yellow_leaf_curl_virus no confirmada (D010)"
+plantdoc,Tomato mold leaf,tomato,leaf_mold,diseased,
+plantdoc,Tomato two spotted spider mites leaf,tomato,spider_mites,diseased,solo 2 imágenes

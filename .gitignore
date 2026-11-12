@@ -9,8 +9,9 @@ data/**/*.JPG
 data/**/*.png
 data/**/*.zip
 
-# Inventarios grandes regenerables
+# Inventarios y manifiesto regenerables (> 2 MB): scripts/audit_dataset.py, scripts/prepare_dataset.py
 reports/**/inventory*.csv
+data/metadata.csv
 
 # --- Modelos y cachés de características ---
 models/

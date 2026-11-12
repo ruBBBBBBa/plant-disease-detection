@@ -58,14 +58,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return args
 
 
-def md_table(df: pd.DataFrame) -> str:
-    """Convierte un DataFrame en una tabla Markdown sencilla (sin dependencias extra)."""
-    header = "| " + " | ".join(str(c) for c in df.columns) + " |"
-    sep = "|" + "---|" * len(df.columns)
-    rows = ["| " + " | ".join(str(v) for v in row) + " |" for row in df.itertuples(index=False)]
-    return "\n".join([header, sep, *rows])
-
-
 def display_path(path: Path) -> str:
     """Ruta relativa a la raíz del repo si está dentro de él (para no imprimir rutas absolutas)."""
     try:
@@ -92,25 +84,25 @@ def summary_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[str]:
         "",
         "## Recuentos por clase",
         "",
-        md_table(counts),
+        audit.md_table(counts),
         "",
         "## Extensiones y canales",
         "",
-        md_table(inv["extension"].value_counts().rename_axis("extension").reset_index()),
+        audit.md_table(inv["extension"].value_counts().rename_axis("extension").reset_index()),
         "",
-        md_table(inv["channels"].value_counts().rename_axis("channels").reset_index()),
+        audit.md_table(inv["channels"].value_counts().rename_axis("channels").reset_index()),
         "",
         "## Resoluciones (píxeles)",
         "",
-        md_table(stats.reset_index(names="stat")),
+        audit.md_table(stats.reset_index(names="stat")),
         "",
         "Más frecuentes (ancho×alto):",
         "",
-        md_table(top_sizes.rename_axis("size").reset_index()),
+        audit.md_table(top_sizes.rename_axis("size").reset_index()),
         "",
         "## Ficheros ilegibles",
         "",
-        md_table(unreadable[["path", "class_name"]]) if len(unreadable) else "Ninguno.",
+        audit.md_table(unreadable[["path", "class_name"]]) if len(unreadable) else "Ninguno.",
         "",
         "## Duplicados exactos (mismo SHA-1)",
         "",
@@ -118,7 +110,7 @@ def summary_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[str]:
         f"- Grupos entre clases distintas: {(dups['scope'] == 'cross_class').sum()}",
         f"- Ficheros implicados: {int(dups['files'].sum())}",
         "",
-        md_table(dups[["files", "scope", "classes", "paths"]]) if len(dups) else "",
+        audit.md_table(dups[["files", "scope", "classes", "paths"]]) if len(dups) else "",
     ]
     if args.compare_with:
         other = pd.read_csv(args.compare_with)
@@ -128,7 +120,7 @@ def summary_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[str]:
             "",
             f"Comparado con `{display_path(args.compare_with)}`: **{len(cross)}** pares idénticos.",
             "",
-            md_table(cross) if len(cross) else "",
+            audit.md_table(cross) if len(cross) else "",
         ]
     return lines
 
@@ -137,7 +129,7 @@ def plantvillage_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[s
     """Secciones propias de PlantVillage: pares color/segmented y agrupación por hoja."""
     pairs = audit.pair_color_segmented(args.root / "raw" / "color", args.root / "raw" / "segmented")
     pairs = pairs[pairs["class_name"].str.lower().str.contains(args.species.lower())]
-    lines = ["## Emparejamiento color ↔ segmented (por nombre base)", "", md_table(pairs), ""]
+    lines = ["## Emparejamiento color ↔ segmented (por nombre base)", "", audit.md_table(pairs), ""]
 
     leaf_map_path = args.root / "leaf-map.json"
     if not leaf_map_path.is_file():
@@ -149,7 +141,7 @@ def plantvillage_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[s
         "`distinct_keys` = valores distintos de la parte del nombre tras `___`; "
         "`with_leaf_id` = imágenes encontradas en el mapa.",
         "",
-        md_table(audit.leaf_group_stats(inv, leaf_map)),
+        audit.md_table(audit.leaf_group_stats(inv, leaf_map)),
         "",
     ]
     mapping_dir = args.root / "data_distribution_for_SVM"
@@ -159,7 +151,7 @@ def plantvillage_sections(inv: pd.DataFrame, args: argparse.Namespace) -> list[s
         lines += [
             "## Partición `data_distribution_for_SVM` frente a la agrupación por hoja",
             "",
-            md_table(pd.DataFrame([leak])),
+            audit.md_table(pd.DataFrame([leak])),
             "",
         ]
     return lines

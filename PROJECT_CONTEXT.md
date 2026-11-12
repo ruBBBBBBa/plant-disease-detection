@@ -96,7 +96,9 @@ No hace falta buscar más datasets por defecto. Buscar datos extra cuando se obs
 
 ### Metadatos propuestos
 
-`data/metadata.csv` (o varios manifiestos por split), con campos como:
+`data/metadata.csv`, generado por `scripts/prepare_dataset.py`. **No se versiona**: pesa > 2 MB
+(límite del CI) y se regenera con el script. `reports/data/split_summary.md`, que sí se versiona,
+registra su SHA-1 y los commits de `data/raw/` para comprobar que se ha regenerado igual. Campos:
 
 | campo | significado |
 |---|---|
