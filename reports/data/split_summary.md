@@ -1,6 +1,12 @@
 # Manifiesto y splits — resumen
 
-Generado con `python scripts/prepare_dataset.py --seed 42 --fractions 0.7 0.15 0.15 --near-dup-threshold 2 --subset-healthy 500 --subset-diseased 500`. Decisiones: D006–D011 (`docs/DECISIONS.md`).
+Generado con `python scripts/prepare_dataset.py --seed 42 --fractions 0.7 0.15 0.15 --near-dup-threshold 2`. Decisiones: `docs/DECISIONS.md` (D006–D014).
+
+## Procedencia
+
+- `data/metadata.csv` (no versionado): SHA-1 `4f1e7c0bd2eb31df136e0e7e1f76333038ee985b`.
+- Commit de `data/raw/plantvillage`: `7f7ecc7e1eaca78107e3affe7cb5abd9427e139a`.
+- Commit de `data/raw/plantdoc`: `5467f6012d78d1c446145d5f582da6096f852ae8`.
 
 - Filas del manifiesto: **18906** (data/metadata.csv).
 - Usadas: **13558**; excluidas: **5348**.
@@ -73,16 +79,16 @@ Generado con `python scripts/prepare_dataset.py --seed 42 --fractions 0.7 0.15 0
 
 | binary_label | disease_name | test | train | val | total |
 |---|---|---|---|---|---|
-| diseased | bacterial_spot | 8 | 44 | 8 | 60 |
-| diseased | early_blight | 8 | 44 | 8 | 60 |
-| diseased | late_blight | 8 | 44 | 8 | 60 |
-| diseased | leaf_mold | 8 | 40 | 8 | 56 |
-| diseased | septoria_leaf_spot | 8 | 40 | 8 | 56 |
-| diseased | spider_mites | 8 | 44 | 8 | 60 |
-| diseased | target_spot | 8 | 40 | 8 | 56 |
-| diseased | yellow_leaf_curl_virus | 8 | 43 | 8 | 59 |
-| healthy | healthy | 72 | 348 | 72 | 492 |
-| total |  | 136 | 687 | 136 | 959 |
+| diseased | bacterial_spot | 16 | 88 | 16 | 120 |
+| diseased | early_blight | 20 | 88 | 20 | 128 |
+| diseased | late_blight | 20 | 88 | 20 | 128 |
+| diseased | leaf_mold | 16 | 84 | 16 | 116 |
+| diseased | septoria_leaf_spot | 20 | 88 | 20 | 128 |
+| diseased | spider_mites | 20 | 88 | 20 | 128 |
+| diseased | target_spot | 16 | 88 | 16 | 120 |
+| diseased | yellow_leaf_curl_virus | 20 | 91 | 20 | 131 |
+| healthy | healthy | 148 | 703 | 148 | 999 |
+| total |  | 296 | 1406 | 296 | 1998 |
 
 ## Grupos, duplicados y comprobaciones
 
