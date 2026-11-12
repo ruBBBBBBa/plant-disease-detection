@@ -184,3 +184,22 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
   detectar recortes o giros. Sin cambio del enfoque ni tareas posteriores implementadas.
 - **Referencia:** la tarea real de esta rama es `T02-manifiesto-y-splits.md`;
   `T02-descarga-y-auditoria.md` no existe.
+
+### Refinado Codex — raíces y comando reproducible (2026-11-12)
+
+- P1 corregido: las raíces de PlantVillage y PlantDoc externas al repositorio se rechazan
+  con un error que remite a `data/README.md`, también si se usan enlaces simbólicos.
+  El inventario usa siempre la raíz del proyecto como base de `image_path`.
+- P2 corregido: el comando del resumen registra todas las opciones y sus valores efectivos,
+  escapados con `shlex.join`. `--subset-healthy auto` y `--subset-diseased auto` expresan
+  explícitamente el comportamiento automático actual sin depender de los valores por defecto.
+- Tests sintéticos: rechazo de ambas raíces externas y enlaces; recuperación de todas las
+  opciones del comando (valores automáticos, numéricos y caracteres de shell); comprobación
+  del comando incluido en el informe de integración. `ruff check .`, `ruff format --check .`
+  y `pytest`: correctos, **40 passed**.
+- Dos ejecuciones reales de `python scripts/prepare_dataset.py`: CSV e informes idénticos
+  byte a byte (`cmp`). SHA-1 del CSV en ambas:
+  `4f1e7c0bd2eb31df136e0e7e1f76333038ee985b`. Sin fugas detectadas; 18.906 filas y
+  subconjunto de 1.998 imágenes. Partición y subconjunto sin cambios.
+  Estado git de ambos repositorios de datos sin cambios.
+- No quedan pendientes de estos dos hallazgos. Sin merge ni ampliación de alcance.

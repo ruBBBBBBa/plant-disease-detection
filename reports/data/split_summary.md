@@ -1,6 +1,6 @@
 # Manifiesto y splits — resumen
 
-Generado con `python scripts/prepare_dataset.py --seed 42 --fractions 0.7 0.15 0.15 --near-dup-threshold 2`. Decisiones: `docs/DECISIONS.md` (D006–D014).
+Generado con `python scripts/prepare_dataset.py --plantvillage-root data/raw/plantvillage --plantdoc-root data/raw/plantdoc --mapping configs/label_mapping.csv --species tomato --out data/metadata.csv --reports reports/data --fractions 0.7 0.15 0.15 --seed 42 --near-dup-threshold 2 --subset-healthy auto --subset-diseased auto`. Decisiones: `docs/DECISIONS.md` (D006–D014).
 
 ## Procedencia
 
