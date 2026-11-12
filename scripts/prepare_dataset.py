@@ -20,6 +20,7 @@ import argparse
 import hashlib
 import math
 import random
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -53,6 +54,11 @@ MANIFEST_COLUMNS = [
 ]
 
 
+def subset_size(value: str) -> int | None:
+    """Interpreta «auto» como el muestreo automático de D007, o un tamaño explícito."""
+    return None if value == "auto" else int(value)
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     """Define y lee las opciones de la línea de comandos."""
     parser = argparse.ArgumentParser(description="Manifiesto y splits sin fugas (T02).")
@@ -74,13 +80,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--subset-healthy",
-        type=int,
-        help="Sanas en el subconjunto (por defecto: todas las de hoja conocida, D007).",
+        type=subset_size,
+        help="Sanas en el subconjunto (auto: todas las de hoja conocida, D007; por defecto).",
     )
     parser.add_argument(
         "--subset-diseased",
-        type=int,
-        help="Enfermas en el subconjunto (por defecto: tantas como sanas en cada split, D007).",
+        type=subset_size,
+        help="Enfermas en el subconjunto (auto: tantas como sanas por split, D007; por defecto).",
     )
     args = parser.parse_args(argv)
     if (
@@ -96,6 +102,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     for name in ("plantvillage_root", "plantdoc_root", "mapping", "out", "reports"):
         path = getattr(args, name)
         setattr(args, name, path if path.is_absolute() else REPO_ROOT / path)
+    for name in ("plantvillage_root", "plantdoc_root"):
+        if not getattr(args, name).resolve().is_relative_to(REPO_ROOT.resolve()):
+            parser.error(
+                f"--{name.replace('_', '-')} debe estar dentro del repositorio. "
+                "Coloca los datos en data/raw/ siguiendo data/README.md."
+            )
     # Resolver también enlaces simbólicos para proteger los originales (D006).
     protected = [REPO_ROOT / "data/raw", args.plantvillage_root, args.plantdoc_root]
     for output in (args.out, args.reports):
@@ -119,7 +131,7 @@ def load_source(source: str, root: Path, species: str) -> pd.DataFrame:
     class_dirs = audit.find_class_dirs(root, source, species)
     if not class_dirs:
         sys.exit(f"Error: no hay carpetas de '{species}' en {rel(root)}.")
-    base = REPO_ROOT if root.resolve().is_relative_to(REPO_ROOT) else root.resolve()
+    base = REPO_ROOT
     df = audit.build_inventory(class_dirs, base).rename(columns={"path": "image_path"})
     df["source"] = source
     df["dhash"] = [
@@ -268,18 +280,17 @@ def git_commit(path: Path) -> str:
 
 
 def command_line(args: argparse.Namespace) -> str:
-    """Comando que reproduce esta ejecución (solo opciones de los datos y del muestreo)."""
-    parts = [
-        "python scripts/prepare_dataset.py",
-        f"--seed {args.seed}",
-        f"--fractions {' '.join(str(f) for f in args.fractions)}",
-        f"--near-dup-threshold {args.near_dup_threshold}",
-    ]
-    if args.subset_healthy is not None:
-        parts.append(f"--subset-healthy {args.subset_healthy}")
-    if args.subset_diseased is not None:
-        parts.append(f"--subset-diseased {args.subset_diseased}")
-    return " ".join(parts)
+    """Comando desde la raíz con todas las opciones efectivas, escapadas para el shell."""
+    parts = ["python", "scripts/prepare_dataset.py"]
+    for name, value in vars(args).items():
+        parts.append("--" + name.replace("_", "-"))
+        if isinstance(value, Path):
+            parts.append(rel(value))
+        elif isinstance(value, (list, tuple)):
+            parts.extend(str(v) for v in value)
+        else:
+            parts.append("auto" if value is None else str(value))
+    return shlex.join(parts)
 
 
 def write_summary(

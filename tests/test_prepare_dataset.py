@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shlex
 import shutil
 from pathlib import Path
 
@@ -220,8 +221,9 @@ def run_prepare(paths: dict[str, Path], out_name: str) -> pd.DataFrame:
     return pd.read_csv(out, keep_default_na=False)
 
 
-def test_prepare_end_to_end(fake_raw: dict[str, Path]) -> None:
+def test_prepare_end_to_end(fake_raw: dict[str, Path], monkeypatch: pytest.MonkeyPatch) -> None:
     """Manifiesto: exclusiones, PlantDoc sin duplicados y con conflicto, splits deterministas."""
+    monkeypatch.setattr(prepare_dataset, "REPO_ROOT", fake_raw["tmp"])
     m = run_prepare(fake_raw, "m1.csv")
 
     nomap = m[m["image_path"].str.contains("NOMAP")].iloc[0]
@@ -241,7 +243,13 @@ def test_prepare_end_to_end(fake_raw: dict[str, Path]) -> None:
 
     m2 = run_prepare(fake_raw, "m2.csv")
     pd.testing.assert_frame_equal(m, m2)
-    assert (fake_raw["tmp"] / "reports" / "split_summary.md").is_file()
+    summary = (fake_raw["tmp"] / "reports" / "split_summary.md").read_text()
+    command = summary.split("Generado con `", 1)[1].split("`", 1)[0]
+    recorded = prepare_dataset.parse_args(shlex.split(command)[2:])
+    assert recorded.mapping == fake_raw["mapping"]
+    assert recorded.plantvillage_root == fake_raw["pv"]
+    assert recorded.plantdoc_root == fake_raw["pd"]
+    assert recorded.subset_healthy == recorded.subset_diseased == 6
 
 
 @pytest.mark.parametrize(
@@ -261,8 +269,11 @@ def test_invalid_cli_parameters(options: list[str]) -> None:
 
 
 @pytest.mark.parametrize("option", ["--out", "--reports"])
-def test_outputs_cannot_write_raw(option: str, tmp_path: Path) -> None:
+def test_outputs_cannot_write_raw(
+    option: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Protege los datos originales incluso si la salida usa un enlace simbólico."""
+    monkeypatch.setattr(prepare_dataset, "REPO_ROOT", tmp_path)
     raw = tmp_path / "originals"
     raw.mkdir()
     link = tmp_path / "link"
@@ -272,3 +283,39 @@ def test_outputs_cannot_write_raw(option: str, tmp_path: Path) -> None:
     with pytest.raises(SystemExit, match="2"):
         prepare_dataset.parse_args([option, "data/raw/output"])
     assert list(raw.iterdir()) == []
+
+
+@pytest.mark.parametrize("option", ["--plantvillage-root", "--plantdoc-root"])
+def test_external_dataset_roots_rejected(
+    option: str, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture
+) -> None:
+    """Rechaza raíces externas, incluso a través de enlaces dentro del repositorio."""
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    monkeypatch.setattr(prepare_dataset, "REPO_ROOT", repo)
+    link = repo / "external"
+    link.symlink_to(tmp_path, target_is_directory=True)
+    for root in (tmp_path, link):
+        with pytest.raises(SystemExit, match="2"):
+            prepare_dataset.parse_args([option, str(root)])
+        assert "debe estar dentro del repositorio" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("subset", [[], ["--subset-healthy", "6", "--subset-diseased", "8"]])
+def test_command_line_records_all_effective_options(subset: list[str]) -> None:
+    """El comando conserva cada opción, incluidos auto y valores con caracteres de shell."""
+    args = prepare_dataset.parse_args(
+        ["--mapping", "configs/map '$(echo x).csv", "--species", "tomato pepper"] + subset
+    )
+    command = prepare_dataset.command_line(args)
+    tokens = shlex.split(command)
+    assert tokens[:2] == ["python", "scripts/prepare_dataset.py"]
+    assert {t for t in tokens if t.startswith("--")} == {
+        "--" + name.replace("_", "-") for name in vars(args)
+    }
+    restored = prepare_dataset.parse_args(tokens[2:])
+    restored.fractions = tuple(restored.fractions)
+    assert vars(restored) == vars(args)
+    if not subset:
+        assert tokens[tokens.index("--subset-healthy") + 1] == "auto"
+        assert tokens[tokens.index("--subset-diseased") + 1] == "auto"
