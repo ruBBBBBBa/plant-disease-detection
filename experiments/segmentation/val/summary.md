@@ -121,13 +121,13 @@ Imágenes con cobertura no verde < 0,5 y mediana de `non_green_rim_frac` (fracci
 
 | method | postprocess | ms |
 |---|---|---|
-| grabcut | False | 83.8 |
-| grabcut | True | 84.3 |
-| hsv_green | False | 0.1 |
-| hsv_green | True | 0.5 |
-| kmeans | False | 6.1 |
-| kmeans | True | 6.5 |
-| otsu | False | 0.2 |
-| otsu | True | 0.6 |
-| watershed | False | 1.0 |
-| watershed | True | 1.4 |
+| grabcut | False | 178.5 |
+| grabcut | True | 179.3 |
+| hsv_green | False | 0.3 |
+| hsv_green | True | 1.2 |
+| kmeans | False | 17.0 |
+| kmeans | True | 18.0 |
+| otsu | False | 0.5 |
+| otsu | True | 1.4 |
+| watershed | False | 1.9 |
+| watershed | True | 2.8 |

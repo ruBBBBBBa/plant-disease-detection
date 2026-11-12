@@ -156,16 +156,16 @@ fotos propias, vídeo e interfaz. Probar técnicas no vistas en el curso sin jus
 
   | Variante | IoU media / p10 | IoU enfermas media / p10 | Cob. no verde media | Cob. no verde enfermas media / p10 | ms/img |
   |---|---|---|---|---|---:|
-  | hsv_green | 0,904 / 0,810 | 0,917 / 0,835 | 0,645 | 0,670 / 0,458 | 0,1 |
-  | hsv_green + post | 0,927 / 0,848 | 0,933 / 0,850 | 0,743 | 0,754 / 0,470 | 0,5 |
-  | otsu (ExG) | 0,935 / 0,844 | 0,909 / 0,805 | 0,642 | 0,426 / 0,085 | 0,2 |
-  | otsu + post | 0,940 / 0,871 | 0,919 / 0,813 | 0,687 | 0,511 / 0,131 | 0,5 |
-  | kmeans | 0,938 / 0,858 | 0,945 / 0,893 | 0,824 | 0,704 / 0,349 | 5,5 |
-  | **kmeans + post** | **0,943 / 0,872** | **0,954 / 0,914** | **0,854** | **0,762** / 0,440 | 5,9 |
-  | grabcut | 0,911 / 0,837 | 0,900 / 0,790 | 0,741 | 0,621 / 0,214 | 76,4 |
-  | grabcut + post | 0,910 / 0,837 | 0,898 / 0,788 | 0,741 | 0,622 / 0,208 | 76,8 |
-  | watershed | 0,922 / 0,864 | 0,910 / 0,816 | 0,692 | 0,546 / 0,205 | 0,9 |
-  | watershed + post | 0,924 / 0,875 | 0,912 / 0,835 | 0,703 | 0,570 / 0,214 | 1,3 |
+  | hsv_green | 0,904 / 0,810 | 0,917 / 0,835 | 0,645 | 0,670 / 0,458 | 0,3 |
+  | hsv_green + post | 0,927 / 0,848 | 0,933 / 0,850 | 0,743 | 0,754 / 0,470 | 1,2 |
+  | otsu (ExG) | 0,935 / 0,844 | 0,909 / 0,805 | 0,642 | 0,426 / 0,085 | 0,5 |
+  | otsu + post | 0,940 / 0,871 | 0,919 / 0,813 | 0,687 | 0,511 / 0,131 | 1,4 |
+  | kmeans | 0,938 / 0,858 | 0,945 / 0,893 | 0,824 | 0,704 / 0,349 | 17,0 |
+  | **kmeans + post** | **0,943 / 0,872** | **0,954 / 0,914** | **0,854** | **0,762** / 0,440 | 18,0 |
+  | grabcut | 0,911 / 0,837 | 0,900 / 0,790 | 0,741 | 0,621 / 0,214 | 178,5 |
+  | grabcut + post | 0,910 / 0,837 | 0,898 / 0,788 | 0,741 | 0,622 / 0,208 | 179,3 |
+  | watershed | 0,922 / 0,864 | 0,910 / 0,816 | 0,692 | 0,546 / 0,205 | 1,9 |
+  | watershed + post | 0,924 / 0,875 | 0,912 / 0,835 | 0,703 | 0,570 / 0,214 | 2,8 |
 
   En *late_blight* (la enfermedad más difícil), kmeans + post saca IoU 0,912 y cobertura 0,892;
   el siguiente es hsv_green + post con 0,844 y 0,635. En sanas, el mejor es otsu (IoU 0,962).
@@ -228,7 +228,7 @@ fotos propias, vídeo e interfaz. Probar técnicas no vistas en el curso sin jus
       dentro de la máscara es una zona oscura que la fase 3 podría confundir con necrosis.
     - **Otsu (ExG) y watershed:** pierden zonas marrones o necróticas.
     - **HSV:** deja huecos y canales conectados con el exterior en hojas con brillos.
-    - **GrabCut:** hereda los cortes de Otsu y es 13 veces más lento (76 ms/img).
+    - **GrabCut:** hereda los cortes de Otsu y es unas 10 veces más lento que K-means (178,5 ms/img sin postprocesado).
 
 - **Método propuesto y por qué:** **K-means (k = 3, cromaticidad a*b*, fondo = clústeres del borde)
   + postprocesado (apertura/cierre 3×3, mayor componente, relleno de huecos)**, elegido con `val`
@@ -246,16 +246,47 @@ fotos propias, vídeo e interfaz. Probar técnicas no vistas en el curso sin jus
   - Referencia = umbral 22 + relleno de huecos.
   - Definición de «verde»: H 30–90, S ≥ 40, fijada antes de evaluar.
   - Guarda que impide ejecutar `test` sin `default_method`.
-  - D015 y D016 en `docs/DECISIONS.md` (propuestas).
+  - D015 aceptada por el alumno; D016 sigue propuesta. D017 y D018 registran las decisiones de cierre.
 
-- **Pendientes (para el alumno):**
-  - Aceptar el método por defecto (D015) o cambiarlo.
-  - Fase 3: calcular características solo dentro de la máscara y fijar con `val` un umbral de
-    área para declarar «no concluyente».
-  - **Métrica:** decidir si añadir una cobertura no verde «interior» (referencia erosionada unos
-    3 px) que no castigue el halo de la referencia. No se ha cambiado aquí porque el problema se vio
-    en `val`, y cambiar la métrica después habría sido ajustar con `val`.
-  - Sombras en K-means: posible mejora (p. ej. combinarlo con otra máscara o probar k = 4) en una
-    tarea futura, ajustando con `train`.
-  - Otros métodos del Tema 5 (crecimiento de regiones, Mean Shift): no parecen necesarios con estos
-    resultados.
+- **Decisiones de cierre del alumno:**
+  - D015 aceptada: K-means con postprocesado; configuración sin cambios.
+  - Características de la fase 3 solo dentro de la máscara. El umbral de «no concluyente»
+    se fijará en T04 con train/val (D017).
+  - No añadir cobertura interior ni probar más métodos de segmentación (D018).
+  - D016 sigue propuesta; no se cambia su estado sin una decisión explícita.
+
+
+### Revisión Codex — PR #3 (2026-11-12)
+
+- **P0:** ninguno señalado en la revisión. **P1 corregido:** las lecturas de color y
+  `segmented` se comprueban antes de construir referencias o ajustar parámetros, también al
+  generar overlays. Si falta una imagen o está corrupta, el CLI termina con la ruta y ayuda
+  de descarga en `data/README.md`. Ocho pruebas sintéticas cubren ambas imágenes, ambos scripts
+  y archivos ausentes/corruptos.
+- **Comandos ejecutados:**
+
+  ```bash
+  ruff check . && ruff format --check . && pytest  # 62 passed
+  python scripts/evaluate_segmentation.py --split val --config configs/segmentation.json --out /tmp/seg_a
+  python scripts/evaluate_segmentation.py --split val --config configs/segmentation.json --out /tmp/seg_b
+  ```
+
+- **Reproducibilidad:** `pandas.testing.assert_frame_equal(..., check_exact=True)` sobre ambos
+  CSV sin la columna `ms`: igualdad exacta de las 2.960 filas y de todas sus columnas restantes,
+  también frente al CSV de val previamente versionado. Los overlays A/B son idénticos byte a byte.
+  Los CSV completos **no son idénticos**: `ms` difiere en 2.959 filas; es tiempo medido,
+  no una salida determinista. No se han sustituido ni eliminado esos tiempos.
+- **Resultados conservados:** `per_image.csv` y `summary.md` de val proceden de `/tmp/seg_a`.
+  La tabla de val y el comentario de GrabCut de esta Entrega reflejan sus tiempos. La ejecución B
+  dio K-means 15,1/15,9 ms y GrabCut 157,4/158,1 ms, sin/con postprocesado; la A conservada,
+  17,0/18,0 y 178,5/179,3 ms, respectivamente. Las métricas no temporales no cambian.
+- **Congelación:** `configs/segmentation.json` coincide con `7eb054c`. No se ha ejecutado
+  el split `test`, ni se han cambiado sus resultados; el fallo de lectura no obliga a repetirlo.
+  Tampoco se ha repetido el ajuste real de parámetros: su ruta de error se prueba con datos
+  sintéticos. `data/raw/plantvillage` sin cambios según git.
+- **Decisiones:** D015 aceptada; D017 y D018 recogen las instrucciones de cierre del alumno.
+- **Pendientes P2:** completar medianas y Dice por enfermedad en los resúmenes; corregir la
+  interpretación de `non_green_rim_frac` (denominador = todos los píxeles no verdes de la
+  referencia, no solo los no cubiertos; no identifica lesiones ni halo). Se mantienen las
+  métricas actuales y no se añade cobertura interior. La discrepancia de tiempos queda
+  corregida al conservar la ejecución A y sincronizar la Entrega. D016 sigue propuesta.
