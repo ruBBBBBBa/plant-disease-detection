@@ -1,6 +1,6 @@
 # T03 — Segmentación clásica de la hoja (PlantVillage)
 
-- **Estado:** Pendiente (siguiente)
+- **Estado:** En revisión
 - **Rama:** `t03-leaf-segmentation`
 - **Depende de:** T02
 - **Referencias:** `PROJECT_CONTEXT.md` §6 (pipeline y consideraciones sobre segmentación);
@@ -118,10 +118,144 @@ fotos propias, vídeo e interfaz. Probar técnicas no vistas en el curso sin jus
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
 - **Comandos ejecutados:**
-- **Resultados reales en `val` (tabla por método):**
-- **Resultados reales en `test` (ejecución única, todo congelado):**
+
+  ```bash
+  sha1sum data/metadata.csv        # 4f1e7c0b… = reports/data/split_summary.md (no hizo falta regenerarlo)
+  python scripts/tune_segmentation.py --sample-per-class 30 --seed 42      # solo train (270 imágenes), ~2 min
+  python scripts/evaluate_segmentation.py --split val --out experiments/segmentation/val     # 296 imágenes, ~30 s
+  # elección con val → configs/segmentation.json: default_method=kmeans, default_postprocess=true
+  # commit 7eb054c con todo congelado; después, una sola vez:
+  python scripts/evaluate_segmentation.py --split test --out experiments/segmentation/test
+  ruff check . && ruff format --check . && pytest        # 54 passed
+  git -C data/raw/plantvillage status --short | wc -l    # 0
+  ```
+
+  `tune_segmentation.py` es un script más de los que pedía la tarea: separa el ajuste (`train`)
+  de la evaluación. `evaluate_segmentation.py --split test` se niega a ejecutarse si la
+  configuración no tiene `default_method`, para no poder mirar `test` antes de elegir. Volver a
+  ejecutar el ajuste y `val` con el código final da la misma configuración y métricas idénticas por
+  imagen (comprobado). Tiempos medidos en Intel i7-1355U, Linux, un hilo de Python.
+
+- **Ajuste con `train`** (`experiments/segmentation/tuning_train/summary.md`, 30 imágenes por
+  enfermedad, semilla 42):
+  - **Criterio:** media por imagen de (IoU + cobertura no verde) / 2. Con solo IoU, los métodos
+    «de verde» ganan aunque pierdan lesiones, porque la mayoría de los píxeles de hoja son verdes.
+  - Umbral de la referencia: **22** (valle del histograma de `max(B,G,R)` en `segmented`).
+  - Otsu (M2): canal **ExG**, con score 0,68 (S 0,55, a* 0,63, L* 0,41).
+  - M1: H 20–95, S ≥ 30, V ≥ 20.
+  - M3: **k = 3 sobre (a*, b*)** con la regla del borde (`border_share` 0,3; 0,3–0,5 dan lo mismo).
+  - M4: 3 iteraciones. M5: erosión 5, dilatación 15. Núcleo del postprocesado: 3.
+  - **Dos correcciones de K-means durante el ajuste, ambas con `train`:**
+    - La regla inicial «fondo = clúster de menor croma» fallaba cuando el fondo se partía en dos
+      clústeres (iluminado y sombra), con IoU 0,54. Se sustituyó por «fondo = clústeres que ocupan
+      el borde».
+    - Con Lab completo la luminosidad domina la distancia (IoU 0,52); con solo (a*, b*), 0,93.
+      Ambas variantes quedan en `tuning.csv`.
+
+- **Resultados reales en `val`** (296 imágenes; detalle en `experiments/segmentation/val/summary.md`):
+
+  | Variante | IoU media / p10 | IoU enfermas media / p10 | Cob. no verde media | Cob. no verde enfermas media / p10 | ms/img |
+  |---|---|---|---|---|---:|
+  | hsv_green | 0,904 / 0,810 | 0,917 / 0,835 | 0,645 | 0,670 / 0,458 | 0,1 |
+  | hsv_green + post | 0,927 / 0,848 | 0,933 / 0,850 | 0,743 | 0,754 / 0,470 | 0,5 |
+  | otsu (ExG) | 0,935 / 0,844 | 0,909 / 0,805 | 0,642 | 0,426 / 0,085 | 0,2 |
+  | otsu + post | 0,940 / 0,871 | 0,919 / 0,813 | 0,687 | 0,511 / 0,131 | 0,5 |
+  | kmeans | 0,938 / 0,858 | 0,945 / 0,893 | 0,824 | 0,704 / 0,349 | 5,5 |
+  | **kmeans + post** | **0,943 / 0,872** | **0,954 / 0,914** | **0,854** | **0,762** / 0,440 | 5,9 |
+  | grabcut | 0,911 / 0,837 | 0,900 / 0,790 | 0,741 | 0,621 / 0,214 | 76,4 |
+  | grabcut + post | 0,910 / 0,837 | 0,898 / 0,788 | 0,741 | 0,622 / 0,208 | 76,8 |
+  | watershed | 0,922 / 0,864 | 0,910 / 0,816 | 0,692 | 0,546 / 0,205 | 0,9 |
+  | watershed + post | 0,924 / 0,875 | 0,912 / 0,835 | 0,703 | 0,570 / 0,214 | 1,3 |
+
+  En *late_blight* (la enfermedad más difícil), kmeans + post saca IoU 0,912 y cobertura 0,892;
+  el siguiente es hsv_green + post con 0,844 y 0,635. En sanas, el mejor es otsu (IoU 0,962).
+
+- **Resultados reales en `test`** (ejecución única tras el commit `7eb054c`, todo congelado;
+  `experiments/segmentation/test/summary.md`):
+
+  | Variante | IoU media / p10 | IoU enfermas media / p10 | Cob. no verde media | Cob. no verde enfermas media / p10 |
+  |---|---|---|---|---|
+  | hsv_green | 0,900 / 0,820 | 0,894 / 0,772 | 0,636 | 0,621 / 0,381 |
+  | hsv_green + post | 0,923 / 0,855 | 0,911 / 0,820 | 0,728 | 0,694 / 0,424 |
+  | otsu | 0,922 / 0,858 | 0,883 / 0,736 | 0,620 | 0,370 / 0,059 |
+  | otsu + post | 0,931 / 0,883 | 0,900 / 0,796 | 0,672 | 0,468 / 0,064 |
+  | kmeans | 0,926 / 0,834 | 0,922 / 0,843 | 0,824 | 0,702 / 0,273 |
+  | **kmeans + post** (elegido) | **0,932** / 0,834 | **0,932 / 0,843** | **0,859** | **0,768 / 0,429** |
+  | grabcut | 0,902 / 0,826 | 0,883 / 0,772 | 0,728 | 0,598 / 0,158 |
+  | grabcut + post | 0,903 / 0,823 | 0,885 / 0,771 | 0,734 | 0,610 / 0,155 |
+  | watershed | 0,911 / 0,872 | 0,887 / 0,751 | 0,679 | 0,510 / 0,118 |
+  | watershed + post | 0,914 / 0,873 | 0,892 / 0,773 | 0,689 | 0,531 / 0,117 |
+
+  En `test` se confirma el orden de `val` en lo que importa: kmeans + post tiene la mayor IoU
+  media en enfermas y la mayor cobertura no verde. Otsu + post tiene mejor p10 global
+  (0,883 frente a 0,834), gracias a las sanas, pero en enfermas cubre menos de la mitad de lo no
+  verde (0,468). *Late_blight* en test: kmeans + post IoU 0,834 y cobertura 0,892; hsv + post 0,788 y 0,577.
+
 - **Cobertura de zonas no verdes — hallazgos:**
+  - **Sí: el umbral de verde (M1) pierde lesiones.** En `val`, sin postprocesado, 35 imágenes
+    quedan con cobertura < 0,5, y en ellas solo el 25 % de los píxeles no verdes está en el borde
+    de la referencia: el resto son **lesiones interiores** fuera de la máscara. El relleno de huecos
+    recupera las interiores (20 imágenes, ahora 81 % en el borde). Sube la cobertura en enfermas de
+    0,670 a 0,754 en `val` y de 0,621 a 0,694 en `test`. Las lesiones que tocan el borde de la hoja
+    no se recuperan.
+  - Otsu sobre ExG (un índice de verdor) es el que más pierde: cobertura en enfermas de 0,43 (val)
+    y 0,37 (test) sin postprocesado. En *late_blight* corta la hoja por la necrosis (ver
+    `overlay_otsu.jpg`).
+  - K-means con (a*, b*) no exige que la hoja sea verde y es el que más cubre.
+  - **Límite de la métrica:** cuando quedan pocos píxeles no verdes, muchos están en el halo de la
+    referencia (sombra o fondo pegados al borde), no en lesiones. En kmeans + post, de las 19
+    imágenes de `val` con cobertura < 0,5, una mediana del 95 % de lo no cubierto está a ≤ 3 px del
+    borde (87 % en `test`). Así se explica la cobertura baja de *yellow_leaf_curl_virus* en `test`
+    (0,514): IoU 0,979, mediana de 401 píxeles no verdes y un 97 % en el borde en los casos bajos.
+    La columna `non_green_rim_frac` y la tabla «Diagnóstico» de cada `summary.md` lo reproducen.
+
 - **Fallos típicos y defectos de la referencia:**
-- **Método propuesto y por qué:**
+  - Defectos de `segmented`: `experiments/segmentation/tuning_train/reference_examples.jpg` (de
+    `train`; columnas color | segmented | referencia).
+    - **Pierde necrosis oscura**: en *late_blight* muy oscura quedan solo fragmentos de la hoja.
+    - **Recorta lesiones del borde.**
+    - **Trunca alguna hoja sana.**
+    - **Incluye sombra.**
+    - **Sobre fondo azul incluye gran parte del fondo.**
+    - Además, `segmented` está **aclarado** respecto a `color` (×1,14–1,25 por canal) pero
+      alineado píxel a píxel (desplazamiento óptimo (0,0) en 80 de 80 imágenes). Por eso solo se usa
+      su geometría, y los colores salen siempre de `color`.
+  - Consecuencia: parte de los peores casos de los métodos son errores de la referencia. Por
+    ejemplo, el peor de kmeans en `val` (*late_blight*, IoU 0,52) es una hoja que el método segmenta
+    entera y la referencia recorta.
+  - Fallos de los métodos (rejillas `overlay_*.jpg` de `val` y `test`, fila 2 = 8 peores):
+    - **K-means:** incluye sombras marcadas del fondo (sanas con IoU 0,70–0,75). Ojo: una sombra
+      dentro de la máscara es una zona oscura que la fase 3 podría confundir con necrosis.
+    - **Otsu (ExG) y watershed:** pierden zonas marrones o necróticas.
+    - **HSV:** deja huecos y canales conectados con el exterior en hojas con brillos.
+    - **GrabCut:** hereda los cortes de Otsu y es 13 veces más lento (76 ms/img).
+
+- **Método propuesto y por qué:** **K-means (k = 3, cromaticidad a*b*, fondo = clústeres del borde)
+  + postprocesado (apertura/cierre 3×3, mayor componente, relleno de huecos)**, elegido con `val`
+  (D015):
+  - Mejor IoU media y p10 en enfermas.
+  - Mayor cobertura no verde: no supone que la hoja sea verde, que es el punto clave de la tarea.
+  - Gana con claridad en *late_blight*.
+  - Rápido (≈ 6 ms/img).
+  - Su fallo principal (sombras) está documentado. hsv_green + post es la alternativa más cercana
+    en cobertura y la mejor en *yellow_leaf_curl_virus*.
+
 - **Decisiones tomadas durante la tarea:**
-- **Pendientes:**
+  - Criterio de ajuste combinado IoU/cobertura.
+  - Regla del borde y (a*, b*) en K-means.
+  - Referencia = umbral 22 + relleno de huecos.
+  - Definición de «verde»: H 30–90, S ≥ 40, fijada antes de evaluar.
+  - Guarda que impide ejecutar `test` sin `default_method`.
+  - D015 y D016 en `docs/DECISIONS.md` (propuestas).
+
+- **Pendientes (para el alumno):**
+  - Aceptar el método por defecto (D015) o cambiarlo.
+  - Fase 3: calcular características solo dentro de la máscara y fijar con `val` un umbral de
+    área para declarar «no concluyente».
+  - **Métrica:** decidir si añadir una cobertura no verde «interior» (referencia erosionada unos
+    3 px) que no castigue el halo de la referencia. No se ha cambiado aquí porque el problema se vio
+    en `val`, y cambiar la métrica después habría sido ajustar con `val`.
+  - Sombras en K-means: posible mejora (p. ej. combinarlo con otra máscara o probar k = 4) en una
+    tarea futura, ajustando con `train`.
+  - Otros métodos del Tema 5 (crecimiento de regiones, Mean Shift): no parecen necesarios con estos
+    resultados.

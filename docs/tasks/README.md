@@ -15,7 +15,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T03](T03-segmentacion-hoja.md) | Segmentación clásica de la hoja y comparación frente a `segmented` | Pendiente — **siguiente** | `t03-leaf-segmentation` |
+| [T03](T03-segmentacion-hoja.md) | Segmentación clásica de la hoja y comparación frente a `segmented` | En revisión | `t03-leaf-segmentation` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
