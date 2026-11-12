@@ -18,9 +18,10 @@
    - Duplicados exactos y casi-duplicados se unen en el mismo grupo.
    - Comprobación: contar y reportar imágenes cuyo `leaf_id` es de una clase distinta a su carpeta
      (`resolve_leaf_id` acepta un candidato único sin mirar la clase).
-2. **Subconjunto (D007).** Después de la partición, `in_subset` marca 500 sanas y 500 enfermas;
-   las enfermas a partes iguales entre las enfermedades disponibles, muestreando hojas completas
-   dentro de cada split para mantener el 70/15/15. Semilla 42.
+2. **Subconjunto (D007, revisada al cerrar T02).** Después de la partición, `in_subset` marca
+   **todas** las sanas con hoja conocida y, en cada split, el mismo número de enfermas, a partes
+   iguales entre las enfermedades disponibles y por hojas completas. Semilla 42. Es el comportamiento
+   por defecto de `prepare_dataset.py` sin argumentos. (Primera versión: 500 sanas / 500 enfermas.)
 3. **PlantDoc (D010).** Todo el tomate es `external_test`. Se quitan los duplicados exactos
    (se conserva una copia). `tomato_V8.jpg`: `binary_label = diseased` y `disease_name` marcado como
    conflictivo. *Spider mites* y *yellow virus* se mantienen (para el binario son `diseased`).
@@ -71,7 +72,8 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
 
 - [ ] Ejecutar dos veces `prepare_dataset.py` con la misma semilla produce el mismo `metadata.csv`.
 - [ ] `check_leakage` pasa sobre el manifiesto real y su test demuestra que detecta fugas.
-- [ ] `split_summary.md` con distribuciones reales versionado; `metadata.csv` versionado si pesa < 2 MB.
+- [ ] `split_summary.md` con distribuciones reales versionado. `metadata.csv` **no se versiona** (pesa > 2 MB);
+      `split_summary.md` registra su SHA-1 y el commit de `data/raw/plantvillage` (y de `plantdoc`).
 - [ ] `ruff` y `pytest` en verde; `data/raw/` intacto.
 - [ ] La entrega explica el riesgo residual de fugas que quede.
 
@@ -84,18 +86,24 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
     semilla (4 enfermedades con 63 y 4 con 62), y se añaden hojas completas **sin pasarse**.
   - **Umbral de casi-duplicados = 2** (configurable con `--near-dup-threshold`). Motivo en
     «Resultados».
-  - Target_Spot: la correspondencia 1:1 se cumple, así que se usa (ver abajo).
-    **El alumno debe revisar `reports/data/target_spot_leaves.jpg`**: 3 hojas al azar, una fila por hoja.
+  - Target_Spot: la correspondencia 1:1 se cumple, así que se usa (ver abajo). El alumno revisó
+    `reports/data/target_spot_leaves.jpg` (3 hojas al azar, una fila por hoja): cada fila es la
+    misma hoja → **Target_Spot queda incluida** (D013).
+  - **Cierre de T02 (revisión del alumno):** subconjunto con todas las sanas disponibles y el mismo
+    número de enfermas (D007 revisada); protocolo de evaluación documentado (D014); `metadata.csv`
+    no versionado, con su SHA-1 y los commits de los datos en `split_summary.md`. La partición no cambia.
   - Clase del `leaf_id` distinta de la carpeta de la imagen: **0 casos**.
 - **Comandos ejecutados:**
 
   ```bash
   python scripts/prepare_dataset.py --help
-  python scripts/prepare_dataset.py            # seed 42, 70/15/15, umbral 2, 500/500 (~90 s)
-  sha1sum data/metadata.csv reports/data/split_summary.md   # 3 ejecuciones → mismos hashes
+  python scripts/prepare_dataset.py            # seed 42, 70/15/15, umbral 2, subconjunto por defecto (~90 s)
+  python scripts/prepare_dataset.py            # 2.ª ejecución tras copiar la 1.ª salida aparte
+  cmp data/metadata.csv <copia> && cmp reports/data/split_summary.md <copia>   # idénticos
+  sha1sum data/metadata.csv                    # 4f1e7c0bd2eb31df136e0e7e1f76333038ee985b
   python scripts/prepare_dataset.py --near-dup-threshold 4 --out <tmp>/metadata.csv --reports <tmp>   # comparación de umbral
   python scripts/audit_dataset.py --source plantvillage && python scripts/audit_dataset.py --source plantdoc --compare-with reports/audit/plantvillage/inventory.csv   # informes de T01 sin cambios tras mover md_table
-  ruff check . && ruff format --check . && pytest   # 28 passed
+  ruff check . && ruff format --check . && pytest   # 36 passed (tras la revisión de Codex y el cierre)
   git -C data/raw/plantvillage status --short | wc -l   # 0  (igual en plantdoc)
   ```
 
@@ -112,9 +120,13 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
     YLCV 1.918/412/408). Las sanas usadas son 999 de 12.815 (≈ 1:12).
   - `external_test` (PlantDoc): 743 imágenes. Entre ellas, `tomato_V8.jpg` con
     `disease_name = conflict:bacterial_spot|septoria_leaf_spot` y `binary_label = diseased`.
-  - **Subconjunto (`in_subset`): 959 imágenes = 492 sanas (348/72/72) + 467 enfermas (56–60
-    por enfermedad; 8 en val y 8 en test por enfermedad).** Se queda por debajo de 500/500 porque
-    casi todas las hojas tienen 4 fotos: un objetivo de 9 en val solo admite 8.
+  - **Subconjunto (`in_subset`), versión final: 1.998 imágenes = 999 sanas + 999 enfermas.**
+    Por split (sanas / enfermas): train 703 / 703, val 148 / 148, test 148 / 148. Enfermas por
+    enfermedad: 116–131 (bacterial_spot 120, early_blight 128, late_blight 128, leaf_mold 116,
+    septoria 128, spider_mites 128, target_spot 120, YLCV 131); en val y en test, 16 o 20 por
+    enfermedad. Como las hojas tienen 3–4 fotos, lo que una enfermedad no llena sin pasarse pasa a
+    la siguiente del mismo split, así que cada split cuadra con sus sanas.
+    (Primera versión, sustituida: 959 = 492 + 467 con objetivo 500/500.)
   - **Casi-duplicados:** dHash de 64 bits con distancia de Hamming ≤ 2 → **0 parejas** entre las
     12.815 imágenes usadas de PlantVillage. También 0 duplicados exactos entre las usadas (las 14
     parejas de T01 caen en lotes excluidos). `check_leakage` también compara PlantDoc con
@@ -122,9 +134,11 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
     Con `--near-dup-threshold 4`: 38 parejas, 3.205 → 3.169 grupos, y **14 grupos mezclan
     enfermedades distintas**. Las parejas que revisé con distancia 3–4 eran hojas distintas sobre el
     mismo fondo gris (falsos positivos): con un umbral alto se unirían hojas que no tienen nada que ver.
-  - Determinismo: tres ejecuciones con semilla 42 → `metadata.csv` y `split_summary.md` idénticos (SHA-1).
+  - Determinismo: dos ejecuciones seguidas con la versión final → `metadata.csv` y `split_summary.md`
+    idénticos byte a byte (`cmp`). SHA-1 del CSV `4f1e7c0bd2eb31df136e0e7e1f76333038ee985b`, registrado
+    en `split_summary.md` junto con los commits de `data/raw/plantvillage` (`7f7ecc7e…`) y `data/raw/plantdoc` (`5467f601…`).
   - `metadata.csv` pesa 6,0 MB (> 2 MB): **no se versiona** (añadido a `.gitignore`). Se regenera
-    con el comando de arriba.
+    con el comando de arriba y se verifica con el SHA-1 de `split_summary.md`.
 
 - **Riesgo residual de fugas:**
   - La agrupación depende de las hojas de cálculo originales de PlantVillage. Si la misma hoja física
@@ -140,14 +154,14 @@ Segmentación, características, clasificadores, aumentos de datos (se aplicará
     seguirían contando dos veces dentro de `external_test` (no es fuga, pero infla el recuento).
 
 - **Pendientes antes de empezar la segmentación:**
-  - El alumno revisa `reports/data/target_spot_leaves.jpg`. Si no parecen la misma hoja por fila,
-    Target_Spot debe pasar a excluida (D006).
-  - Aceptar o ajustar el subconjunto de 959 (492 + 467) y el tamaño minúsculo de val/test por
-    enfermedad (8 imágenes, 2 hojas): sirve para el binario, no para métricas por enfermedad.
-  - Posible ampliación anotada (no implementada): usar el número de hoja del nombre
-    (`GH_HL Leaf 259.1`, `GHLB_PS Leaf 24 Day 16`) para recuperar parte de las 5.345 excluidas.
+  - Protocolo de evaluación (D014): métricas principales en el `test` del subconjunto; análisis por
+    enfermedad en el `test` completo (en el subconjunto solo hay 16–20 por enfermedad); PlantDoc como test externo.
+  - **Ampliación pendiente (no implementada):** usar el número de hoja del nombre
+    (`GH_HL Leaf 259.1`, `GHLB_PS Leaf 24 Day 16`) para recuperar parte de las 5.345 excluidas. Solo
+    el lote `GH_HL Leaf …` recuperaría **unas 590 sanas** (590 según la auditoría de T01), que hoy
+    limitan el subconjunto.
   - Casi-duplicados dentro de PlantDoc (redimensionados) si se quiere un `external_test` más limpio.
-  - `PROJECT_CONTEXT.md` §5 dice que `data/metadata.csv` se versiona; ahora se regenera porque pesa > 2 MB.
+  - Hecho al cerrar T02: `PROJECT_CONTEXT.md` §5 ya dice que `metadata.csv` no se versiona.
 
 ## Revisión Codex
 
