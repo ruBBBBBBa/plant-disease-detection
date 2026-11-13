@@ -1,6 +1,6 @@
 # T04 — Extracción de características de color, textura y manchas
 
-- **Estado:** Pendiente (siguiente, tras mergear T03)
+- **Estado:** En curso
 - **Rama:** `t04-features`
 - **Depende de:** T03 (segmentación K-means + postprocesado, `configs/segmentation.json`)
 - **Referencias:** `PROJECT_CONTEXT.md` §6; Tema 2 (espacios de color e histogramas), Tema 4
