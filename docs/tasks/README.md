@@ -15,14 +15,18 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T03](T03-segmentacion-hoja.md) | Segmentación clásica de la hoja y comparación frente a `segmented` | En revisión | `t03-leaf-segmentation` |
+| [T03](T03-segmentacion-hoja.md) | Segmentación clásica de la hoja y comparación frente a `segmented` | Hecha | `t03-leaf-segmentation` (PR #3) |
+
+## Fase 3 — Características
+
+| ID | Tarea | Estado | Rama / PR |
+|---|---|---|---|
+| [T04](T04-caracteristicas.md) | Extracción de características de color, textura y manchas | En revisión | `t04-features` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
 Cada fase se convierte en ficheros de tarea cuando la anterior está cerrada, con sus resultados reales delante.
 
-- **Fase 3 — Características:** color (HSV/Lab, histogramas, proporción de tonos anómalos),
-  textura (GLCM, LBP), regiones/manchas (componentes conexas, área, irregularidad).
 - **Fase 4 — Clasificación y evaluación:** baseline por reglas, kNN, SVM, árbol/Random Forest;
   color vs textura vs combinadas; matriz de confusión, precision/recall/F1, tiempo por imagen.
 - **Fase 5 — Test externo y análisis de errores:** PlantDoc, falsos negativos/positivos, «análisis no concluyente».

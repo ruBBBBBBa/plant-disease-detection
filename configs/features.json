@@ -1,0 +1,46 @@
+{
+  "_comment": "Ajustado solo con train por scripts/tune_features.py (T04).",
+  "tuned_on": {
+    "split": "train",
+    "subset": true,
+    "images": 1406,
+    "seed": 42
+  },
+  "mask_variant": {
+    "kind": "raw"
+  },
+  "tones": {
+    "v_dark": 15,
+    "s_min": 40,
+    "v_hue_min": 50,
+    "h_brown_yellow": 20,
+    "h_green_min": 29
+  },
+  "hist_ranges": {
+    "a": [
+      -27.0,
+      5.0
+    ],
+    "b": [
+      1.0,
+      48.0
+    ]
+  },
+  "texture": {
+    "glcm_levels": 32,
+    "glcm_distance": 1,
+    "lbp_points": 16,
+    "lbp_radius": 2
+  },
+  "spots": {
+    "min_area": 10
+  },
+  "inconclusive": {
+    "mask_solidity_min": 0.6504
+  },
+  "inconclusive_candidates": {
+    "leaf_area_frac_min": 0.2154,
+    "mask_solidity_min": 0.6504,
+    "border_touch_frac_max": 0.1627
+  }
+}
