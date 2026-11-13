@@ -1,6 +1,6 @@
 # T04 — Extracción de características de color, textura y manchas
 
-- **Estado:** En curso
+- **Estado:** En revisión
 - **Rama:** `t04-features`
 - **Depende de:** T03 (segmentación K-means + postprocesado, `configs/segmentation.json`)
 - **Referencias:** `PROJECT_CONTEXT.md` §6; Tema 2 (espacios de color e histogramas), Tema 4
@@ -138,9 +138,109 @@ Clasificadores, escalado y selección de características basada en un modelo (f
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
 - **Comandos ejecutados:**
-- **Comparación de variantes de sombra (train):**
+
+  ```bash
+  git merge origin/main                          # T03 (PR #3) con configs/segmentation.json
+  python scripts/tune_features.py --seed 42      # solo train (1.406 imágenes), ~1,5 min
+  python scripts/extract_features.py --subset-only   # 1.998 imágenes (train/val/test del subconjunto)
+  python scripts/extract_features.py --full-test     # 1.900 imágenes (test completo de PlantVillage)
+  sha1sum data/processed/features_v1_*.csv       # repetida la extracción → mismos SHA-1:
+  #   04020f706325ec6bcfd1319dd4de754306be947f  features_v1_subset.csv
+  #   560c1f1e82de33a706eaa40f0307579e5054d453  features_v1_test_full.csv
+  python scripts/analyze_features.py --seed 42   # solo filas train
+  ruff check . && ruff format --check . && pytest   # 70 passed
+  git -C data/raw/plantvillage status --short | wc -l   # 0
+  ```
+
+  El criterio de sombras se registró en este fichero (commit `9a4d2be`) **antes** de calcular
+  nada. Los análisis y figuras solo usan `train`. `analyze_features.py` descarta las filas de `val`
+  y `test` al cargar el CSV, y `extract_features.py` solo escribe recuentos por split. PlantDoc no
+  se usa y la segmentación de T03 no se toca.
+
+- **Comparación de variantes de sombra (train):** detalle en `reports/features/tuning_train.md` y
+  `shadow_variants_train.jpg`.
+  - **El criterio fijado de antemano no discrimina.** Con V < 60, el 18 % de los píxeles de las
+    hojas **sanas** ya son «oscuros» (mediana 0,179; *blight* 0,173): es el verde oscuro normal. El
+    AUC sanas frente a *blight* queda entre 0,473 y 0,489 en las 14 combinaciones: (a) 0,480; mejor
+    (b) n = 8, 0,484; mejor (c) V < 50 y S < 80, 0,489.
+  - Ninguna mejora en ≥ 0,01, así que la regla de desempate elige **(a) la máscara tal cual**.
+  - **Pérdida de lesión:** la erosión quita entre el 16 % (n = 2) y el 37 % (n = 8) de los píxeles
+    oscuros de las hojas de *blight*. La variante de sombra, entre el 0,4 % y el 4,8 %.
+  - Las rejillas muestran que ninguna variante quita de verdad la sombra de las sanas. En algunas
+    *blight* es la máscara de T03 la que ya excluye la necrosis oscura.
+  - **Sensibilidad posterior** (columnas `posthoc_*`, solo informan): con V < 30 o V < 15 el AUC
+    **baja** a 0,30–0,39. En `train`, las sanas tienen **más** píxeles oscuros que las hojas con
+    *blight*. El riesgo de D019 («sombra = falsa necrosis») apunta en el sentido contrario: la
+    oscuridad es más frecuente en las sanas por cómo están fotografiadas.
+
 - **Criterio «no concluyente» y cuántas imágenes de train afecta:**
+  - Se calcularon tres reglas candidatas con `train`: área de la hoja < p1 (0,2154), solidez de la
+    máscara < p1 (0,6504) y fracción de borde > p99 (0,1627). Juntas marcan 41 imágenes.
+  - Revisión visual (`inconclusive_train.jpg`, un bloque por regla):
+    - **Área:** marca sobre todo hojas pequeñas bien segmentadas.
+    - **Borde:** marca primeros planos bien segmentados.
+    - **Solidez:** recoge la mayoría de las máscaras fragmentadas (necrosis perdida, fondo
+      incluido), más 4 hojas de YLCV rizadas que están bien.
+  - **Regla activa propuesta: `mask_solidity < 0,6504` → 14 de 1.406 imágenes de train**, todas
+    enfermas. Las otras dos quedan en `inconclusive_candidates` (`configs/features.json`).
+  - Ojo: con cualquier regla, todas las marcadas en `train` son enfermas. Excluirlas en la
+    evaluación quitaría enfermas difíciles; la fase 4 debe contarlas aparte, no descartarlas.
+
 - **Características: número por familia y tiempo por imagen:**
-- **Hallazgos del análisis exploratorio (train):**
+  - **75 en total:** calidad 3, color 43, textura 22 (GLCM d = 1 con 32 niveles; LBP uniforme
+    P = 16, R = 2) y manchas 7. Diccionario completo en `docs/FEATURES.md`.
+  - **Tiempo:** 27–44 ms por imagen, incluida la segmentación, en un i7-1355U con un hilo; varía
+    con la carga entre ejecuciones (`reports/features/extraction.md`).
+  - Los CSV pesan unos 1,5 MB y no se versionan; se regeneran con los comandos de arriba y se
+    verifican con su SHA-1.
+
+- **Hallazgos del análisis exploratorio (train)** (`reports/features/features_train.md`, 1.392
+  imágenes, sin las 14 no concluyentes):
+  - **Separación mediana |AUC − 0,5| por familia:** textura 0,397, manchas 0,214, color 0,193 y
+    calidad 0,070.
+  - **Las más separadoras:** `glcm_contrast` (AUC 0,013; sanas 35,5 frente a enfermas 10,3),
+    `glcm_homogeneity` (0,96), varios bins LBP (0,91–0,95), `l_std` y `v_std` (0,05).
+  - **Señal de alarma — sesgo de captura.** La nitidez (varianza del laplaciano dentro de la hoja,
+    calculada solo como diagnóstico) separa sanas de enfermas con AUC 0,014. La mediana es 20.112 en
+    sanas y de 952 a 9.311 en enfermas. La textura separa casi igual que la nitidez, así que buena
+    parte de esa separación puede venir de que el lote de sanas está fotografiado más nítido, no de
+    los síntomas. No se puede separar ambas cosas dentro de PlantVillage: es una pregunta para la
+    fase 4 (comparar familias) y la fase 5 (PlantDoc).
+  - **Color:** los histogramas de a\* (`a_hist_04` 0,12; `a_hist_01` 0,86), `s_mean` (0,80) y
+    `a_mean` (0,20) separan de forma moderada. Las enfermas son más saturadas (S media 0,43 frente
+    a 0,32) y tienen a\* **más negativo** (−14,2 frente a −10,3, verde más puro). Otra vez puede
+    ser la captura, no un síntoma. `frac_yellow` (0,73) y `frac_brown` (0,67) separan menos de lo
+    esperable por sí solas.
+  - **Manchas:** separación moderada (`spot_area_frac` 0,75). Capta bien lesiones marrones y casi
+    nada en sanas, pero apenas la clorosis suave (YLCV, *leaf mold*) ni a *spider mites*
+    (`spots_train.jpg`).
+  - **Redundancia:** 104 pares con |r| ≥ 0,9, casi todos dentro de la textura (93 entre bins LBP,
+    más LBP–GLCM). Además, `l_std`/`v_std` (r 0,998) y `l_mean`/`v_mean` (0,995) son prácticamente
+    la misma medida. La textura
+    es la familia más redundante.
+  - Separación univariante no es capacidad de clasificación: no se anticipan resultados de la fase 4.
+
 - **Decisiones tomadas durante la tarea:**
-- **Pendientes:**
+  - **Umbral de tono:** H solo cuenta con V ≥ 50 y S ≥ 40. En `train`, los píxeles oscuros de
+    hojas sanas daban picos espurios de H y un p1 de 15, que habría dejado vacía la clase
+    «amarillento»; con píxeles fiables el p1 es 29.
+  - **Media circular de H:** H es un ángulo.
+  - **Error corregido gracias a un test:** el histograma LBP erosiona R + 1 y no R (con R = 2 los
+    vecinos interpolados tocaban el fondo). Corregido antes de la extracción final.
+  - **Regla «no concluyente» activa:** solo la solidez; las otras dos quedan como candidatas.
+  - **Scripts:** tres (`tune_features`, `extract_features` y `analyze_features`) en lugar de uno,
+    para separar el ajuste (`train`), la extracción (todos los splits) y el análisis (`train`).
+  - **Propuestas registradas:** D020–D022 en `docs/DECISIONS.md`.
+
+- **Pendientes (para el alumno):**
+  1. **Variante de máscara (D020):** aceptar «tal cual», que es lo que da el criterio fijado. El
+     problema de sombras de D019 no se resuelve con estas variantes; en `train` la oscuridad es más
+     frecuente en sanas.
+  2. **«No concluyente» (D021):** aceptar solo la solidez (14 de train), activar también área o
+     borde, o no usar ninguna. En todos los casos solo afecta a enfermas.
+  3. **Grupos para la fase 4:** color, textura, manchas y combinadas, como dice `PROJECT_CONTEXT.md`
+     §7. Dado el sesgo de nitidez, conviene comparar color + manchas **sin** textura y valorar en
+     PlantDoc si la textura generaliza. Otra opción para la fase 4 sería normalizar la nitidez
+     (p. ej. un suavizado común antes de la textura), ajustado con `train`.
+  4. **Excluir `l_std`/`v_std`:** también reflejan el sesgo de captura; decidir si se excluyen de
+     la familia «color».

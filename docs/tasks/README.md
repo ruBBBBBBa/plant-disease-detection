@@ -21,7 +21,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T04](T04-caracteristicas.md) | Extracción de características de color, textura y manchas | En curso | `t04-features` |
+| [T04](T04-caracteristicas.md) | Extracción de características de color, textura y manchas | En revisión | `t04-features` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
