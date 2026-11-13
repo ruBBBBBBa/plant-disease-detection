@@ -121,6 +121,20 @@ Clasificadores, escalado y selección de características basada en un modelo (f
 3. Qué grupos de características se comparan en la fase 4 (color, textura, manchas, combinadas;
    `PROJECT_CONTEXT.md` §7).
 
+## Criterio de las variantes de sombra (fijado antes de ver resultados, 2026-11-13)
+
+- Píxel «oscuro» = V < 60 en HSV de OpenCV (0–255). Medida: fracción de píxeles oscuros dentro
+  de la máscara.
+- **Criterio principal:** AUC univariante de esa fracción entre `healthy` y las enfermedades con
+  necrosis (`late_blight` + `early_blight`), solo con `train`. **Secundario:** AUC `healthy` frente
+  a todas las enfermas.
+- Los parámetros de cada variante (*n* de la erosión; umbrales V y S de la sombra) se eligen con el
+  mismo criterio, también en `train`.
+- **Desempate:** se elige la variante más simple (a < b < c) salvo que otra mejore el criterio
+  principal en ≥ 0,01.
+- **Control:** la fracción de píxeles oscuros que cada variante elimina en hojas de *blight*
+  (pérdida de lesión) y rejillas de sanas con sombra y de *blight* con lesión en el borde.
+
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
 - **Comandos ejecutados:**
