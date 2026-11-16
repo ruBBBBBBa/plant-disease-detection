@@ -198,7 +198,7 @@ una imagen nueva e interfaz (fase 6). Cambiar la segmentación (T03) o el vector
   4. `mask_empty` excluido en entrenamiento, contado como error en evaluación (conservador).
   5. PlantDoc excluido (fase 5); `inconclusive` no activado (D021).
   6. `textura_suavizada` usa mismo vector que `textura` pero de CSV `v1_blur` (sigma=3.0).
-  7. **Dos modelos fijados para fase 5 (D030):** A = combinadas+RF (mejor val), B = color_manchas+SVM lineal (mejor color_manchas en val). Hipótesis: B pierde menos en PlantDoc al no depender de textura ligada a nitidez.
+  7. **Dos modelos fijados para fase 5 (D030):** A = combinadas+RF (mejor val: 0.9628), B = color_manchas+SVM lineal (mejor color_manchas en val: 0.9459). **Variante C = color_manchas_sin_l_v+SVM RBF (val: 0.9527)**. Hipótesis 1: B pierde menos en PlantDoc al no depender de textura ligada a nitidez. Hipótesis 2: si C pierde menos que B en PlantDoc, v_std también era huella de captura.
 - **Pendientes:**
   1. Generar rejillas visuales de falsos negativos/positivos en val con máscaras (para memoria).
   2. Verificar regeneración de modelos con comando desde `configs/classification.json`.

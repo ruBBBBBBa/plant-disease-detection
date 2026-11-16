@@ -88,6 +88,10 @@ FEATURE_GROUPS["combinadas"] = (
     FEATURE_GROUPS["color"] + FEATURE_GROUPS["textura"] + FEATURE_GROUPS["manchas"]
 )
 FEATURE_GROUPS["color_manchas"] = FEATURE_GROUPS["color"] + FEATURE_GROUPS["manchas"]
+# Variante C: color_manchas sin l_std ni v_std (para testar si v_std era huella de captura)
+FEATURE_GROUPS["color_manchas_sin_l_v"] = [
+    c for c in FEATURE_GROUPS["color_manchas"] if c not in ("l_std", "v_std")
+]
 
 # Candidatos a "mejor modelo" (control_nitidez excluido)
 CANDIDATE_GROUPS = [
@@ -96,6 +100,7 @@ CANDIDATE_GROUPS = [
     "manchas",
     "combinadas",
     "color_manchas",
+    "color_manchas_sin_l_v",
     "textura_suavizada",
 ]
 

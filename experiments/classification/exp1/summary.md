@@ -55,6 +55,17 @@ Features: 50
 | decision_tree | 0.9365 | 0.8885 | 0.8311 | 0.9107 |
 | random_forest | 0.9672 | 0.9324 | 0.9054 | 0.9822 |
 
+## Grupo: color_manchas_sin_l_v
+Features: 48
+
+| Modelo | CV balanced_acc | Val balanced_acc | Val recall_diseased | Val ROC-AUC |
+|---|---:|---:|---:|---:|
+| knn | 0.9275 | 0.9122 | 0.8784 | 0.9466 |
+| svm_lineal | 0.9643 | 0.9426 | 0.9459 | 0.9912 |
+| svm_rbf | 0.9588 | 0.9527 | 0.9595 | 0.9872 |
+| decision_tree | 0.9046 | 0.9054 | 0.9459 | 0.9328 |
+| random_forest | 0.9537 | 0.9392 | 0.9257 | 0.9835 |
+
 ## Grupo: control_nitidez
 Features: 1
 

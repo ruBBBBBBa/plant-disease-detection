@@ -77,6 +77,10 @@ FEATURE_GROUPS["combinadas"] = (
     FEATURE_GROUPS["color"] + FEATURE_GROUPS["textura"] + FEATURE_GROUPS["manchas"]
 )
 FEATURE_GROUPS["color_manchas"] = FEATURE_GROUPS["color"] + FEATURE_GROUPS["manchas"]
+# Variante C: color_manchas sin l_std ni v_std
+FEATURE_GROUPS["color_manchas_sin_l_v"] = [
+    c for c in FEATURE_GROUPS["color_manchas"] if c not in ("l_std", "v_std")
+]
 # textura_suavizada se define dinámicamente (mismas columnas que textura)
 
 CANDIDATE_GROUPS = [
@@ -85,6 +89,7 @@ CANDIDATE_GROUPS = [
     "manchas",
     "combinadas",
     "color_manchas",
+    "color_manchas_sin_l_v",
     "textura_suavizada",
 ]
 ALL_GROUPS = CANDIDATE_GROUPS + ["control_nitidez"]
@@ -195,7 +200,15 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
         val_blur = df_blur[df_blur["split"] == "val"].reset_index(drop=True)
 
     models_grids = tr.get_models_and_grids(args.seed)
-    groups = ["color", "textura", "manchas", "combinadas", "color_manchas", "control_nitidez"]
+    groups = [
+        "color",
+        "textura",
+        "manchas",
+        "combinadas",
+        "color_manchas",
+        "color_manchas_sin_l_v",
+        "control_nitidez",
+    ]
     if use_blur:
         groups.append("textura_suavizada")
 
