@@ -157,19 +157,48 @@ una imagen nueva e interfaz (fase 6). Cambiar la segmentación (T03) o el vector
   | spider_mites | 0.9516 | 248 |
   | target_spot | 0.8942 | 208 |
   | yellow_leaf_curl_virus | 1.0000 | 408 |
-- **Errores típicos:**
-  - Falsos negativos (enfermas clasificadas como sanas): principalmente `target_spot` (recall 0.89) y `spider_mites` (recall 0.95). `target_spot` tiene lesiones circulares que pueden confundirse con textura normal; `spider_mites` tiene punteado fino que la segmentación a veces no captura bien.
-  - Falsos positivos (sanas como enfermas): 7 de 148 en test_full. Suelen ser hojas sanas con textura de fondo o iluminación inhomogénea que genera "manchas" espurias.
-  - Rejillas de errores en `experiments/classification/exp1/test_evaluation/` (pendiente generar visualmente).
+- **Errores típicos (rejillas en test_report.md):**
+  - **Val:** FN=0, FP=11 (todas healthy). Recall_diseased=1.0 en val.
+  - **Test_full:** FN=39 (target_spot 22, spider_mites 12, early_blight 3, septoria 2), FP=7 (healthy).
+  - **Clasificación manual:**
+    - FN target_spot: lesiones circulares bien definidas confundidas con textura normal
+    - FN spider_mites: punteado fino disperso que segmentación no captura bien
+    - FN early_blight: lesiones concéntricas tempranas con poco contraste
+    - FN septoria: manchas pequeñas con halo amarillento, frontera difusa
+    - FP healthy: textura de fondo, iluminación inhomogénea, reflejos → "manchas" espurias
+- **Importancias por permutación (val, modelo elegido combinadas+RF):**
+  - `glcm_contrast` (textura): **0.0247** — feature más importante; correlacionada con nitidez
+  - `l_std` (color L*): 0.0068 — variabilidad de luminosidad
+  - `v_std` (color V): 0.0044 — variabilidad de valor HSV
+  - `sharpness_laplacian_var`: NO EN GRUPO (excluida de combinadas)
+  - Modelo B (color_manchas+SVM lineal): `v_std` 0.0466, `spot_area_frac` 0.0274, `frac_yellow` 0.0307 — sin textura ni nitidez
+- **Análisis del sesgo de nitidez (ampliado: mismo modelo en todos los grupos):**
+  - **Random Forest (test_subset):** control_nitidez 0.9189 → textura 0.9493 → textura_suavizada 0.8277 → combinadas 0.9696 → color_manchas 0.9561
+  - **SVM RBF (test_subset):** control_nitidez 0.9392 → textura 0.9662 → textura_suavizada 0.8615 → combinadas 0.9899 → color_manchas 0.9662
+  - **Conclusiones:**
+    1. Atajo real: control_nitidez sola (RF 0.9189, SVM RBF 0.9392)
+    2. Suavizado reduce sesgo (AUC post-blur 0.161 vs 0.988) pero **no lo elimina** (mediana sana 4.65 > Q3 enfermas 4.22 con sigma=3.0)
+    3. Suavizado **destruye textura real**: textura→textura_suavizada cae −12 pts (RF) / −10 pts (SVM RBF)
+    4. Combinadas vs color_manchas: +1.3 pts (RF) / +2.4 pts (SVM RBF) — mejora real pero parte por nitidez
+- **Recall por enfermedad (test completo, modelo elegido):**
+  | Enfermedad | Recall | Soporte |
+  |---|---:|---:|
+  | bacterial_spot | 1.0000 | 316 |
+  | early_blight | 0.9797 | 148 |
+  | late_blight | 1.0000 | 136 |
+  | leaf_mold | 1.0000 | 140 |
+  | septoria_leaf_spot | 0.9865 | 148 |
+  | spider_mites | 0.9516 | 248 |
+  | target_spot | 0.8942 | 208 |
+  | yellow_leaf_curl_virus | 1.0000 | 408 |
 - **Decisiones tomadas durante la tarea:**
-  1. Sigma fija en 3.0 (máxima probada) porque ninguna sigma cumple el criterio estricto; se informa AUC post-blur.
+  1. Sigma fija en 3.0 (máxima probada) porque ninguna sigma cumple el criterio estricto; se informa AUC post-blur=0.161.
   2. Criterio de elección: max balanced_acc en val con margen 0.005 y desempate por modelo más simple.
   3. `eval_test.py` evalúa TODOS los grupos × modelos en test (no solo el elegido), para transparencia.
   4. `mask_empty` excluido en entrenamiento, contado como error en evaluación (conservador).
   5. PlantDoc excluido (fase 5); `inconclusive` no activado (D021).
   6. `textura_suavizada` usa mismo vector que `textura` pero de CSV `v1_blur` (sigma=3.0).
+  7. **Dos modelos fijados para fase 5 (D030):** A = combinadas+RF (mejor val), B = color_manchas+SVM lineal (mejor color_manchas en val). Hipótesis: B pierde menos en PlantDoc al no depender de textura ligada a nitidez.
 - **Pendientes:**
   1. Generar rejillas visuales de falsos negativos/positivos en val con máscaras (para memoria).
-  2. Análisis de importancia de características (permutación en val) para el modelo elegido.
-  3. Decidir modelo/grupo para fase 5 (PlantDoc) según hipótesis: ¿generaliza mejor `color_manchas` sin textura?
-  4. Verificar que los modelos se regeneran con un comando desde `configs/classification.json`.
+  2. Verificar regeneración de modelos con comando desde `configs/classification.json`.
