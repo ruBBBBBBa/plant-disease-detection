@@ -12,11 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-import math
-import pickle
 import subprocess
-import sys
-import time
 from pathlib import Path
 from typing import Any
 
@@ -34,11 +30,11 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
-from sklearn.model_selection import StratifiedGroupKFold, GridSearchCV
+from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import LinearSVC, SVC
+from sklearn.svm import SVC, LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -47,21 +43,40 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 FEATURE_GROUPS = {
     "color": [
-        "h_circ_mean_deg", "h_circ_var",
-        "s_mean", "s_std", "v_mean", "v_std",
-        "l_mean", "l_std", "a_mean", "a_std", "b_mean", "b_std",
+        "h_circ_mean_deg",
+        "h_circ_var",
+        "s_mean",
+        "s_std",
+        "v_mean",
+        "v_std",
+        "l_mean",
+        "l_std",
+        "a_mean",
+        "a_std",
+        "b_mean",
+        "b_std",
         *[f"h_hist_{i:02d}" for i in range(12)],
         *[f"a_hist_{i:02d}" for i in range(8)],
         *[f"b_hist_{i:02d}" for i in range(8)],
-        "frac_yellow", "frac_brown", "frac_dark",
+        "frac_yellow",
+        "frac_brown",
+        "frac_dark",
     ],
     "textura": [
-        "glcm_contrast", "glcm_homogeneity", "glcm_energy", "glcm_correlation",
+        "glcm_contrast",
+        "glcm_homogeneity",
+        "glcm_energy",
+        "glcm_correlation",
         *[f"lbp_{i:02d}" for i in range(18)],
     ],
     "manchas": [
-        "spot_count", "spot_area_frac", "spot_mean_area_frac", "spot_max_area_frac",
-        "spot_mean_solidity", "spot_mean_eccentricity", "spot_mean_circularity",
+        "spot_count",
+        "spot_area_frac",
+        "spot_mean_area_frac",
+        "spot_max_area_frac",
+        "spot_mean_solidity",
+        "spot_mean_eccentricity",
+        "spot_mean_circularity",
     ],
     "combinadas": None,  # se rellena abajo
     "color_manchas": None,
@@ -75,10 +90,18 @@ FEATURE_GROUPS["combinadas"] = (
 FEATURE_GROUPS["color_manchas"] = FEATURE_GROUPS["color"] + FEATURE_GROUPS["manchas"]
 
 # Candidatos a "mejor modelo" (control_nitidez excluido)
-CANDIDATE_GROUPS = ["color", "textura", "manchas", "combinadas", "color_manchas", "textura_suavizada"]
+CANDIDATE_GROUPS = [
+    "color",
+    "textura",
+    "manchas",
+    "combinadas",
+    "color_manchas",
+    "textura_suavizada",
+]
 
 
 # --------------------------------------------------------------------------- models & grids
+
 
 def get_models_and_grids(seed: int = 42) -> dict[str, tuple[Any, dict]]:
     """Devuelve {nombre: (estimador_base, grid_params)}.
@@ -123,6 +146,7 @@ def get_models_and_grids(seed: int = 42) -> dict[str, tuple[Any, dict]]:
 
 # --------------------------------------------------------------------------- baseline por reglas
 
+
 def baseline_rules_predict(X: np.ndarray, feature_names: list[str], thresholds: dict) -> np.ndarray:
     """Baseline interpretable: umbrales sobre spot_area_frac y frac_brown (p90 de sanas en train).
 
@@ -140,7 +164,9 @@ def baseline_rules_predict(X: np.ndarray, feature_names: list[str], thresholds: 
     return pred
 
 
-def compute_baseline_thresholds(X_train: np.ndarray, y_train: np.ndarray, feature_names: list[str]) -> dict:
+def compute_baseline_thresholds(
+    X_train: np.ndarray, y_train: np.ndarray, feature_names: list[str]
+) -> dict:
     """Percentil 90 de spot_area_frac y frac_brown en clase healthy (0) de train."""
     healthy = X_train[y_train == 0]
     thresholds = {}
@@ -155,14 +181,20 @@ def compute_baseline_thresholds(X_train: np.ndarray, y_train: np.ndarray, featur
 
 # --------------------------------------------------------------------------- metrics
 
-def compute_metrics(y_true: np.ndarray, y_pred: np.ndarray, y_score: np.ndarray | None = None) -> dict:
+
+def compute_metrics(
+    y_true: np.ndarray, y_pred: np.ndarray, y_score: np.ndarray | None = None
+) -> dict:
     """Métricas completas para binario healthy(0)/diseased(1)."""
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
     tn, fp, fn, tp = cm.ravel()
 
     metrics = {
         "confusion_matrix": cm.tolist(),
-        "tn": int(tn), "fp": int(fp), "fn": int(fn), "tp": int(tp),
+        "tn": int(tn),
+        "fp": int(fp),
+        "fn": int(fn),
+        "tp": int(tp),
         "accuracy": float(accuracy_score(y_true, y_pred)),
         "balanced_accuracy": float(balanced_accuracy_score(y_true, y_pred)),
         "precision_healthy": float(precision_score(y_true, y_pred, pos_label=0, zero_division=0)),
@@ -201,7 +233,9 @@ def bootstrap_ci_grouped(
         if mask.sum() == 0:
             continue
         try:
-            val = metric_fn(y_true[mask], y_pred[mask], y_score[mask] if y_score is not None else None)
+            val = metric_fn(
+                y_true[mask], y_pred[mask], y_score[mask] if y_score is not None else None
+            )
             if np.isfinite(val):
                 values.append(val)
         except Exception:
@@ -213,6 +247,7 @@ def bootstrap_ci_grouped(
 
 
 # --------------------------------------------------------------------------- CV & training
+
 
 def cv_grouped(
     X: np.ndarray,
@@ -232,10 +267,12 @@ def cv_grouped(
     # Pre-computar splits como lista (generador no se puede picklear con n_jobs=-1)
     cv_splits = list(cv.split(X, y, groups))
 
-    pipeline = Pipeline([
-        ("scaler", StandardScaler()),
-        ("clf", clone(base_estimator)),
-    ])
+    pipeline = Pipeline(
+        [
+            ("scaler", StandardScaler()),
+            ("clf", clone(base_estimator)),
+        ]
+    )
 
     search = GridSearchCV(
         pipeline,
@@ -250,7 +287,7 @@ def cv_grouped(
 
     # Métricas por fold en el mejor estimador
     fold_metrics = []
-    for fold, (train_idx, val_idx) in enumerate(cv.split(X, y, groups)):
+    for _fold, (train_idx, val_idx) in enumerate(cv.split(X, y, groups)):
         pipe = clone(search.best_estimator_)
         pipe.fit(X[train_idx], y[train_idx])
         y_pred = pipe.predict(X[val_idx])
@@ -279,15 +316,23 @@ def train_full(
     seed: int = 42,
 ) -> Pipeline:
     """Entrena en todo train con los mejores hiperparámetros."""
-    pipeline = Pipeline([
-        ("scaler", StandardScaler()),
-        ("clf", clone(base_estimator).set_params(**{k.replace("clf__", ""): v for k, v in best_params.items()})),
-    ])
+    pipeline = Pipeline(
+        [
+            ("scaler", StandardScaler()),
+            (
+                "clf",
+                clone(base_estimator).set_params(
+                    **{k.replace("clf__", ""): v for k, v in best_params.items()}
+                ),
+            ),
+        ]
+    )
     pipeline.fit(X, y)
     return pipeline
 
 
 # --------------------------------------------------------------------------- evaluation on val/test
+
 
 def evaluate_model(
     model: Pipeline,
@@ -309,14 +354,16 @@ def evaluate_model(
     if groups is not None:
         for metric_name in ("balanced_accuracy", "recall_diseased", "roc_auc"):
             if metric_name in metrics:
-                def m_fn(y_t, y_p, y_s):
-                    if metric_name == "balanced_accuracy":
+
+                def m_fn(y_t, y_p, y_s, m_name=metric_name):
+                    if m_name == "balanced_accuracy":
                         return balanced_accuracy_score(y_t, y_p)
-                    if metric_name == "recall_diseased":
+                    if m_name == "recall_diseased":
                         return recall_score(y_t, y_p, pos_label=1, zero_division=0)
-                    if metric_name == "roc_auc" and y_s is not None:
+                    if m_name == "roc_auc" and y_s is not None:
                         return roc_auc_score(y_t, y_s)
                     return float("nan")
+
                 ci = bootstrap_ci_grouped(y, y_pred, y_score, groups, m_fn)
                 metrics[f"{metric_name}_ci95"] = ci
 
@@ -325,12 +372,12 @@ def evaluate_model(
 
 # --------------------------------------------------------------------------- utils
 
+
 def get_git_commit_hash() -> str:
     """Hash del commit actual (HEAD)."""
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=REPO_ROOT, capture_output=True, text=True, check=True
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True, check=True
         )
         return result.stdout.strip()
     except Exception:
@@ -342,7 +389,10 @@ def check_git_clean() -> bool:
     try:
         result = subprocess.run(
             ["git", "status", "--porcelain"],
-            cwd=REPO_ROOT, capture_output=True, text=True, check=True
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
         )
         return result.stdout.strip() == ""
     except Exception:
@@ -355,11 +405,14 @@ def sha1_file(path: Path) -> str:
 
 # --------------------------------------------------------------------------- texture blur
 
+
 def compute_blur_sigma(
     features_csv: Path,
-    sigma_candidates: list[float] = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+    sigma_candidates: list[float] | None = None,
     seed: int = 42,
 ) -> tuple[float, dict]:
+    if sigma_candidates is None:
+        sigma_candidates = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
     """Elige sigma: menor que hace que la mediana de sharpness en sanas quede
     dentro del IQR (Q1-Q3) de las enfermas, TRAS aplicar el mismo blur a todas.
 
@@ -370,13 +423,11 @@ def compute_blur_sigma(
     from src import segmentation as seg
 
     metadata = pd.read_csv(REPO_ROOT / "data/metadata.csv", keep_default_na=False)
-    train_meta = metadata[(metadata["split"] == "train") & (metadata["in_subset"].astype(str) == "True")]
+    train_meta = metadata[
+        (metadata["split"] == "train") & (metadata["in_subset"].astype(str) == "True")
+    ]
 
     seg_config = json.loads((REPO_ROOT / "configs/segmentation.json").read_text())
-    feat_config = json.loads((REPO_ROOT / "configs/features.json").read_text())
-
-    sharpness_healthy = []
-    sharpness_diseased = []
     results = {}
 
     for sigma in sigma_candidates:
@@ -401,7 +452,12 @@ def compute_blur_sigma(
                 d_vals.append(val)
 
         if not h_vals or not d_vals:
-            results[sigma] = {"healthy_median": None, "diseased_q1": None, "diseased_q3": None, "ok": False}
+            results[sigma] = {
+                "healthy_median": None,
+                "diseased_q1": None,
+                "diseased_q3": None,
+                "ok": False,
+            }
             continue
 
         h_med = np.median(h_vals)
@@ -416,7 +472,7 @@ def compute_blur_sigma(
         if ok:
             # AUC post-blur para ver si el sesgo desaparece
             all_vals = np.array(h_vals + d_vals)
-            all_labels = np.array([0]*len(h_vals) + [1]*len(d_vals))
+            all_labels = np.array([0] * len(h_vals) + [1] * len(d_vals))
             auc = float(roc_auc_score(all_labels, all_vals))
             results[sigma]["auc_post_blur"] = auc
             return sigma, results
@@ -426,7 +482,7 @@ def compute_blur_sigma(
     results[best_sigma]["forced"] = True
     # AUC post-blur para la mayor
     all_vals = np.array(h_vals + d_vals)
-    all_labels = np.array([0]*len(h_vals) + [1]*len(d_vals))
+    all_labels = np.array([0] * len(h_vals) + [1] * len(d_vals))
     if len(all_vals) > 0:
         results[best_sigma]["auc_post_blur"] = float(roc_auc_score(all_labels, all_vals))
     return best_sigma, results
@@ -449,9 +505,9 @@ def generate_v1_blur(
     df = pd.read_csv(input_csv)
     seg_config = json.loads((REPO_ROOT / "configs/segmentation.json").read_text())
     feat_config = json.loads((REPO_ROOT / "configs/features.json").read_text())
-
-    texture_cols = FEATURE_GROUPS["textura"]
-    metadata = pd.read_csv(REPO_ROOT / "data/metadata.csv", keep_default_na=False).set_index("image_id")
+    metadata = pd.read_csv(REPO_ROOT / "data/metadata.csv", keep_default_na=False).set_index(
+        "image_id"
+    )
 
     new_rows = []
     for _, row in df.iterrows():
@@ -483,6 +539,7 @@ def generate_v1_blur(
 
 # --------------------------------------------------------------------------- feature group helpers
 
+
 def get_feature_columns(group_name: str, df: pd.DataFrame) -> list[str]:
     """Devuelve la lista de columnas para un grupo, validando que existan."""
     if group_name == "textura_suavizada":
@@ -498,7 +555,9 @@ def get_feature_columns(group_name: str, df: pd.DataFrame) -> list[str]:
     return cols
 
 
-def prepare_xy(df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = True) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
+def prepare_xy(
+    df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = True
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
     """Prepara X, y, groups para un grupo de características.
 
     Excluye filas con mask_empty=True si exclude_mask_empty.
@@ -510,5 +569,9 @@ def prepare_xy(df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = Tru
     feature_cols = get_feature_columns(group_name, work)
     X = work[feature_cols].to_numpy(dtype=np.float64)
     y = (work["binary_label"] != "healthy").astype(int).to_numpy()
-    groups = work["leaf_group_id"].to_numpy() if "leaf_group_id" in work.columns else np.arange(len(work))
+    groups = (
+        work["leaf_group_id"].to_numpy()
+        if "leaf_group_id" in work.columns
+        else np.arange(len(work))
+    )
     return X, y, groups, feature_cols

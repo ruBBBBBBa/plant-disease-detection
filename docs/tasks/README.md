@@ -27,7 +27,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T05](T05-clasificacion-evaluacion.md) | Clasificación clásica y evaluación (con control del sesgo de nitidez) | En curso | `t05-classification` |
+| [T05](T05-clasificacion-evaluacion.md) | Clasificación clásica y evaluación (con control del sesgo de nitidez) | En revisión | `t05-classification` |
 
 ## Hoja de ruta (sin detallar a propósito)
 

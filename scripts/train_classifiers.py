@@ -30,26 +30,44 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from src import training as tr  # noqa: E402
 
-
-# --------------------------------------------------------------------------- feature group helpers (inline to avoid circular)
+# --------------------------------------------------------------------------- feature group helpers
 
 FEATURE_GROUPS = {
     "color": [
-        "h_circ_mean_deg", "h_circ_var",
-        "s_mean", "s_std", "v_mean", "v_std",
-        "l_mean", "l_std", "a_mean", "a_std", "b_mean", "b_std",
+        "h_circ_mean_deg",
+        "h_circ_var",
+        "s_mean",
+        "s_std",
+        "v_mean",
+        "v_std",
+        "l_mean",
+        "l_std",
+        "a_mean",
+        "a_std",
+        "b_mean",
+        "b_std",
         *[f"h_hist_{i:02d}" for i in range(12)],
         *[f"a_hist_{i:02d}" for i in range(8)],
         *[f"b_hist_{i:02d}" for i in range(8)],
-        "frac_yellow", "frac_brown", "frac_dark",
+        "frac_yellow",
+        "frac_brown",
+        "frac_dark",
     ],
     "textura": [
-        "glcm_contrast", "glcm_homogeneity", "glcm_energy", "glcm_correlation",
+        "glcm_contrast",
+        "glcm_homogeneity",
+        "glcm_energy",
+        "glcm_correlation",
         *[f"lbp_{i:02d}" for i in range(18)],
     ],
     "manchas": [
-        "spot_count", "spot_area_frac", "spot_mean_area_frac", "spot_max_area_frac",
-        "spot_mean_solidity", "spot_mean_eccentricity", "spot_mean_circularity",
+        "spot_count",
+        "spot_area_frac",
+        "spot_mean_area_frac",
+        "spot_max_area_frac",
+        "spot_mean_solidity",
+        "spot_mean_eccentricity",
+        "spot_mean_circularity",
     ],
     "control_nitidez": ["sharpness_laplacian_var"],
 }
@@ -61,7 +79,14 @@ FEATURE_GROUPS["combinadas"] = (
 FEATURE_GROUPS["color_manchas"] = FEATURE_GROUPS["color"] + FEATURE_GROUPS["manchas"]
 # textura_suavizada se define dinámicamente (mismas columnas que textura)
 
-CANDIDATE_GROUPS = ["color", "textura", "manchas", "combinadas", "color_manchas", "textura_suavizada"]
+CANDIDATE_GROUPS = [
+    "color",
+    "textura",
+    "manchas",
+    "combinadas",
+    "color_manchas",
+    "textura_suavizada",
+]
 ALL_GROUPS = CANDIDATE_GROUPS + ["control_nitidez"]
 
 
@@ -85,11 +110,16 @@ def prepare_xy(df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = Tru
     feature_cols = get_feature_columns(group_name, work)
     X = work[feature_cols].to_numpy(dtype=np.float64)
     y = (work["binary_label"] != "healthy").astype(int).to_numpy()
-    groups = work["leaf_group_id"].to_numpy() if "leaf_group_id" in work.columns else np.arange(len(work))
+    groups = (
+        work["leaf_group_id"].to_numpy()
+        if "leaf_group_id" in work.columns
+        else np.arange(len(work))
+    )
     return X, y, groups, feature_cols
 
 
 # --------------------------------------------------------------------------- commands
+
 
 def cmd_compute_sigma(args: argparse.Namespace) -> int:
     """Calcula sigma óptimo para GaussianBlur (criterio: mediana sana en IQR enferma)."""
@@ -103,7 +133,10 @@ def cmd_compute_sigma(args: argparse.Namespace) -> int:
     out_dir = REPO_ROOT / "reports/classification"
     out_dir.mkdir(parents=True, exist_ok=True)
     report = {
-        "criterion": "menor sigma donde mediana(sharpness sano) dentro de IQR(sharpness enfermo) tras blur común",
+        "criterion": (
+            "menor sigma donde mediana(sharpness sano) dentro de "
+            "IQR(sharpness enfermo) tras blur común"
+        ),
         "sigma_candidates": [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
         "chosen_sigma": sigma,
         "details": details,
@@ -197,13 +230,20 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
 
             # CV en train
             cv_res = tr.cv_grouped(
-                X_train, y_train, g_train,
-                model_name, base_est, grid,
-                cv_folds=args.cv_folds, seed=args.seed
+                X_train,
+                y_train,
+                g_train,
+                model_name,
+                base_est,
+                grid,
+                cv_folds=args.cv_folds,
+                seed=args.seed,
             )
 
             # Entrenar en todo train con mejores params
-            best_model = tr.train_full(X_train, y_train, model_name, base_est, cv_res["best_params"], args.seed)
+            best_model = tr.train_full(
+                X_train, y_train, model_name, base_est, cv_res["best_params"], args.seed
+            )
 
             # Evaluar en val
             val_metrics = tr.evaluate_model(best_model, X_val, y_val, g_val)
@@ -211,12 +251,17 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
             # Baseline si aplica
             baseline_metrics = None
             if group in baseline_thresholds:
-                y_pred_base = tr.baseline_rules_predict(X_val, feat_cols, baseline_thresholds[group])
+                y_pred_base = tr.baseline_rules_predict(
+                    X_val, feat_cols, baseline_thresholds[group]
+                )
                 baseline_metrics = tr.compute_metrics(y_val, y_pred_base)
 
             elapsed = time.perf_counter() - start
             print(f"    CV best balanced_acc: {cv_res['best_score']:.4f} ({cv_res['best_params']})")
-            print(f"    Val balanced_acc: {val_metrics['balanced_accuracy']:.4f}, recall_diseased: {val_metrics['recall_diseased']:.4f}")
+            print(
+                f"    Val balanced_acc: {val_metrics['balanced_accuracy']:.4f}, "
+                f"recall_diseased: {val_metrics['recall_diseased']:.4f}"
+            )
             if baseline_metrics:
                 print(f"    Baseline balanced_acc: {baseline_metrics['balanced_accuracy']:.4f}")
 
@@ -232,6 +277,7 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
 
     # Guardar resultados
     import pickle
+
     with open(out_dir / "cv_val_results.pkl", "wb") as f:
         pickle.dump(all_results, f)
 
@@ -241,14 +287,16 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
         summary_lines.append(f"## Grupo: {group}")
         summary_lines.append(f"Features: {len(gres['features'])}")
         summary_lines.append("")
-        summary_lines.append("| Modelo | CV balanced_acc | Val balanced_acc | Val recall_diseased | Val ROC-AUC |")
+        summary_lines.append(
+            "| Modelo | CV balanced_acc | Val balanced_acc | Val recall_diseased | Val ROC-AUC |"
+        )
         summary_lines.append("|---|---:|---:|---:|---:|")
         for mname, mres in gres["models"].items():
             vm = mres["val_metrics"]
             auc = vm.get("roc_auc", float("nan"))
             summary_lines.append(
-                f"| {mname} | {mres['cv_best_score']:.4f} | {vm['balanced_accuracy']:.4f} | "
-                f"{vm['recall_diseased']:.4f} | {auc:.4f} |"
+                f"| {mname} | {mres['cv_best_score']:.4f} | "
+                f"{vm['balanced_accuracy']:.4f} | {vm['recall_diseased']:.4f} | {auc:.4f} |"
             )
         summary_lines.append("")
 
@@ -259,12 +307,13 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
 
 
 def cmd_choose_best(args: argparse.Namespace) -> int:
-    """Elige la mejor configuración según val (mayor balanced_accuracy) y guarda en configs/classification.json."""
+    """Elige la mejor config según val (mayor balanced_acc) y guarda en configs."""
     results_file = Path(args.out) / "cv_val_results.pkl"
     if not results_file.is_file():
         sys.exit(f"Error: falta {results_file}. Ejecuta --cv --val primero.")
 
     import pickle
+
     with open(results_file, "rb") as f:
         all_results = pickle.load(f)
 
@@ -285,7 +334,13 @@ def cmd_choose_best(args: argparse.Namespace) -> int:
                 best_model = mname
             elif abs(score - best_score) <= 0.005 and best is not None:
                 # Empate: modelo más simple (orden de preferencia)
-                simplicity_order = ["knn", "svm_lineal", "decision_tree", "svm_rbf", "random_forest"]
+                simplicity_order = [
+                    "knn",
+                    "svm_lineal",
+                    "decision_tree",
+                    "svm_rbf",
+                    "random_forest",
+                ]
                 if simplicity_order.index(mname) < simplicity_order.index(best_model):
                     best = mres
                     best_group = group
@@ -336,7 +391,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p_cv.add_argument("--seed", type=int, default=42)
     p_cv.add_argument("--out", type=Path, default=REPO_ROOT / "experiments/classification/exp1")
 
-    p_choose = sub.add_parser("choose-best", help="Elige mejor config según val y guarda en configs/classification.json")
+    p_choose = sub.add_parser(
+        "choose-best", help="Elige mejor config según val y guarda en configs/classification.json"
+    )
     p_choose.add_argument("--out", type=Path, default=REPO_ROOT / "experiments/classification/exp1")
 
     return parser.parse_args(argv)

@@ -27,26 +27,44 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from src import training as tr  # noqa: E402
 
-
-# --------------------------------------------------------------------------- feature groups (replicado para evitar circular)
+# --------------------------------------------------------------------------- feature groups
 
 FEATURE_GROUPS = {
     "color": [
-        "h_circ_mean_deg", "h_circ_var",
-        "s_mean", "s_std", "v_mean", "v_std",
-        "l_mean", "l_std", "a_mean", "a_std", "b_mean", "b_std",
+        "h_circ_mean_deg",
+        "h_circ_var",
+        "s_mean",
+        "s_std",
+        "v_mean",
+        "v_std",
+        "l_mean",
+        "l_std",
+        "a_mean",
+        "a_std",
+        "b_mean",
+        "b_std",
         *[f"h_hist_{i:02d}" for i in range(12)],
         *[f"a_hist_{i:02d}" for i in range(8)],
         *[f"b_hist_{i:02d}" for i in range(8)],
-        "frac_yellow", "frac_brown", "frac_dark",
+        "frac_yellow",
+        "frac_brown",
+        "frac_dark",
     ],
     "textura": [
-        "glcm_contrast", "glcm_homogeneity", "glcm_energy", "glcm_correlation",
+        "glcm_contrast",
+        "glcm_homogeneity",
+        "glcm_energy",
+        "glcm_correlation",
         *[f"lbp_{i:02d}" for i in range(18)],
     ],
     "manchas": [
-        "spot_count", "spot_area_frac", "spot_mean_area_frac", "spot_max_area_frac",
-        "spot_mean_solidity", "spot_mean_eccentricity", "spot_mean_circularity",
+        "spot_count",
+        "spot_area_frac",
+        "spot_mean_area_frac",
+        "spot_max_area_frac",
+        "spot_mean_solidity",
+        "spot_mean_eccentricity",
+        "spot_mean_circularity",
     ],
     "control_nitidez": ["sharpness_laplacian_var"],
 }
@@ -56,7 +74,15 @@ FEATURE_GROUPS["combinadas"] = (
 )
 FEATURE_GROUPS["color_manchas"] = FEATURE_GROUPS["color"] + FEATURE_GROUPS["manchas"]
 
-ALL_GROUPS = ["color", "textura", "manchas", "combinadas", "color_manchas", "control_nitidez", "textura_suavizada"]
+ALL_GROUPS = [
+    "color",
+    "textura",
+    "manchas",
+    "combinadas",
+    "color_manchas",
+    "control_nitidez",
+    "textura_suavizada",
+]
 
 
 def get_feature_columns(group_name: str, df: pd.DataFrame) -> list[str]:
@@ -77,15 +103,18 @@ def prepare_xy(df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = Tru
     feature_cols = get_feature_columns(group_name, work)
     X = work[feature_cols].to_numpy(dtype=np.float64)
     y = (work["binary_label"] != "healthy").astype(int).to_numpy()
-    groups = work["leaf_group_id"].to_numpy() if "leaf_group_id" in work.columns else np.arange(len(work))
+    groups = (
+        work["leaf_group_id"].to_numpy()
+        if "leaf_group_id" in work.columns
+        else np.arange(len(work))
+    )
     return X, y, groups, feature_cols
 
 
 def get_git_commit_hash() -> str:
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=REPO_ROOT, capture_output=True, text=True, check=True
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True, check=True
         )
         return result.stdout.strip()
     except Exception:
@@ -96,7 +125,10 @@ def check_git_clean() -> bool:
     try:
         result = subprocess.run(
             ["git", "status", "--porcelain"],
-            cwd=REPO_ROOT, capture_output=True, text=True, check=True
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
         )
         return result.stdout.strip() == ""
     except Exception:
@@ -111,8 +143,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Evaluación única en test (T05).")
     parser.add_argument("--config", type=Path, required=True, help="configs/classification.json")
     parser.add_argument("--frozen-commit", required=True, help="Hash del commit congelado")
-    parser.add_argument("--exp-dir", type=Path, default=REPO_ROOT / "experiments/classification/exp1",
-                        help="Directorio con cv_val_results.pkl")
+    parser.add_argument(
+        "--exp-dir",
+        type=Path,
+        default=REPO_ROOT / "experiments/classification/exp1",
+        help="Directorio con cv_val_results.pkl",
+    )
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args(argv)
 
@@ -123,7 +159,10 @@ def main(argv: list[str] | None = None) -> int:
     # 2. Verificar commit congelado (solo advertencia, no bloqueo)
     current_commit = get_git_commit_hash()
     if current_commit != args.frozen_commit:
-        print(f"ADVERTENCIA: Commit actual ({current_commit[:8]}) != commit congelado ({args.frozen_commit[:8]}).")
+        print(
+            f"ADVERTENCIA: Commit actual ({current_commit[:8]}) != "
+            f"commit congelado ({args.frozen_commit[:8]})."
+        )
         print("Continuando evaluación (solo se bloquea si hay cambios sin commitear).")
 
     # 3. Cargar configuración elegida
@@ -138,7 +177,6 @@ def main(argv: list[str] | None = None) -> int:
     if not results_file.is_file():
         sys.exit(f"Error: falta {results_file}. Ejecuta train_classifiers.py --cv --val primero.")
 
-    import pickle
     with open(results_file, "rb") as f:
         all_results = pickle.load(f)
 
@@ -149,7 +187,9 @@ def main(argv: list[str] | None = None) -> int:
     blur_full = REPO_ROOT / "data/processed/features_v1_blur_test_full.csv"
 
     if not subset_csv.is_file() or not full_csv.is_file():
-        sys.exit("Error: faltan CSVs de test. Ejecuta extract_features.py --subset-only y --full-test.")
+        sys.exit(
+            "Error: faltan CSVs de test. Ejecuta extract_features.py --subset-only y --full-test."
+        )
 
     df_subset = pd.read_csv(subset_csv)
     df_full = pd.read_csv(full_csv)
@@ -198,7 +238,7 @@ def main(argv: list[str] | None = None) -> int:
 
         group_results = {"features": feat_cols, "models": {}}
 
-        for model_name, (base_est, grid) in models_grids.items():
+        for model_name, (base_est, _grid) in models_grids.items():
             # Obtener mejores params de CV
             if group not in all_results or model_name not in all_results[group]["models"]:
                 print(f"  {model_name}: no hay resultados de CV, saltando")
@@ -207,18 +247,24 @@ def main(argv: list[str] | None = None) -> int:
             cv_best_params = all_results[group]["models"][model_name]["cv_best_params"]
 
             # Entrenar en TODO train
-            best_model = tr.train_full(X_train, y_train, model_name, base_est, cv_best_params, args.seed)
+            best_model = tr.train_full(
+                X_train, y_train, model_name, base_est, cv_best_params, args.seed
+            )
 
             # Evaluar en cada split de test
             test_splits_results = {}
             for split_name, test_df in test_dfs.items():
                 if group == "textura_suavizada":
-                    X_test, y_test, g_test, _ = prepare_xy(test_blur_dfs[split_name], "textura_suavizada")
+                    X_test, y_test, g_test, _ = prepare_xy(
+                        test_blur_dfs[split_name], "textura_suavizada"
+                    )
                 else:
                     X_test, y_test, g_test, _ = prepare_xy(test_df, group)
 
                 # Contar mask_empty en este split
-                n_mask_empty = int(test_df["mask_empty"].sum()) if "mask_empty" in test_df.columns else 0
+                n_mask_empty = (
+                    int(test_df["mask_empty"].sum()) if "mask_empty" in test_df.columns else 0
+                )
 
                 metrics = tr.evaluate_model(best_model, X_test, y_test, g_test)
                 metrics["n_samples"] = len(y_test)
@@ -228,9 +274,11 @@ def main(argv: list[str] | None = None) -> int:
                 # Matriz de confusión para reporte
                 y_pred = best_model.predict(X_test)
                 cm = metrics["confusion_matrix"]
-                print(f"    {split_name}: balanced_acc={metrics['balanced_accuracy']:.4f}, "
-                      f"recall_diseased={metrics['recall_diseased']:.4f}, "
-                      f"mask_empty={n_mask_empty}, CM={cm}")
+                print(
+                    f"    {split_name}: balanced_acc={metrics['balanced_accuracy']:.4f}, "
+                    f"recall_diseased={metrics['recall_diseased']:.4f}, "
+                    f"mask_empty={n_mask_empty}, CM={cm}"
+                )
 
             group_results["models"][model_name] = {
                 "cv_best_params": cv_best_params,
@@ -268,7 +316,10 @@ def main(argv: list[str] | None = None) -> int:
         report_lines.append(f"### Grupo: {group}")
         report_lines.append(f"Features: {len(gres['features'])}")
         report_lines.append("")
-        report_lines.append("| Modelo | Test Subset Balanced Acc | Test Subset Recall Diseased | Test Full Balanced Acc | Test Full Recall Diseased | Elegido |")
+        report_lines.append(
+            "| Modelo | Test Subset Balanced Acc | Test Subset Recall Diseased | "
+            "Test Full Balanced Acc | Test Full Recall Diseased | Elegido |"
+        )
         report_lines.append("|---|---:|---:|---:|---:|:---:|")
         for mname, mres in gres["models"].items():
             ts = mres["test"]["test_subset"]
@@ -298,12 +349,18 @@ def main(argv: list[str] | None = None) -> int:
             X_train, y_train, _, _ = prepare_xy(train_df, chosen_group)
             X_test, y_test, _, _ = prepare_xy(test_dfs["test_full"], chosen_group)
 
-        final_model = tr.train_full(X_train, y_train, chosen_model, base_est, cv_best_params, args.seed)
+        final_model = tr.train_full(
+            X_train, y_train, chosen_model, base_est, cv_best_params, args.seed
+        )
         y_pred = final_model.predict(X_test)
 
         # Añadir disease_name para desglose
         test_full_df = test_dfs["test_full"]
-        test_full_df = test_full_df[~test_full_df["mask_empty"]].reset_index(drop=True) if "mask_empty" in test_full_df.columns else test_full_df
+        test_full_df = (
+            test_full_df[~test_full_df["mask_empty"]].reset_index(drop=True)
+            if "mask_empty" in test_full_df.columns
+            else test_full_df
+        )
         diseases = test_full_df["disease_name"].unique()
 
         report_lines.append("| Enfermedad | Recall | Soporte |")
@@ -325,15 +382,23 @@ def main(argv: list[str] | None = None) -> int:
 
     # control_nitidez vs mejor modelo
     if "control_nitidez" in all_test_results:
-        ctrl_ts = all_test_results["control_nitidez"]["models"]["knn"]["test"]["test_subset"]  # kNN como referencia
-        ctrl_tf = all_test_results["control_nitidez"]["models"]["knn"]["test"]["test_full"]
+        ctrl_ts = all_test_results["control_nitidez"]["models"]["knn"]["test"][
+            "test_subset"
+        ]  # kNN como referencia
         chosen_ts = chosen_result["test_subset"]
-        chosen_tf = chosen_result["test_full"]
 
         report_lines.append("### control_nitidez (kNN) vs modelo elegido")
         report_lines.append("")
-        report_lines.append(f"- control_nitidez test_subset: balanced_acc={ctrl_ts['balanced_accuracy']:.4f}, recall_diseased={ctrl_ts['recall_diseased']:.4f}")
-        report_lines.append(f"- modelo elegido test_subset: balanced_acc={chosen_ts['balanced_accuracy']:.4f}, recall_diseased={chosen_ts['recall_diseased']:.4f}")
+        report_lines.append(
+            f"- control_nitidez test_subset: "
+            f"balanced_acc={ctrl_ts['balanced_accuracy']:.4f}, "
+            f"recall_diseased={ctrl_ts['recall_diseased']:.4f}"
+        )
+        report_lines.append(
+            f"- modelo elegido test_subset: "
+            f"balanced_acc={chosen_ts['balanced_accuracy']:.4f}, "
+            f"recall_diseased={chosen_ts['recall_diseased']:.4f}"
+        )
         report_lines.append("")
 
     # textura vs textura_suavizada
@@ -342,7 +407,9 @@ def main(argv: list[str] | None = None) -> int:
         tex_blur_ts = all_test_results["textura_suavizada"]["models"]["knn"]["test"]["test_subset"]
         report_lines.append("### textura vs textura_suavizada (kNN en test_subset)")
         report_lines.append(f"- textura: balanced_acc={tex_ts['balanced_accuracy']:.4f}")
-        report_lines.append(f"- textura_suavizada: balanced_acc={tex_blur_ts['balanced_accuracy']:.4f}")
+        report_lines.append(
+            f"- textura_suavizada: balanced_acc={tex_blur_ts['balanced_accuracy']:.4f}"
+        )
         report_lines.append("")
 
     # combinadas vs color_manchas

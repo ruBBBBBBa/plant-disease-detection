@@ -9,8 +9,8 @@ from sklearn.model_selection import StratifiedGroupKFold
 
 from src import training as tr
 
-
 # --------------------------------------------------------------------------- fixtures
+
 
 @pytest.fixture
 def synthetic_data():
@@ -27,7 +27,7 @@ def synthetic_data():
     X[:100, 1] -= 1
     X[100:, 1] += 1
 
-    y = np.array([0]*100 + [1]*100)
+    y = np.array([0] * 100 + [1] * 100)
     groups = np.repeat(np.arange(n_groups), n_samples // n_groups)
     # Ajustar si no divide exacto
     if len(groups) > n_samples:
@@ -55,6 +55,7 @@ def synthetic_df(synthetic_data):
 
 # --------------------------------------------------------------------------- tests
 
+
 def test_cv_folds_no_shared_groups(synthetic_data):
     """Los pliegues de StratifiedGroupKFold nunca comparten leaf_group_id entre train y val."""
     X, y, groups, _ = synthetic_data
@@ -68,15 +69,17 @@ def test_cv_folds_no_shared_groups(synthetic_data):
 
 def test_pipeline_scaler_fitted_per_fold(synthetic_data):
     """El StandardScaler se ajusta dentro del pipeline por fold, no con todo train."""
-    from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import StandardScaler
     from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import cross_val_score
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler
 
     X, y, groups, _ = synthetic_data
     cv = StratifiedGroupKFold(n_splits=3, shuffle=True, random_state=42)
 
-    pipe = Pipeline([("scaler", StandardScaler()), ("clf", LogisticRegression(random_state=42, max_iter=200))])
+    pipe = Pipeline(
+        [("scaler", StandardScaler()), ("clf", LogisticRegression(random_state=42, max_iter=200))]
+    )
 
     # cross_val_score clona el pipeline por fold → scaler se re-ajusta en cada fold
     scores = cross_val_score(pipe, X, y, cv=cv.split(X, y, groups), groups=groups)
@@ -92,12 +95,12 @@ def test_metrics_known_case():
 
     m = tr.compute_metrics(y_true, y_pred, y_score)
     assert m["tp"] == 2
-    assert m["tn"] == 1
+    assert m["tn"] == 2  # indices 0 and 4: true=0, pred=0
     assert m["fp"] == 1
     assert m["fn"] == 1
-    assert m["accuracy"] == 4/6
-    assert m["recall_diseased"] == 2/3
-    assert m["precision_diseased"] == 2/3
+    assert m["accuracy"] == 4 / 6
+    assert m["recall_diseased"] == 2 / 3
+    assert m["precision_diseased"] == 2 / 3
     assert 0 <= m["roc_auc"] <= 1
 
 
@@ -121,7 +124,7 @@ def test_mask_empty_excluded_in_train_counted_as_error_in_eval():
     rng = np.random.default_rng(42)
     n = 100
     X = rng.normal(0, 1, (n, 5))
-    y = np.array([0]*50 + [1]*50)
+    y = np.array([0] * 50 + [1] * 50)
     groups = np.arange(n)
 
     # Marcar 10% como mask_empty
@@ -129,13 +132,14 @@ def test_mask_empty_excluded_in_train_counted_as_error_in_eval():
     mask_empty[:10] = True
 
     df = pd.DataFrame(X, columns=[f"f{i}" for i in range(5)])
+    df["sharpness_laplacian_var"] = rng.uniform(0, 100, n)  # para grupo control_nitidez
     df["binary_label"] = np.where(y == 0, "healthy", "diseased")
     df["leaf_group_id"] = groups
     df["mask_empty"] = mask_empty
     df["split"] = "train"
 
     # prepare_xy con exclude_mask_empty=True debe quitar esas filas
-    X_train, y_train, g_train, _ = tr.prepare_xy(df, "color", exclude_mask_empty=True)
+    X_train, y_train, g_train, _ = tr.prepare_xy(df, "control_nitidez", exclude_mask_empty=True)
     assert len(X_train) == 90
     assert not any(g_train < 10)  # grupos 0-9 excluidos
 
@@ -146,18 +150,23 @@ def test_eval_test_refuses_uncommitted_changes(monkeypatch, tmp_path):
     """eval_test.py se niega a ejecutarse con cambios sin commitear."""
     # Simular git status --porcelain con cambios
     import subprocess
+
     original_run = subprocess.run
 
     def mock_run(cmd, *args, **kwargs):
         if cmd[:2] == ["git", "status"]:
+
             class MockResult:
                 stdout = "M  some_file.py\n"
                 returncode = 0
+
             return MockResult()
         if cmd[:2] == ["git", "rev-parse"]:
+
             class MockResult:
                 stdout = "abc123\n"
                 returncode = 0
+
             return MockResult()
         return original_run(cmd, *args, **kwargs)
 
@@ -165,35 +174,43 @@ def test_eval_test_refuses_uncommitted_changes(monkeypatch, tmp_path):
 
     # Verificar que check_git_clean devuelve False
     from src.training import check_git_clean
+
     assert check_git_clean() is False
 
 
 def test_eval_test_refuses_wrong_commit(monkeypatch):
     """eval_test.py se niega si el commit actual != congelado."""
     import subprocess
+
     original_run = subprocess.run
 
     def mock_run(cmd, *args, **kwargs):
         if cmd[:2] == ["git", "rev-parse"]:
+
             class MockResult:
                 stdout = "different_commit\n"
                 returncode = 0
+
             return MockResult()
         if cmd[:2] == ["git", "status"]:
+
             class MockResult:
                 stdout = ""
                 returncode = 0
+
             return MockResult()
         return original_run(cmd, *args, **kwargs)
 
     monkeypatch.setattr(subprocess, "run", mock_run)
 
-    from src.training import get_git_commit_hash, check_git_clean
+    from src.training import check_git_clean, get_git_commit_hash
+
     assert check_git_clean() is True
     assert get_git_commit_hash() != "frozen_commit"
 
 
 # --------------------------------------------------------------------------- baseline test
+
 
 def test_baseline_rules():
     """Baseline por reglas: umbrales fijos, predicción booleana."""
@@ -221,10 +238,12 @@ def test_compute_baseline_thresholds():
 
 # --------------------------------------------------------------------------- texture blur test
 
+
 def test_compute_blur_sigma_returns_sigma():
     """compute_blur_sigma devuelve una sigma y detalles (test de integración ligero)."""
     # Este test solo verifica que la función existe y tiene la firma correcta
     import inspect
+
     sig = inspect.signature(tr.compute_blur_sigma)
     assert "features_csv" in sig.parameters
     assert "sigma_candidates" in sig.parameters
