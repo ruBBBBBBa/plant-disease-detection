@@ -1,0 +1,15 @@
+{
+  "chosen_group": "combinadas",
+  "chosen_model": "random_forest",
+  "chosen_by": "max balanced_accuracy on val (tie-break: simpler model, margin 0.005)",
+  "val_balanced_accuracy": 0.9628378378378378,
+  "val_recall_diseased": 1.0,
+  "cv_best_params": {
+    "clf__max_depth": 10,
+    "clf__min_samples_split": 5,
+    "clf__n_estimators": 200
+  },
+  "frozen_commit": "a9d187d99c5117bcdf82c3f09e570ec4e3843d73",
+  "git_clean_at_choice": false,
+  "timestamp": "2026-11-16 16:11:07"
+}

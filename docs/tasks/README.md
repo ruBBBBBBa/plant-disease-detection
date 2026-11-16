@@ -21,14 +21,18 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T04](T04-caracteristicas.md) | Extracción de características de color, textura y manchas | En revisión | `t04-features` |
+| [T04](T04-caracteristicas.md) | Extracción de características de color, textura y manchas | Hecha | `t04-features` (PR #4) |
+
+## Fase 4 — Clasificación y evaluación
+
+| ID | Tarea | Estado | Rama / PR |
+|---|---|---|---|
+| [T05](T05-clasificacion-evaluacion.md) | Clasificación clásica y evaluación (con control del sesgo de nitidez) | En curso | `t05-classification` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
 Cada fase se convierte en ficheros de tarea cuando la anterior está cerrada, con sus resultados reales delante.
 
-- **Fase 4 — Clasificación y evaluación:** baseline por reglas, kNN, SVM, árbol/Random Forest;
-  color vs textura vs combinadas; matriz de confusión, precision/recall/F1, tiempo por imagen.
 - **Fase 5 — Test externo y análisis de errores:** PlantDoc, falsos negativos/positivos, «análisis no concluyente».
 - **Fase 6 — Explicación visual e inferencia:** CLI de inferencia con máscaras, regiones sospechosas y estadísticas.
 - **Ampliaciones condicionadas:** patata/pimiento, enfermedades concretas, vídeo (CamShift/KLT), Streamlit.
