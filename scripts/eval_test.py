@@ -20,6 +20,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.metrics import recall_score
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
@@ -316,7 +317,6 @@ def main(argv: list[str] | None = None) -> int:
             recall = recall_score(y_dis, y_pred_dis, pos_label=1, zero_division=0)
             report_lines.append(f"| {dis} | {recall:.4f} | {int(mask.sum())} |")
 
-        from sklearn.metrics import recall_score
         report_lines.append("")
 
     # Análisis de sesgo
