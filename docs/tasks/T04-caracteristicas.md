@@ -244,3 +244,23 @@ Clasificadores, escalado y selección de características basada en un modelo (f
      (p. ej. un suavizado común antes de la textura), ajustado con `train`.
   4. **Excluir `l_std`/`v_std`:** también reflejan el sesgo de captura; decidir si se excluyen de
      la familia «color».
+
+
+### Revisión Codex — PR #4 (2026-11-16)
+
+- La revisión no encontró P0 ni P1; no se cambia la implementación ni la configuración.
+- P2 pendientes: tratamiento explícito de máscara vacía (puede producir NaN aunque se marque
+  «no concluyente»); respaldar el extremo de 27 ms del rango de tiempos de la Entrega con
+  un registro conservado (el informe actual recoge 41,6 y 43,7 ms).
+- `ruff check .`, `ruff format --check .` y `pytest`: correctos, **70 passed**.
+- Verificación de extracción: dos ejecuciones de `extract_features.py --subset-only`, con
+  `--out /tmp/feat_a.csv` y `--out /tmp/feat_b.csv`, y ambas con
+  `--log /tmp/t04_refinement_extraction.md`. Comparación con `cmp` y `sha1sum`.
+- T03 sin diferencias respecto a main; datos originales sin cambios según git. No se ejecuta
+  el ajuste ni se entrena ningún clasificador. Val/test solo se calculan, sin analizarlos.
+- Para el alumno: resolver D020–D022 y los dos P2 antes citados. Sin merge.
+- Resultado: CSV idénticos byte a byte, SHA-1 en ambos
+  `04020f706325ec6bcfd1319dd4de754306be947f`, igual al de la Entrega. Se mantienen
+  las 1.998 filas y 75 características. No cambia ningún valor de los CSV, por lo que no
+  es necesario regenerar los informes exploratorios. Los tiempos de estas verificaciones
+  temporales fueron 20,8 y 21,5 ms/img; no sustituyen los tiempos históricos conservados.
