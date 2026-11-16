@@ -1,6 +1,6 @@
 # Diccionario de características (versión `v1`, T04)
 
-Cada imagen de PlantVillage se convierte en **75 características** explícitas, calculadas **solo
+Cada imagen de PlantVillage se convierte en **77 características** explícitas, calculadas **solo
 dentro de la máscara de la hoja** (D017). Código: `src/features.py`. Parámetros (ajustados solo con
 `train`): `configs/features.json`. Extracción: `scripts/extract_features.py`, que escribe
 `data/processed/features_v1_*.csv` (no versionado).
@@ -16,14 +16,25 @@ dentro de la máscara de la hoja** (D017). Código: `src/features.py`. Parámetr
   mucho más nítidas (varianza del laplaciano: mediana 20.112 frente a 952–9.311 en las enfermas;
   AUC 0,014). Las características de **textura** y la dispersión del brillo (`l_std`, `v_std`)
   separan casi perfectamente, pero en parte por eso. Ver `reports/features/features_train.md`.
+- **Sin regla «no concluyente» para PlantVillage (D021):** la solidez se mantiene como característica
+  normal; el criterio se retoma en la fase 5 con PlantDoc. Motivo: las reglas candidatas solo
+  marcaban hojas enfermas cuya forma es el propio síntoma.
+- **Columna `mask_empty` (bool):** indica si la máscara final quedó vacía (P2 de Codex). La fase 4
+  decidirá cómo tratarla (imputar, excluir, etc.). Evita NaN silenciosos.
 
 ## Calidad de la máscara (3) — no son síntomas
 
 | Nombre | Cálculo | Rango | Uso |
 |---|---|---|---|
-| `leaf_area_frac` | píxeles de hoja / píxeles de la imagen (máscara de T03) | 0–1 | Calidad; regla candidata de «no concluyente» |
-| `border_touch_frac` | fracción de los píxeles del borde de la imagen que son hoja | 0–1 | Calidad; regla candidata |
-| `mask_solidity` | área / área de la envolvente convexa de la mayor región | 0–1 | **Regla activa de «no concluyente»** (< 0,6504, p1 de `train`) |
+| `leaf_area_frac` | píxeles de hoja / píxeles de la imagen (máscara de T03) | 0–1 | Calidad; regla candidata de «no concluyente» (fase 5) |
+| `border_touch_frac` | fracción de los píxeles del borde de la imagen que son hoja | 0–1 | Calidad; regla candidata (fase 5) |
+| `mask_solidity` | área / área de la envolvente convexa de la mayor región | 0–1 | Calidad; regla candidata de «no concluyente» (fase 5) |
+
+## Diagnóstico de captura (1) — no son síntomas
+
+| Nombre | Cálculo | Rango | Uso |
+|---|---|---|---|
+| `sharpness_laplacian_var` | varianza del laplaciano del gris dentro de la hoja | ≥ 0 | **Diagnóstico de captura**: detecta sesgo de nitidez entre lotes (sanas más nítidas). Familia `diagnostico`, separada de color/textura/manchas. |
 
 ## Color (43) — Tema 2 (espacios de color, histogramas) y Tema 4
 

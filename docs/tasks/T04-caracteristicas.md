@@ -116,10 +116,10 @@ Clasificadores, escalado y selección de características basada en un modelo (f
 
 ## Decisiones que quedan para el alumno al cerrar T04
 
-1. Variante de máscara para las características (tal cual, erosionada o sin sombras).
-2. Criterio de «no concluyente».
+1. Variante de máscara para las características (tal cual, erosionada o sin sombras). → **D020: aceptada «tal cual» (raw)**.
+2. Criterio de «no concluyente». → **D021: sin regla para PlantVillage; solidez como característica normal; se retoma en fase 5**.
 3. Qué grupos de características se comparan en la fase 4 (color, textura, manchas, combinadas;
-   `PROJECT_CONTEXT.md` §7).
+   `PROJECT_CONTEXT.md` §7). → **D022: baseline reglas, color, textura, manchas, combinadas, color+manchas sin textura, control solo nitidez, textura tras suavizado gaussiano común. `l_std`/`v_std` en color, señaladas.**
 
 ## Criterio de las variantes de sombra (fijado antes de ver resultados, 2026-11-13)
 
@@ -173,22 +173,16 @@ Clasificadores, escalado y selección de características basada en un modelo (f
     *blight*. El riesgo de D019 («sombra = falsa necrosis») apunta en el sentido contrario: la
     oscuridad es más frecuente en las sanas por cómo están fotografiadas.
 
-- **Criterio «no concluyente» y cuántas imágenes de train afecta:**
-  - Se calcularon tres reglas candidatas con `train`: área de la hoja < p1 (0,2154), solidez de la
-    máscara < p1 (0,6504) y fracción de borde > p99 (0,1627). Juntas marcan 41 imágenes.
-  - Revisión visual (`inconclusive_train.jpg`, un bloque por regla):
-    - **Área:** marca sobre todo hojas pequeñas bien segmentadas.
-    - **Borde:** marca primeros planos bien segmentados.
-    - **Solidez:** recoge la mayoría de las máscaras fragmentadas (necrosis perdida, fondo
-      incluido), más 4 hojas de YLCV rizadas que están bien.
-  - **Regla activa propuesta: `mask_solidity < 0,6504` → 14 de 1.406 imágenes de train**, todas
-    enfermas. Las otras dos quedan en `inconclusive_candidates` (`configs/features.json`).
-  - Ojo: con cualquier regla, todas las marcadas en `train` son enfermas. Excluirlas en la
-    evaluación quitaría enfermas difíciles; la fase 4 debe contarlas aparte, no descartarlas.
+- **Criterio «no concluyente» (D021):** se calculan tres reglas candidatas con `train` (p1/p99):
+  área < 0,2154, solidez < 0,6504, borde > 0,1627 (juntas marcan 41 imágenes). Revisión visual:
+  todas marcan solo **enfermas** cuya forma fragmentada es el síntoma. **Decisión: sin regla activa
+  para PlantVillage**; la solidez se mantiene como característica normal. Las tres quedan en
+  `inconclusive_candidates` para decidir en la fase 5 con PlantDoc.
 
 - **Características: número por familia y tiempo por imagen:**
-  - **75 en total:** calidad 3, color 43, textura 22 (GLCM d = 1 con 32 niveles; LBP uniforme
-    P = 16, R = 2) y manchas 7. Diccionario completo en `docs/FEATURES.md`.
+  - **77 en total:** calidad 3, diagnóstico 1 (`sharpness_laplacian_var`), color 43, textura 22
+    (GLCM d = 1 con 32 niveles; LBP uniforme P = 16, R = 2), manchas 7 y **`mask_empty` (bool)**.
+    Diccionario completo en `docs/FEATURES.md`.
   - **Tiempo:** 27–44 ms por imagen, incluida la segmentación, en un i7-1355U con un hilo; varía
     con la carga entre ejecuciones (`reports/features/extraction.md`).
   - Los CSV pesan unos 1,5 MB y no se versionan; se regeneran con los comandos de arriba y se
@@ -227,23 +221,24 @@ Clasificadores, escalado y selección de características basada en un modelo (f
   - **Media circular de H:** H es un ángulo.
   - **Error corregido gracias a un test:** el histograma LBP erosiona R + 1 y no R (con R = 2 los
     vecinos interpolados tocaban el fondo). Corregido antes de la extracción final.
-  - **Regla «no concluyente» activa:** solo la solidez; las otras dos quedan como candidatas.
+  - **Sin regla «no concluyente» para PlantVillage (D021):** las tres reglas candidatas solo marcan
+    enfermas; la solidez queda como característica normal. Retomar en fase 5.
+  - **Nueva columna `mask_empty` (bool):** evita NaN silenciosos si la máscara queda vacía (P2
+    Codex). La fase 4 decide el tratamiento.
+  - **Nueva columna `sharpness_laplacian_var` (familia `diagnostico`):** mide el sesgo de captura
+    (D022). No es una característica de síntoma.
   - **Scripts:** tres (`tune_features`, `extract_features` y `analyze_features`) en lugar de uno,
     para separar el ajuste (`train`), la extracción (todos los splits) y el análisis (`train`).
-  - **Propuestas registradas:** D020–D022 en `docs/DECISIONS.md`.
+  - **Propuestas registradas:** D020–D023 en `docs/DECISIONS.md`.
 
-- **Pendientes (para el alumno):**
-  1. **Variante de máscara (D020):** aceptar «tal cual», que es lo que da el criterio fijado. El
-     problema de sombras de D019 no se resuelve con estas variantes; en `train` la oscuridad es más
-     frecuente en sanas.
-  2. **«No concluyente» (D021):** aceptar solo la solidez (14 de train), activar también área o
-     borde, o no usar ninguna. En todos los casos solo afecta a enfermas.
-  3. **Grupos para la fase 4:** color, textura, manchas y combinadas, como dice `PROJECT_CONTEXT.md`
-     §7. Dado el sesgo de nitidez, conviene comparar color + manchas **sin** textura y valorar en
-     PlantDoc si la textura generaliza. Otra opción para la fase 4 sería normalizar la nitidez
-     (p. ej. un suavizado común antes de la textura), ajustado con `train`.
-  4. **Excluir `l_std`/`v_std`:** también reflejan el sesgo de captura; decidir si se excluyen de
-     la familia «color».
+- **Pendientes (para el alumno / fase 4):**
+  1. **Sesgo de nitidez (D023, riesgo para fase 4):** la textura separa casi igual que la nitidez
+     de captura (AUC 0,013 vs 0,014). La fase 4 debe comparar: baseline (reglas), color, textura,
+     manchas, combinadas, **color + manchas SIN textura**, control solo nitidez, textura tras
+     suavizado gaussiano común (ajustado con train). `l_std`/`v_std` quedan en color, señaladas.
+  2. **Tratamiento de `mask_empty` (P2):** la fase 4 debe decidir (imputar, excluir, clase aparte).
+  3. **Validación en PlantDoc (fase 5):** si la textura generaliza fuera de PlantVillage y si se
+     activa alguna regla «no concluyente».
 
 
 ### Revisión Codex — PR #4 (2026-11-16)

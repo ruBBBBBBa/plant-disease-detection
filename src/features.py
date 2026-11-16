@@ -259,7 +259,10 @@ def spot_features(image_bgr: np.ndarray, mask: np.ndarray, cfg: dict) -> dict[st
 
 
 def quality_features(mask: np.ndarray) -> dict[str, float]:
-    """Calidad de la máscara, para el criterio «no concluyente» (D017).
+    """Calidad de la máscara (D017). Sin regla de «no concluyente» para PlantVillage (D021):
+    la solidez se mantiene como característica normal; el criterio se retoma en la fase 5 con
+    PlantDoc. Motivo: las reglas candidatas solo marcaban hojas enfermas cuya forma es el propio
+    síntoma (necrosis perdida, bordes irregulares).
 
     - ``leaf_area_frac``: fracción de la imagen ocupada por la hoja.
     - ``border_touch_frac``: fracción de los píxeles del borde de la imagen que son hoja.
@@ -281,20 +284,96 @@ def quality_features(mask: np.ndarray) -> dict[str, float]:
     }
 
 
+def sharpness_feature(image_bgr: np.ndarray, mask: np.ndarray) -> dict[str, float]:
+    """Nitidez de la captura dentro de la hoja: varianza del laplaciano del gris.
+
+    Es una **columna de diagnóstico** (familia ``diagnostico``), no una característica de síntoma.
+    Permite detectar sesgos de captura (p. ej. lote de sanas más nítido que el de enfermas).
+    Se calcula **antes** de cualquier suavizado para medir la nitidez real de la adquisición.
+    Se usa una máscara erosionada 2 píxeles para evitar efectos de borde con el fondo.
+    """
+    inside = cv2.erode(mask, seg.ellipse_kernel(5)) > 0
+    if not inside.any():
+        return {"sharpness_laplacian_var": 0.0}
+    gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+    laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+    return {"sharpness_laplacian_var": float(laplacian[inside].var())}
+
+
 # --------------------------------------------------------------------------- todo junto
 
 
-def extract_features(image_bgr: np.ndarray, raw_mask: np.ndarray, cfg: dict) -> dict[str, float]:
-    """Vector completo de una imagen: calidad (máscara de T03) + color, textura y manchas.
+def _zero_features(cfg: dict) -> dict[str, float]:
+    """Vector de ceros con la misma estructura que extract_features (para mask_empty=True)."""
+    # quality (3)
+    zero = {
+        "leaf_area_frac": 0.0,
+        "border_touch_frac": 0.0,
+        "mask_solidity": 0.0,
+    }
+    # diagnostico (1)
+    zero["sharpness_laplacian_var"] = 0.0
+    # color (43): stats + histograms + tone fractions
+    zero.update(
+        {
+            "h_circ_mean_deg": 0.0,
+            "h_circ_var": 0.0,
+            "s_mean": 0.0,
+            "s_std": 0.0,
+            "v_mean": 0.0,
+            "v_std": 0.0,
+            "l_mean": 0.0,
+            "l_std": 0.0,
+            "a_mean": 0.0,
+            "a_std": 0.0,
+            "b_mean": 0.0,
+            "b_std": 0.0,
+        }
+    )
+    for i in range(12):
+        zero[f"h_hist_{i:02d}"] = 0.0
+    for name in ("a", "b"):
+        for i in range(8):
+            zero[f"{name}_hist_{i:02d}"] = 0.0
+    zero.update({"frac_yellow": 0.0, "frac_brown": 0.0, "frac_dark": 0.0})
+    # texture (22): GLCM (4) + LBP (18)
+    for prop in ("contrast", "homogeneity", "energy", "correlation"):
+        zero[f"glcm_{prop}"] = 0.0
+    for i in range(18):
+        zero[f"lbp_{i:02d}"] = 0.0
+    # spots (7)
+    zero.update(
+        {
+            "spot_count": 0.0,
+            "spot_area_frac": 0.0,
+            "spot_mean_area_frac": 0.0,
+            "spot_max_area_frac": 0.0,
+            "spot_mean_solidity": 0.0,
+            "spot_mean_eccentricity": 0.0,
+            "spot_mean_circularity": 0.0,
+        }
+    )
+    return zero
 
-    La calidad se mide sobre la máscara de T03 tal cual; el resto, sobre la máscara preparada
-    con la variante de sombra elegida (``cfg["mask_variant"]``).
+
+def extract_features(image_bgr: np.ndarray, raw_mask: np.ndarray, cfg: dict) -> dict[str, float]:
+    """Vector completo: calidad (máscara T03) + color, textura, manchas y diagnóstico.
+
+    La calidad y el diagnóstico (nitidez) usan la máscara de T03 tal cual; el resto,
+    la máscara preparada con la variante de sombra (``cfg["mask_variant"]``).
+
+    Devuelve ``mask_empty`` (bool): True si la máscara final no tiene píxeles. En ese caso
+    las demás características valdrán 0; la fase 4 decide el tratamiento. Evita NaN silenciosos
+    (P2 de Codex).
     """
     mask = prepare_mask(image_bgr, raw_mask, cfg["mask_variant"])
-    if not (mask > 0).any():
-        mask = raw_mask  # la variante no puede dejar la hoja vacía
+    mask_empty = not (mask > 0).any()
+    if mask_empty:
+        return {"mask_empty": True} | _zero_features(cfg)
     return (
-        quality_features(raw_mask)
+        {"mask_empty": False}
+        | quality_features(raw_mask)
+        | sharpness_feature(image_bgr, raw_mask)
         | color_features(image_bgr, mask, cfg)
         | texture_features(image_bgr, mask, cfg)
         | spot_features(image_bgr, mask, cfg)
@@ -306,6 +385,9 @@ def is_inconclusive(quality: dict[str, float], rules: dict) -> bool:
 
     Reglas posibles: ``leaf_area_frac_min``, ``mask_solidity_min`` y ``border_touch_frac_max``.
     Solo se aplican las que están en ``rules`` (``configs/features.json``).
+
+    Nota: Para PlantVillage no se usa (D021). Se mantiene por compatibilidad y para la fase 5
+    (PlantDoc), donde se decidirá si se activa.
     """
     checks = {
         "leaf_area_frac_min": lambda t: quality["leaf_area_frac"] < t,

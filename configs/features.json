@@ -1,5 +1,5 @@
 {
-  "_comment": "Ajustado solo con train por scripts/tune_features.py (T04).",
+  "_comment": "Ajustado solo con train por scripts/tune_features.py (T04). Sin regla 'inconclusive' para PlantVillage (D021); se retoma en fase 5 con PlantDoc.",
   "tuned_on": {
     "split": "train",
     "subset": true,
@@ -35,9 +35,7 @@
   "spots": {
     "min_area": 10
   },
-  "inconclusive": {
-    "mask_solidity_min": 0.6504
-  },
+  "inconclusive": {},
   "inconclusive_candidates": {
     "leaf_area_frac_min": 0.2154,
     "mask_solidity_min": 0.6504,

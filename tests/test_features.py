@@ -15,6 +15,7 @@ CONFIG = {
     "hist_ranges": {"a": [-27.0, 5.0], "b": [1.0, 48.0]},
     "texture": {"glcm_levels": 32, "glcm_distance": 1, "lbp_points": 16, "lbp_radius": 2},
     "spots": {"min_area": 10},
+    "inconclusive": {},
 }
 GREEN = (40, 150, 50)  # BGR, H ≈ 62 (escala OpenCV)
 BROWN = (30, 70, 120)  # BGR, H ≈ 10
@@ -68,9 +69,10 @@ def test_feature_names_and_order_are_stable() -> None:
     image[50:60, 50:60] = BROWN
     b = list(ft.extract_features(image, mask, CONFIG))
     assert a == b
-    assert a[:3] == ["leaf_area_frac", "border_touch_frac", "mask_solidity"]
+    assert a[:4] == ["mask_empty", "leaf_area_frac", "border_touch_frac", "mask_solidity"]
     assert a[-1] == "spot_mean_circularity"
-    assert len(a) == 3 + 12 + 12 + 8 + 8 + 3 + 4 + 18 + 7
+    assert a[4] == "sharpness_laplacian_var"
+    assert len(a) == 77  # 75 + mask_empty + sharpness_laplacian_var
 
 
 def test_shadow_variant_keeps_interior_lesion_and_removes_rim_shadow() -> None:
@@ -113,3 +115,20 @@ def test_is_inconclusive_only_uses_active_rules() -> None:
     quality = {"leaf_area_frac": 0.1, "border_touch_frac": 0.5, "mask_solidity": 0.9}
     assert not ft.is_inconclusive(quality, {"mask_solidity_min": 0.65})
     assert ft.is_inconclusive(quality, {"mask_solidity_min": 0.65, "leaf_area_frac_min": 0.2})
+
+
+def test_empty_mask_returns_mask_empty_true_and_no_nan() -> None:
+    """Máscara vacía → mask_empty=True y todas las características numéricas finitas (sin NaN).
+
+    P2 de Codex: evitar NaN silenciosos. La fase 4 decide cómo tratar mask_empty=True
+    (imputar, excluir, etc.).
+    """
+    image = np.zeros((SIZE, SIZE, 3), np.uint8)
+    empty_mask = np.zeros((SIZE, SIZE), np.uint8)
+    feats = ft.extract_features(image, empty_mask, CONFIG)
+    assert feats["mask_empty"] is True
+    # Todas las demás características deben ser números finitos (no NaN, no inf)
+    for name, value in feats.items():
+        if name == "mask_empty":
+            continue
+        assert np.isfinite(value), f"Característica {name} no es finita: {value}"

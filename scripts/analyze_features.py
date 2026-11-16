@@ -35,7 +35,16 @@ from src import data_audit as audit  # noqa: E402
 from src import features as ft  # noqa: E402
 from src import segmentation as seg  # noqa: E402
 
-NON_FEATURES = {"image_id", "split", "binary_label", "disease_name", "leaf_group_id", "in_subset"}
+NON_FEATURES = {
+    "image_id",
+    "split",
+    "binary_label",
+    "disease_name",
+    "leaf_group_id",
+    "in_subset",
+    "mask_empty",
+    "sharpness_laplacian_var",
+}
 QUALITY = {"leaf_area_frac", "border_touch_frac", "mask_solidity"}
 
 
@@ -58,6 +67,8 @@ def family(name: str) -> str:
     """Familia de una característica a partir de su nombre."""
     if name in QUALITY:
         return "calidad"
+    if name == "sharpness_laplacian_var":
+        return "diagnostico"
     if name.startswith(("glcm_", "lbp_")):
         return "textura"
     if name.startswith("spot_"):
@@ -173,9 +184,9 @@ def main(argv: list[str] | None = None) -> int:
     table = pd.read_csv(args.features)
     train = table[table["split"] == "train"].reset_index(drop=True)  # val/test fuera desde aquí
     del table
-    n_inconclusive = int(train["inconclusive"].sum())
-    train = train[~train["inconclusive"]].reset_index(drop=True)
-    columns = [c for c in train.columns if c not in NON_FEATURES | {"inconclusive"}]
+    # Sin columna "inconclusive" para PlantVillage (D021); mask_empty y sharpness_laplacian_var
+    # están en NON_FEATURES y se excluyen del análisis univariante de síntomas.
+    columns = [c for c in train.columns if c not in NON_FEATURES]
     constant = [c for c in columns if train[c].nunique() <= 1]
     columns = [c for c in columns if c not in constant]
 
@@ -206,8 +217,8 @@ def main(argv: list[str] | None = None) -> int:
         "",
         f"`python scripts/analyze_features.py --seed {args.seed}` sobre "
         f"`data/processed/{args.features.name}`. Solo filas `train` del subconjunto "
-        f"({len(train)} imágenes; {n_inconclusive} «no concluyentes» excluidas). `val` y `test` "
-        "no se leen. AUC: 1 = enferma; `sep` = |AUC − 0,5| (0 = no separa, 0,5 = separa del todo).",
+        f"({len(train)} imágenes). `val` y `test` no se leen. AUC: 1 = enferma; "
+        "`sep` = |AUC − 0,5| (0 = no separa, 0,5 = separa del todo).",
         "",
         f"Características constantes en train (sin información, excluidas del análisis): "
         f"{constant or 'ninguna'}.",
@@ -237,12 +248,13 @@ def main(argv: list[str] | None = None) -> int:
         "diferencias de captura entre clases (encuadre, tamaño de la hoja): "
         + ", ".join(f"`{r.feature}` AUC {r.auc}" for r in quality_aucs.itertuples())
         + ".",
-        "- **Diagnóstico de captura** (nitidez = varianza del laplaciano dentro de la hoja, no "
-        f"es una característica): AUC sano/enfermo {sharpness.attrs['auc']}. Mediana por "
+        "- **Diagnóstico de captura** (nitidez = `sharpness_laplacian_var`, ahora columna del CSV, "
+        f"familia 'diagnostico'): AUC sano/enfermo {sharpness.attrs['auc']}. Mediana por "
         "enfermedad: "
         + ", ".join(f"{r.disease_name} {r.laplacian_var}" for r in sharpness.itertuples())
         + ". Si las sanas son mucho más nítidas, la separación de la textura puede deberse en "
         "parte a la captura de cada lote y no a los síntomas.",
+        "- `mask_empty` (bool) indica máscaras vacías; la fase 4 decidirá su tratamiento (P2).",
         "- Separación univariante no es capacidad de clasificación: no se anticipa ningún "
         "resultado de la fase 4.",
         "",

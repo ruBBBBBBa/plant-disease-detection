@@ -47,12 +47,9 @@ TEXTURE_GRID = {
 SIMPLICITY = {"raw": 0, "erode": 1, "shadow": 2}
 V_HUE_MIN = 50  # por debajo, H no es fiable (picos espurios en los píxeles oscuros de sanas)
 SENSITIVITY_DARK_V = (30, 15)
-# Reglas «no concluyente» activas por defecto. Revisando inconclusive_train.jpg: área y borde marcan
-# sobre todo hojas bien segmentadas (pequeñas o en primer plano); la solidez recoge la mayoría de
-# las máscaras fragmentadas. Las otras dos quedan en "inconclusive_candidates" para activarlas.
-ACTIVE_RULES = (
-    "mask_solidity_min",
-)  # análisis post hoc del criterio; no interviene en la elección
+# Sin regla «no concluyente» activa para PlantVillage (D021): las reglas candidatas solo marcaban
+# hojas enfermas cuya forma es el propio síntoma. Se retoma en fase 5 con PlantDoc.
+ACTIVE_RULES = ()  # vacío; las tres reglas quedan en "inconclusive_candidates"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -331,10 +328,9 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     variants_grid(samples, rows, variants, args.reports / "shadow_variants_train.jpg")
+    # Generar la rejilla de candidatos «no concluyente» para documentación (fase 5 / PlantDoc)
     inconclusive_grid(samples, rows, quality, rules, args.reports / "inconclusive_train.jpg")
-    active = config["inconclusive"]
-    flags = [ft.is_inconclusive(q.to_dict(), active) for _, q in quality.iterrows()]
-    n_flagged = sum(flags)
+    any_rule = [ft.is_inconclusive(q.to_dict(), rules) for _, q in quality.iterrows()]
     flagged_by = {
         "leaf_area_frac < min": int(
             (quality["leaf_area_frac"] < rules["leaf_area_frac_min"]).sum()
@@ -344,8 +340,6 @@ def main(argv: list[str] | None = None) -> int:
             (quality["border_touch_frac"] > rules["border_touch_frac_max"]).sum()
         ),
     }
-    any_rule = [ft.is_inconclusive(q.to_dict(), rules) for _, q in quality.iterrows()]
-    flagged_labels = rows.loc[flags, "binary_label"].value_counts()
     report = [
         "# Ajuste de características con train",
         "",
@@ -378,20 +372,22 @@ def main(argv: list[str] | None = None) -> int:
         "",
         f"Elegido: `{json.dumps(texture)}`.",
         "",
-        "## Criterio «no concluyente» (D017)",
+        "## Criterio «no concluyente» (D017, D021)",
         "",
         f"Reglas candidatas (p1 / p99 de train): `{json.dumps(rules)}`. Con las tres juntas se "
         f"marcarían {sum(any_rule)} de {len(rows)} imágenes de train ({json.dumps(flagged_by)}).",
         "",
         "Revisión visual (`inconclusive_train.jpg`, un bloque por regla): las reglas de área y de "
         "borde marcan sobre todo hojas bien segmentadas (pequeñas o en primer plano); la de "
-        "solidez recoge la mayoría de las máscaras fragmentadas. **Regla activa por defecto:** "
-        f"`{json.dumps(active)}` → **{n_flagged}** imágenes de train no concluyentes "
-        f"(por etiqueta: {flagged_labels.to_dict()}).",
+        "solidez recoge la mayoría de las máscaras fragmentadas (necrosis perdida, bordes "
+        "irregulares). "
+        "**Para PlantVillage no se activa ninguna regla (D021):** todas las imágenes marcadas "
+        "son enfermas cuya forma fragmentada es el propio síntoma. Las reglas quedan en "
+        "`inconclusive_candidates` para decidir en la fase 5 con PlantDoc.",
         "",
     ]
     (args.reports / "tuning_train.md").write_text("\n".join(report), encoding="utf-8")
-    print(f"Variante: {variant}; no concluyentes en train: {n_flagged}")
+    print(f"Variante: {variant}; reglas inconclusivas candidatas documentadas (ninguna activa)")
     return 0
 
 

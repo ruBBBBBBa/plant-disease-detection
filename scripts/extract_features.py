@@ -112,11 +112,9 @@ def main(argv: list[str] | None = None) -> int:
         mask = ft.leaf_mask(image, seg_config)
         feats = ft.extract_features(image, mask, config)
         elapsed += time.perf_counter() - start
-        quality = {k: feats[k] for k in ("leaf_area_frac", "border_touch_frac", "mask_solidity")}
         records.append(
             {
                 **{column: getattr(row, column) for column in ID_COLUMNS},
-                "inconclusive": ft.is_inconclusive(quality, config["inconclusive"]),
                 **feats,
             }
         )
@@ -126,7 +124,8 @@ def main(argv: list[str] | None = None) -> int:
 
     sha1 = hashlib.sha1(args.out.read_bytes()).hexdigest()
     ms = 1000 * elapsed / len(rows)
-    n_features = len(table.columns) - len(ID_COLUMNS) - 1
+    # ID_COLUMNS + mask_empty (incluido en feats) = total columnas - ID_COLUMNS
+    n_features = len(table.columns) - len(ID_COLUMNS)
     counts = table["split"].value_counts().sort_index().to_dict()
     flag = "--subset-only" if args.subset_only else "--full-test"
     update_log(
@@ -137,7 +136,9 @@ def main(argv: list[str] | None = None) -> int:
         f"- Imágenes por split: {counts}; características por imagen: {n_features}.\n"
         f"- Tiempo medio por imagen (segmentación + características): {ms:.1f} ms — {cpu_name()}, "
         f"{platform.system()}, un hilo.\n"
-        "- Las características de `val` y `test` se calculan pero no se analizan (protocolo T04).",
+        "- Las características de `val` y `test` se calculan pero no se analizan (protocolo T04).\n"
+        "- Sin columna 'inconclusive' para PlantVillage (D021); 'mask_empty' indica máscara vacía "
+        "(P2 Codex); 'sharpness_laplacian_var' es diagnóstico de captura (D022).",
     )
     print(f"{len(rows)} imágenes, {n_features} características, {ms:.1f} ms/img → {args.out}")
     return 0
