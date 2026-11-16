@@ -123,6 +123,8 @@ def prepare_xy(df: pd.DataFrame, group_name: str, exclude_mask_empty: bool = Tru
     return X, y, groups, feature_cols
 
 
+ID_COLUMNS = ["image_id", "split", "binary_label", "disease_name", "leaf_group_id"]
+
 # --------------------------------------------------------------------------- commands
 
 
@@ -215,6 +217,7 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    (out_dir / "run_commit.txt").write_text(tr.get_git_commit_hash() + "\n")
     all_results = {}
     baseline_thresholds = {}
 
@@ -223,10 +226,10 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
         # Preparar datos
         if group == "textura_suavizada":
             X_train, y_train, g_train, feat_cols = prepare_xy(train_blur, "textura_suavizada")
-            X_val, y_val, g_val, _ = prepare_xy(val_blur, "textura_suavizada")
+            X_val, y_val, g_val, _ = prepare_xy(val_blur, "textura_suavizada", False)
         else:
             X_train, y_train, g_train, feat_cols = prepare_xy(train_df, group)
-            X_val, y_val, g_val, _ = prepare_xy(val_df, group)
+            X_val, y_val, g_val, _ = prepare_xy(val_df, group, False)
 
         print(f"  Train: {len(X_train)} muestras, {X_train.shape[1]} features")
         print(f"  Val:   {len(X_val)} muestras")
@@ -259,14 +262,31 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
             )
 
             # Evaluar en val
-            val_metrics = tr.evaluate_model(best_model, X_val, y_val, g_val)
+            eval_df = val_blur if group == "textura_suavizada" else val_df
+            empty = eval_df["mask_empty"].to_numpy(bool)
+            val_metrics = tr.evaluate_model(best_model, X_val, y_val, g_val, empty)
+            import joblib
+
+            model_dir = REPO_ROOT / "models" / out_dir.name
+            model_dir.mkdir(parents=True, exist_ok=True)
+            joblib.dump(best_model, model_dir / f"{group}__{model_name}.joblib")
+            pred, score = tr.predict_with_empty(best_model, X_val, y_val, empty)
+            predictions = eval_df[ID_COLUMNS].copy()
+            predictions["y_true"], predictions["y_pred"], predictions["score"] = y_val, pred, score
+            predictions["mask_empty"] = empty
+            predictions.to_csv(
+                out_dir / f"val__{group}__{model_name}.csv.gz",
+                index=False,
+                compression={"method": "gzip", "mtime": 0},
+            )
 
             # Baseline si aplica
             baseline_metrics = None
             if group in baseline_thresholds:
                 y_pred_base = tr.baseline_rules_predict(
-                    X_val, feat_cols, baseline_thresholds[group]
+                    np.nan_to_num(X_val), feat_cols, baseline_thresholds[group]
                 )
+                y_pred_base[empty] = 1 - y_val[empty]
                 baseline_metrics = tr.compute_metrics(y_val, y_pred_base)
 
             elapsed = time.perf_counter() - start
@@ -330,37 +350,7 @@ def cmd_choose_best(args: argparse.Namespace) -> int:
     with open(results_file, "rb") as f:
         all_results = pickle.load(f)
 
-    best = None
-    best_score = -1
-    best_group = None
-    best_model = None
-
-    for group, gres in all_results.items():
-        if group == "control_nitidez":
-            continue  # no es candidato
-        for mname, mres in gres["models"].items():
-            score = mres["val_metrics"]["balanced_accuracy"]
-            if score > best_score + 0.005:  # margen de empate 0.5%
-                best_score = score
-                best = mres
-                best_group = group
-                best_model = mname
-            elif abs(score - best_score) <= 0.005 and best is not None:
-                # Empate: modelo más simple (orden de preferencia)
-                simplicity_order = [
-                    "knn",
-                    "svm_lineal",
-                    "decision_tree",
-                    "svm_rbf",
-                    "random_forest",
-                ]
-                if simplicity_order.index(mname) < simplicity_order.index(best_model):
-                    best = mres
-                    best_group = group
-                    best_model = mname
-
-    if best is None:
-        sys.exit("Error: no se encontró mejor modelo")
+    best_group, best_model, best = tr.choose_candidate(all_results)
 
     commit_hash = tr.get_git_commit_hash()
     git_clean = tr.check_git_clean()

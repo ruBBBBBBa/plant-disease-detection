@@ -252,3 +252,94 @@ def test_compute_blur_sigma_returns_sigma():
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+def test_bootstrap_keeps_duplicate_leaf_rows():
+    """Cada selección repetida aporta otra copia de todas las filas de esa hoja."""
+    y = np.array([0, 0, 1])
+    groups = np.array(["a", "a", "b"])
+    observed = []
+
+    def metric(a, b, c):
+        observed.append(a.tolist())
+        return float(a.mean())
+
+    tr.bootstrap_ci_grouped(y, y, None, groups, metric, n_bootstrap=20)
+    rng = np.random.default_rng(42)
+    expected = [
+        np.concatenate([y[groups == g] for g in rng.choice(["a", "b"], 2)]).tolist()
+        for _ in range(20)
+    ]
+    assert observed == expected
+
+
+def test_empty_masks_are_errors_in_metrics_and_auc():
+    """No se predice con NaN; las vacías son errores de ambas clases y del ranking."""
+
+    class Model:
+        def predict(self, x):
+            assert np.isfinite(x).all()
+            return x[:, 0].astype(int)
+
+        def predict_proba(self, x):
+            return np.column_stack([1 - x[:, 0], x[:, 0]])
+
+    y = np.array([0, 1, 0, 1])
+    pred, score = tr.predict_with_empty(
+        Model(),
+        np.array([[0.0], [1.0], [np.nan], [np.nan]]),
+        y,
+        np.array([False, False, True, True]),
+    )
+    metrics = tr.compute_metrics(y, pred, score)
+    assert metrics["accuracy"] == metrics["recall_healthy"] == metrics["recall_diseased"] == 0.5
+    assert metrics["roc_auc"] == 0.25
+
+
+def test_selection_is_global_deterministic_and_uses_strict_margin():
+    """No depende del recorrido ni incluye control_nitidez; margen estricto."""
+    results = {
+        g: {"models": {m: {"val_metrics": {"balanced_accuracy": s}}}}
+        for g, m, s in [
+            ("combinadas", "random_forest", 0.963),
+            ("color", "knn", 0.958),
+            ("textura", "svm_lineal", 0.960),
+            ("control_nitidez", "knn", 1.0),
+        ]
+    }
+    assert tr.choose_candidate(results)[:2] == ("textura", "svm_lineal")
+    assert tr.choose_candidate(dict(reversed(list(results.items()))))[:2] == (
+        "textura",
+        "svm_lineal",
+    )
+
+
+def test_execution_guard_blocks_mismatch_and_second_run(tmp_path, monkeypatch):
+    """La guarda real exige HEAD y reserva el registro con creación exclusiva."""
+    from scripts import eval_test
+
+    monkeypatch.setattr(tr, "get_git_commit_hash", lambda: "actual")
+    monkeypatch.setattr(tr, "check_git_clean", lambda: True)
+    with pytest.raises(SystemExit, match="congelado"):
+        eval_test.reserve_execution("other", tmp_path)
+    eval_test.reserve_execution("actual", tmp_path)
+    with pytest.raises(SystemExit, match="registro"):
+        eval_test.reserve_execution("actual", tmp_path)
+
+
+def test_pipeline_and_predictions_roundtrip(tmp_path):
+    """Persistir el pipeline y CSV comprimido permite reconstruir métricas sin fit."""
+    import joblib
+
+    est, _ = tr.get_models_and_grids()["decision_tree"]
+    X = np.array([[0.0], [1.0], [2.0], [3.0]])
+    y = np.array([0, 0, 1, 1])
+    model = tr.train_full(X, y, "decision_tree", est, {})
+    joblib.dump(model, tmp_path / "model.joblib")
+    loaded = joblib.load(tmp_path / "model.joblib")
+    pred, score = tr.predict_with_empty(loaded, X, y)
+    pd.DataFrame({"y_true": y, "y_pred": pred, "score": score}).to_csv(
+        tmp_path / "pred.csv.gz", index=False
+    )
+    saved = pd.read_csv(tmp_path / "pred.csv.gz")
+    assert tr.compute_metrics(saved.y_true, saved.y_pred, saved.score)["accuracy"] == 1

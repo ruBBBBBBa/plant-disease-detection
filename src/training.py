@@ -234,8 +234,8 @@ def bootstrap_ci_grouped(
 
     for _ in range(n_bootstrap):
         sampled_groups = rng.choice(unique_groups, size=n_groups, replace=True)
-        mask = np.isin(groups, sampled_groups)
-        if mask.sum() == 0:
+        mask = np.concatenate([np.flatnonzero(groups == group) for group in sampled_groups])
+        if len(mask) == 0:
             continue
         try:
             val = metric_fn(
@@ -344,15 +344,10 @@ def evaluate_model(
     X: np.ndarray,
     y: np.ndarray,
     groups: np.ndarray | None = None,
+    mask_empty: np.ndarray | None = None,
 ) -> dict:
     """Evalúa un modelo ya entrenado, con IC bootstrap si hay groups."""
-    y_pred = model.predict(X)
-    y_score = None
-    clf = model.named_steps["clf"]
-    if hasattr(clf, "predict_proba"):
-        y_score = model.predict_proba(X)[:, 1]
-    elif hasattr(clf, "decision_function"):
-        y_score = model.decision_function(X)
+    y_pred, y_score = predict_with_empty(model, X, y, mask_empty)
 
     metrics = compute_metrics(y, y_pred, y_score)
 
@@ -580,3 +575,45 @@ def prepare_xy(
         else np.arange(len(work))
     )
     return X, y, groups, feature_cols
+
+
+MODEL_ORDER = ["knn", "svm_lineal", "decision_tree", "svm_rbf", "random_forest"]
+
+
+def choose_candidate(results: dict, only_group: str | None = None) -> tuple[str, str, dict]:
+    """Máximo de val; a menos de 0,005, simplicidad y luego grupo alfabético."""
+    candidates = [
+        (g, m, r)
+        for g, gs in results.items()
+        if g != "control_nitidez" and (only_group is None or g == only_group)
+        for m, r in gs["models"].items()
+    ]
+    maximum = max(r["val_metrics"]["balanced_accuracy"] for _, _, r in candidates)
+    tied = [
+        (g, m, r)
+        for g, m, r in candidates
+        if maximum - r["val_metrics"]["balanced_accuracy"] < 0.005
+    ]
+    return min(tied, key=lambda c: (MODEL_ORDER.index(c[1]), c[0]))
+
+
+def predict_with_empty(
+    model, X: np.ndarray, y: np.ndarray, mask_empty: np.ndarray | None = None
+) -> tuple[np.ndarray, np.ndarray]:
+    """Predice hojas válidas; máscaras vacías son errores, incluso en el ranking ROC."""
+    empty = np.zeros(len(y), dtype=bool) if mask_empty is None else np.asarray(mask_empty, bool)
+    valid = ~empty
+    pred = 1 - y.copy()
+    score = np.where(y == 0, np.inf, -np.inf).astype(float)
+    if valid.any():
+        pred[valid] = model.predict(X[valid])
+        if hasattr(model, "predict_proba"):
+            score[valid] = model.predict_proba(X[valid])[:, 1]
+        else:
+            score[valid] = model.decision_function(X[valid])
+    # Sentinelas finitos peores que cualquier score válido (sklearn rechaza infinito).
+    low = float(score[valid].min()) - 1 if valid.any() else -1.0
+    high = float(score[valid].max()) + 1 if valid.any() else 1.0
+    score[empty & (y == 0)] = high
+    score[empty & (y == 1)] = low
+    return pred, score
