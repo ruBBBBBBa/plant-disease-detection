@@ -9,7 +9,7 @@
     "clf__min_samples_split": 5,
     "clf__n_estimators": 200
   },
-  "frozen_commit": "c7d1daf8f3cf022aec83682210b90905aeebf0d4",
+  "frozen_commit": "edd4a994073d6bc4dd79bf12c8af564d8283c959",
   "git_clean_at_choice": true,
   "timestamp": "2026-11-16 16:11:07"
 }
