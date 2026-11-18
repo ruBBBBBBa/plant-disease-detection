@@ -343,3 +343,54 @@ def test_pipeline_and_predictions_roundtrip(tmp_path):
     )
     saved = pd.read_csv(tmp_path / "pred.csv.gz")
     assert tr.compute_metrics(saved.y_true, saved.y_pred, saved.score)["accuracy"] == 1
+
+
+def test_report_numbers_come_from_saved_predictions(tmp_path):
+    """El informe conserva el denominador completo y reconstruye los números del CSV."""
+    from scripts.report_classification import summarize
+
+    path = tmp_path / "val__color__knn.csv.gz"
+    pd.DataFrame(
+        {
+            "y_true": [0, 0, 1, 1],
+            "y_pred": [0, 1, 0, 1],
+            "score": [0.1, 0.8, 0.2, 0.9],
+            "mask_empty": [False, True, True, False],
+            "leaf_group_id": ["a", "b", "c", "d"],
+        }
+    ).to_csv(path, index=False)
+    result = summarize(path)
+    assert result["n_samples"] == 4 and result["n_mask_empty"] == 2
+    assert result["balanced_accuracy"] == 0.5
+
+
+def test_delivery_and_decisions_are_generated_from_run(tmp_path, monkeypatch):
+    """Una cifra obsoleta de la Entrega desaparece al reconstruir desde los artefactos."""
+    import json
+    import pickle
+
+    from scripts import document_classification as doc
+
+    monkeypatch.setattr(doc, "REPO_ROOT", tmp_path)
+    exp = tmp_path / "exp"
+    exp.mkdir()
+    result = {
+        g: {"models": {"svm_lineal": {"val_metrics": {"balanced_accuracy": 0.912345}}}}
+        for g in ("combinadas", "color_manchas", "color_manchas_sin_l_v")
+    }
+    (exp / "cv_val_results.pkl").write_bytes(pickle.dumps(result))
+    (exp / "summary.md").write_text("tabla generada")
+    (exp / "run_commit.txt").write_text("commit-ejecucion")
+    reports = tmp_path / "reports/classification"
+    reports.mkdir(parents=True)
+    (reports / "sigma_selection.json").write_text(json.dumps({"chosen_sigma": 3.0}))
+    docs = tmp_path / "docs/tasks"
+    docs.mkdir(parents=True)
+    task = docs / "T05-clasificacion-evaluacion.md"
+    task.write_text("# T05\n## Entrega\nDato obsoleto: 0.9999")
+    (tmp_path / "docs/DECISIONS.md").write_text("# Decisiones\n")
+    doc.main(["--exp-dir", str(exp)])
+    assert "0.9999" not in task.read_text()
+    assert "0.912345" in task.read_text()
+    assert "commit-ejecucion" in task.read_text()
+    assert "0.912345" in (tmp_path / "docs/DECISIONS.md").read_text()

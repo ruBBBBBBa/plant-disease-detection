@@ -230,11 +230,12 @@ def bootstrap_ci_grouped(
     rng = np.random.default_rng(seed)
     unique_groups = np.unique(groups)
     n_groups = len(unique_groups)
+    rows_by_group = {group: np.flatnonzero(groups == group) for group in unique_groups}
     values = []
 
     for _ in range(n_bootstrap):
         sampled_groups = rng.choice(unique_groups, size=n_groups, replace=True)
-        mask = np.concatenate([np.flatnonzero(groups == group) for group in sampled_groups])
+        mask = np.concatenate([rows_by_group[group] for group in sampled_groups])
         if len(mask) == 0:
             continue
         try:

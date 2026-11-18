@@ -1,0 +1,15 @@
+{
+  "cv_val_commit": "c7badc951a377e68f0f7dce602b778b71caf65bf",
+  "seed": 42,
+  "cv_folds": 5,
+  "data_sha1": {
+    "features_v1_subset.csv": "59a6b908fc0d1d9dad45285096a3a27260dcb8e2",
+    "features_v1_test_full.csv": "1286735fb5faa524b8797898af33bd5d2954fdb6",
+    "features_v1_blur_subset.csv": "6701f5009e778b0195331b473ea649f23f1edd5b",
+    "features_v1_blur_test_full.csv": "f0ed355386d3c9b16c4c09f9efff7a0458ad779f"
+  },
+  "config_sha1": {
+    "features.json": "7000d906d86a45b277ca1fd07bf48f3761404726",
+    "segmentation.json": "27d5e027664c991c4c81133804f9eb8ac49d2118"
+  }
+}

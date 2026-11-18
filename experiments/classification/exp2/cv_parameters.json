@@ -1,0 +1,611 @@
+{
+  "color": {
+    "features": [
+      "h_circ_mean_deg",
+      "h_circ_var",
+      "s_mean",
+      "s_std",
+      "v_mean",
+      "v_std",
+      "l_mean",
+      "l_std",
+      "a_mean",
+      "a_std",
+      "b_mean",
+      "b_std",
+      "h_hist_00",
+      "h_hist_01",
+      "h_hist_02",
+      "h_hist_03",
+      "h_hist_04",
+      "h_hist_05",
+      "h_hist_06",
+      "h_hist_07",
+      "h_hist_08",
+      "h_hist_09",
+      "h_hist_10",
+      "h_hist_11",
+      "a_hist_00",
+      "a_hist_01",
+      "a_hist_02",
+      "a_hist_03",
+      "a_hist_04",
+      "a_hist_05",
+      "a_hist_06",
+      "a_hist_07",
+      "b_hist_00",
+      "b_hist_01",
+      "b_hist_02",
+      "b_hist_03",
+      "b_hist_04",
+      "b_hist_05",
+      "b_hist_06",
+      "b_hist_07",
+      "frac_yellow",
+      "frac_brown",
+      "frac_dark"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 5,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9303146853146853
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 1
+        },
+        "cv_balanced_accuracy": 0.9622477522477523
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.9559540459540461
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.9429620379620379
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 10,
+          "clf__min_samples_split": 2,
+          "clf__n_estimators": 100
+        },
+        "cv_balanced_accuracy": 0.9608191808191808
+      }
+    }
+  },
+  "textura": {
+    "features": [
+      "glcm_contrast",
+      "glcm_homogeneity",
+      "glcm_energy",
+      "glcm_correlation",
+      "lbp_00",
+      "lbp_01",
+      "lbp_02",
+      "lbp_03",
+      "lbp_04",
+      "lbp_05",
+      "lbp_06",
+      "lbp_07",
+      "lbp_08",
+      "lbp_09",
+      "lbp_10",
+      "lbp_11",
+      "lbp_12",
+      "lbp_13",
+      "lbp_14",
+      "lbp_15",
+      "lbp_16",
+      "lbp_17"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 3,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9487962037962039
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 0.1
+        },
+        "cv_balanced_accuracy": 0.9573376623376623
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 1,
+          "clf__gamma": 0.1
+        },
+        "cv_balanced_accuracy": 0.9545254745254745
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 3,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.9373526473526473
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 5,
+          "clf__n_estimators": 100
+        },
+        "cv_balanced_accuracy": 0.9480819180819182
+      }
+    }
+  },
+  "manchas": {
+    "features": [
+      "spot_count",
+      "spot_area_frac",
+      "spot_mean_area_frac",
+      "spot_max_area_frac",
+      "spot_mean_solidity",
+      "spot_mean_eccentricity",
+      "spot_mean_circularity"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 7,
+          "clf__weights": "distance"
+        },
+        "cv_balanced_accuracy": 0.5987462537462538
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 10
+        },
+        "cv_balanced_accuracy": 0.7041758241758241
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.7126723276723277
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 3,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.7084165834165834
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 2,
+          "clf__n_estimators": 100
+        },
+        "cv_balanced_accuracy": 0.7246953046953047
+      }
+    }
+  },
+  "combinadas": {
+    "features": [
+      "h_circ_mean_deg",
+      "h_circ_var",
+      "s_mean",
+      "s_std",
+      "v_mean",
+      "v_std",
+      "l_mean",
+      "l_std",
+      "a_mean",
+      "a_std",
+      "b_mean",
+      "b_std",
+      "h_hist_00",
+      "h_hist_01",
+      "h_hist_02",
+      "h_hist_03",
+      "h_hist_04",
+      "h_hist_05",
+      "h_hist_06",
+      "h_hist_07",
+      "h_hist_08",
+      "h_hist_09",
+      "h_hist_10",
+      "h_hist_11",
+      "a_hist_00",
+      "a_hist_01",
+      "a_hist_02",
+      "a_hist_03",
+      "a_hist_04",
+      "a_hist_05",
+      "a_hist_06",
+      "a_hist_07",
+      "b_hist_00",
+      "b_hist_01",
+      "b_hist_02",
+      "b_hist_03",
+      "b_hist_04",
+      "b_hist_05",
+      "b_hist_06",
+      "b_hist_07",
+      "frac_yellow",
+      "frac_brown",
+      "frac_dark",
+      "glcm_contrast",
+      "glcm_homogeneity",
+      "glcm_energy",
+      "glcm_correlation",
+      "lbp_00",
+      "lbp_01",
+      "lbp_02",
+      "lbp_03",
+      "lbp_04",
+      "lbp_05",
+      "lbp_06",
+      "lbp_07",
+      "lbp_08",
+      "lbp_09",
+      "lbp_10",
+      "lbp_11",
+      "lbp_12",
+      "lbp_13",
+      "lbp_14",
+      "lbp_15",
+      "lbp_16",
+      "lbp_17",
+      "spot_count",
+      "spot_area_frac",
+      "spot_mean_area_frac",
+      "spot_max_area_frac",
+      "spot_mean_solidity",
+      "spot_mean_eccentricity",
+      "spot_mean_circularity"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 5,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9531268731268732
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 0.1
+        },
+        "cv_balanced_accuracy": 0.9764735264735265
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.9772477522477523
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 7,
+          "clf__min_samples_split": 5
+        },
+        "cv_balanced_accuracy": 0.9437962037962038
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 10,
+          "clf__min_samples_split": 5,
+          "clf__n_estimators": 200
+        },
+        "cv_balanced_accuracy": 0.967962037962038
+      }
+    }
+  },
+  "color_manchas": {
+    "features": [
+      "h_circ_mean_deg",
+      "h_circ_var",
+      "s_mean",
+      "s_std",
+      "v_mean",
+      "v_std",
+      "l_mean",
+      "l_std",
+      "a_mean",
+      "a_std",
+      "b_mean",
+      "b_std",
+      "h_hist_00",
+      "h_hist_01",
+      "h_hist_02",
+      "h_hist_03",
+      "h_hist_04",
+      "h_hist_05",
+      "h_hist_06",
+      "h_hist_07",
+      "h_hist_08",
+      "h_hist_09",
+      "h_hist_10",
+      "h_hist_11",
+      "a_hist_00",
+      "a_hist_01",
+      "a_hist_02",
+      "a_hist_03",
+      "a_hist_04",
+      "a_hist_05",
+      "a_hist_06",
+      "a_hist_07",
+      "b_hist_00",
+      "b_hist_01",
+      "b_hist_02",
+      "b_hist_03",
+      "b_hist_04",
+      "b_hist_05",
+      "b_hist_06",
+      "b_hist_07",
+      "frac_yellow",
+      "frac_brown",
+      "frac_dark",
+      "spot_count",
+      "spot_area_frac",
+      "spot_mean_area_frac",
+      "spot_max_area_frac",
+      "spot_mean_solidity",
+      "spot_mean_eccentricity",
+      "spot_mean_circularity"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 7,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9359840159840159
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 1
+        },
+        "cv_balanced_accuracy": 0.9643606393606394
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.958066933066933
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.9365334665334665
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 10,
+          "clf__min_samples_split": 5,
+          "clf__n_estimators": 200
+        },
+        "cv_balanced_accuracy": 0.9672327672327672
+      }
+    }
+  },
+  "color_manchas_sin_l_v": {
+    "features": [
+      "h_circ_mean_deg",
+      "h_circ_var",
+      "s_mean",
+      "s_std",
+      "v_mean",
+      "l_mean",
+      "a_mean",
+      "a_std",
+      "b_mean",
+      "b_std",
+      "h_hist_00",
+      "h_hist_01",
+      "h_hist_02",
+      "h_hist_03",
+      "h_hist_04",
+      "h_hist_05",
+      "h_hist_06",
+      "h_hist_07",
+      "h_hist_08",
+      "h_hist_09",
+      "h_hist_10",
+      "h_hist_11",
+      "a_hist_00",
+      "a_hist_01",
+      "a_hist_02",
+      "a_hist_03",
+      "a_hist_04",
+      "a_hist_05",
+      "a_hist_06",
+      "a_hist_07",
+      "b_hist_00",
+      "b_hist_01",
+      "b_hist_02",
+      "b_hist_03",
+      "b_hist_04",
+      "b_hist_05",
+      "b_hist_06",
+      "b_hist_07",
+      "frac_yellow",
+      "frac_brown",
+      "frac_dark",
+      "spot_count",
+      "spot_area_frac",
+      "spot_mean_area_frac",
+      "spot_max_area_frac",
+      "spot_mean_solidity",
+      "spot_mean_eccentricity",
+      "spot_mean_circularity"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 5,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9274575424575424
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 1
+        },
+        "cv_balanced_accuracy": 0.9643456543456544
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.9587512487512487
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.9046153846153846
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 10,
+          "clf__min_samples_split": 5,
+          "clf__n_estimators": 100
+        },
+        "cv_balanced_accuracy": 0.9536763236763237
+      }
+    }
+  },
+  "control_nitidez": {
+    "features": [
+      "sharpness_laplacian_var"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 3,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.9417132867132867
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 0.1
+        },
+        "cv_balanced_accuracy": 0.9367582417582418
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": 0.1
+        },
+        "cv_balanced_accuracy": 0.9381568431568432
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 3,
+          "clf__min_samples_split": 2
+        },
+        "cv_balanced_accuracy": 0.938201798201798
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 2,
+          "clf__n_estimators": 200
+        },
+        "cv_balanced_accuracy": 0.938201798201798
+      }
+    }
+  },
+  "textura_suavizada": {
+    "features": [
+      "glcm_contrast",
+      "glcm_homogeneity",
+      "glcm_energy",
+      "glcm_correlation",
+      "lbp_00",
+      "lbp_01",
+      "lbp_02",
+      "lbp_03",
+      "lbp_04",
+      "lbp_05",
+      "lbp_06",
+      "lbp_07",
+      "lbp_08",
+      "lbp_09",
+      "lbp_10",
+      "lbp_11",
+      "lbp_12",
+      "lbp_13",
+      "lbp_14",
+      "lbp_15",
+      "lbp_16",
+      "lbp_17"
+    ],
+    "models": {
+      "knn": {
+        "params": {
+          "clf__metric": "euclidean",
+          "clf__n_neighbors": 5,
+          "clf__weights": "uniform"
+        },
+        "cv_balanced_accuracy": 0.7937562437562438
+      },
+      "svm_lineal": {
+        "params": {
+          "clf__C": 1
+        },
+        "cv_balanced_accuracy": 0.8449150849150848
+      },
+      "svm_rbf": {
+        "params": {
+          "clf__C": 10,
+          "clf__gamma": "scale"
+        },
+        "cv_balanced_accuracy": 0.8513586413586414
+      },
+      "decision_tree": {
+        "params": {
+          "clf__criterion": "gini",
+          "clf__max_depth": 5,
+          "clf__min_samples_split": 5
+        },
+        "cv_balanced_accuracy": 0.7700649350649351
+      },
+      "random_forest": {
+        "params": {
+          "clf__max_depth": 10,
+          "clf__min_samples_split": 2,
+          "clf__n_estimators": 200
+        },
+        "cv_balanced_accuracy": 0.8200649350649352
+      }
+    }
+  }
+}

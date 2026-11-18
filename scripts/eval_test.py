@@ -82,7 +82,16 @@ def main(argv: list[str] | None = None) -> int:
                 out.to_csv(path, index=False, compression={"method": "gzip", "mtime": 0})
                 manifest[path.name] = tr.sha1_file(path)
     payload = json.loads(record.read_text())
-    payload.update(status="complete", predictions_sha1=manifest, chosen=config)
+    payload.update(
+        status="complete",
+        predictions_sha1=manifest,
+        chosen=config,
+        config_sha1=tr.sha1_file(args.config),
+        pipelines_sha1={
+            p.name: tr.sha1_file(p)
+            for p in sorted((REPO_ROOT / "models" / args.exp_dir.name).glob("*.joblib"))
+        },
+    )
     record.write_text(json.dumps(payload, indent=2) + "\n")
     return 0
 
