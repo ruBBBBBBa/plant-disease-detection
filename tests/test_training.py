@@ -394,3 +394,43 @@ def test_delivery_and_decisions_are_generated_from_run(tmp_path, monkeypatch):
     assert "0.912345" in task.read_text()
     assert "commit-ejecucion" in task.read_text()
     assert "0.912345" in (tmp_path / "docs/DECISIONS.md").read_text()
+
+
+def test_cv_command_persists_real_pipeline_and_predictions(tmp_path, monkeypatch):
+    """La ruta de producción debe guardar pipelines y predicciones, no solo métricas."""
+    from argparse import Namespace
+
+    import joblib
+    from sklearn.tree import DecisionTreeClassifier
+
+    from scripts import train_classifiers as cli
+
+    monkeypatch.setattr(cli, "REPO_ROOT", tmp_path)
+    data_dir = tmp_path / "data/processed"
+    data_dir.mkdir(parents=True)
+    columns = sorted({c for cols in cli.FEATURE_GROUPS.values() for c in cols})
+    data = pd.DataFrame(np.random.default_rng(1).normal(size=(24, len(columns))), columns=columns)
+    data["split"] = ["train"] * 16 + ["val"] * 8
+    data["binary_label"] = ["healthy", "diseased"] * 12
+    data["image_id"] = [f"i{i}" for i in range(24)]
+    data["leaf_group_id"] = data.image_id
+    data["disease_name"] = data.binary_label
+    data["mask_empty"] = False
+    data.to_csv(data_dir / "features_v1_subset.csv", index=False)
+    monkeypatch.setattr(
+        tr,
+        "get_models_and_grids",
+        lambda seed: {"decision_tree": (DecisionTreeClassifier(random_state=seed), {})},
+    )
+    monkeypatch.setattr(tr, "cv_grouped", lambda *a, **k: {"best_params": {}, "best_score": 0.5})
+    monkeypatch.setattr(
+        tr,
+        "evaluate_model",
+        lambda *a: {"balanced_accuracy": 0.5, "recall_diseased": 0.5, "roc_auc": 0.5},
+    )
+    out = tmp_path / "run"
+    cli.cmd_cv_val(Namespace(seed=42, cv_folds=2, out=out))
+    pipeline_path = tmp_path / "models/run/combinadas__decision_tree.joblib"
+    assert hasattr(joblib.load(pipeline_path), "predict")
+    saved = pd.read_csv(out / "val__combinadas__decision_tree.csv.gz")
+    assert len(saved) == 8 and {"y_true", "y_pred", "score"} <= set(saved)

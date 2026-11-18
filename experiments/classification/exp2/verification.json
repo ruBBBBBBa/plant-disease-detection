@@ -1,0 +1,13 @@
+{
+  "models_regenerated": [
+    "A",
+    "B",
+    "C"
+  ],
+  "method": "train_full with saved CV params, train only; compare against saved val predictions",
+  "classes": "exact equality",
+  "scores_rtol": 1e-12,
+  "scores_atol": 1e-12,
+  "checks": "passed",
+  "test_commit": "a32470e314de4cecbdacdd0be199175ef86efba5"
+}
