@@ -14,7 +14,7 @@
   "target_module": "src/features.py",
   "objective": "max",
   "min_improvement": 0.005,
-  "timeouts": {"gate_seconds": 300, "metric_seconds": 600},
+  "timeouts": {"gate_seconds": 120, "metric_seconds": 300},
   "max_iterations": 20,
   "max_consecutive_discards": 5
 }
