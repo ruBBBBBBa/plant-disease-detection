@@ -46,6 +46,14 @@ Thumbs.db
 #Agentes
 
 .agents/
-.claude/
+.claude/*
+!.claude/settings.json  # guardas de T00b (D038)
 skills/
 skills-lock.json
+
+# --- Bucle de mutación (loop/): copia temporal, resultados y estado locales ---
+mutants/
+loop/.staging/
+loop/results.tsv
+loop/survivors.txt
+loop/STOP
