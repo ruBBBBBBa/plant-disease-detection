@@ -1,0 +1,13 @@
+{
+  "chosen_group": "combinadas",
+  "chosen_model": "svm_lineal",
+  "chosen_by": "max balanced_accuracy on val (tie-break: simpler model, margin 0.005)",
+  "val_balanced_accuracy": 0.9594594594594594,
+  "val_recall_diseased": 0.9662162162162162,
+  "cv_best_params": {
+    "clf__C": 0.1
+  },
+  "frozen_commit": "c7badc951a377e68f0f7dce602b778b71caf65bf",
+  "git_clean_at_choice": false,
+  "timestamp": "2026-11-16 19:12:18"
+}

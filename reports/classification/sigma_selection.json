@@ -1,0 +1,52 @@
+{
+  "criterion": "menor sigma donde mediana(sharpness sano) dentro de IQR(sharpness enfermo) tras blur com\u00fan",
+  "sigma_candidates": [
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+  ],
+  "chosen_sigma": 3.0,
+  "details": {
+    "0.5": {
+      "healthy_median": 5356.513801724504,
+      "diseased_q1": 630.7848626155201,
+      "diseased_q3": 2094.5816186512693,
+      "ok": false
+    },
+    "1.0": {
+      "healthy_median": 192.56079186575997,
+      "diseased_q1": 40.35893072815102,
+      "diseased_q3": 99.38710398318574,
+      "ok": false
+    },
+    "1.5": {
+      "healthy_median": 40.292578546426945,
+      "diseased_q1": 11.295029836731535,
+      "diseased_q3": 25.772297817678044,
+      "ok": false
+    },
+    "2.0": {
+      "healthy_median": 14.778125964728424,
+      "diseased_q1": 5.620190700668333,
+      "diseased_q3": 11.143761970226773,
+      "ok": false
+    },
+    "2.5": {
+      "healthy_median": 7.229319296783631,
+      "diseased_q1": 3.6841441736014993,
+      "diseased_q3": 6.108388680650305,
+      "ok": false
+    },
+    "3.0": {
+      "healthy_median": 4.65295129839589,
+      "diseased_q1": 2.92681116267162,
+      "diseased_q3": 4.224346576031458,
+      "ok": false,
+      "forced": true,
+      "auc_post_blur": 0.16133862394250206
+    }
+  }
+}
