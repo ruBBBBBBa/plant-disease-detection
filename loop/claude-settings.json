@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python loop/evaluate.py *)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Read(./loop/survivors.txt)"
+    ],
+    "deny": [
+      "Edit(./src/**)",
+      "Edit(./configs/**)",
+      "Edit(./data/**)",
+      "Edit(./loop/config.json)",
+      "Edit(./loop/metric.py)",
+      "Edit(./loop/evaluate.py)",
+      "Edit(./loop/keep_going.py)",
+      "Edit(./loop/claude-settings.json)",
+      "Edit(./loop/program.md)",
+      "Edit(./loop/results.tsv)",
+      "Edit(./loop/survivors.txt)",
+      "Edit(./loop/STOP)",
+      "Edit(./loop/.staging/**)",
+      "Read(./data/raw/**)",
+      "Bash(git commit*)",
+      "Bash(git stash*)",
+      "Bash(git reset*)",
+      "Bash(git checkout*)",
+      "Bash(git switch*)",
+      "Bash(git tag*)",
+      "Bash(git push*)",
+      "Bash(pip install*)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR\"/loop/keep_going.py"
+          }
+        ]
+      }
+    ]
+  }
+}
