@@ -1,0 +1,20 @@
+{
+  "base": "loop-base-mutation",
+  "editable": ["tests/"],
+  "protected": [
+    "src/",
+    "configs/",
+    "loop/",
+    ":(exclude)loop/RESUMEN.md",
+    "pyproject.toml",
+    "requirements*.txt"
+  ],
+  "gate": ["ruff check .", "ruff format --check .", "pytest -q"],
+  "metric": "python loop/metric.py",
+  "target_module": "src/features.py",
+  "objective": "max",
+  "min_improvement": 0.005,
+  "timeouts": {"gate_seconds": 300, "metric_seconds": 600},
+  "max_iterations": 20,
+  "max_consecutive_discards": 5
+}

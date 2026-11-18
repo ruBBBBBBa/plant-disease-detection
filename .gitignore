@@ -42,3 +42,10 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+# --- Bucle de mutación (loop/): copia temporal, resultados y estado locales ---
+mutants/
+loop/.staging/
+loop/results.tsv
+loop/survivors.txt
+loop/STOP
