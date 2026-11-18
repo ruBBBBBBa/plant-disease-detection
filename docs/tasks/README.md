@@ -33,7 +33,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | En curso | `t06-plantdoc-external` |
+| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | En revisión | `t06-plantdoc-external` |
 
 ## Hoja de ruta (sin detallar a propósito)
 

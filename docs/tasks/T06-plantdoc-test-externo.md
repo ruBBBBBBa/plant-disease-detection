@@ -1,6 +1,6 @@
 # T06 — Test externo en PlantDoc y análisis de errores
 
-- **Estado:** En curso
+- **Estado:** En revisión
 - **Rama:** `t06-plantdoc-external`
 - **Depende de:** T05 (modelos `exp2`, variantes preregistradas en D030)
 - **Referencias:** `PROJECT_CONTEXT.md` §2 («análisis no concluyente») y §7 (test externo);
@@ -123,12 +123,36 @@ Las mejoras que se ocurran al ver los errores van a «Pendientes» como trabajo 
 
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
-- **Commit congelado y registro de la ejecución:**
-- **Umbrales de «no concluyente» (desde PlantVillage):**
-- **Resultados por variante (todas / solo concluyentes + cobertura):**
-- **Caídas Δ y veredicto de H1–H3:**
-- **Casos especiales:**
-- **Diagnóstico de cambio de dominio:**
-- **Errores por categoría:**
-- **Decisiones tomadas durante la tarea:**
-- **Pendientes / trabajo futuro:**
+- **Commit congelado y registro de la ejecución:** `5a2c39ca90e1bcb3729f705a042103144254b36c`
+  (protocolo y umbrales en `9bd8b7e`; guarda y tests en `5a2c39c`; ninguno procesó PlantDoc).
+  Comando: `python scripts/eval_external.py --frozen-commit 5a2c39ca90e1bcb3729f705a042103144254b36c`
+  → «743 imágenes, 575 no concluyentes». Registro: `experiments/external/plantdoc_v1/execution_5a2c39ca….json`
+  (`status: complete`, SHA-1 de predicciones y pipelines). Una sola ejecución.
+  Tras ella: `python scripts/report_external.py` y `python scripts/plot_external_errors.py`
+  (leen las predicciones; no predicen). `ruff` y `pytest` en verde (99 tests; 10 nuevos en `tests/test_external.py`).
+- **Umbrales de «no concluyente» (desde PlantVillage train+val, 1 702 imágenes):**
+  `leaf_area_frac` [0,180; 0,616], `border_touch_frac` [0,000; 0,213], `mask_solidity` [0,593; 0,961]
+  (`configs/external.json`). La regla marca el 2,3 % de PlantVillage train+val como referencia.
+  **En PlantDoc marca el 77,4 %** (área 49,7 %, solidez 39,9 %, borde 20,5 %, máscara vacía 0,8 %).
+- **Resultados por variante (todas / solo concluyentes + cobertura 22,6 %):** BA «todas» ≈ 0,11 en las cinco
+  variantes (A 0,114, B 0,115, C 0,111, C_lineal 0,114, control 0,112); BA «solo concluyentes» ≈ 0,50
+  (A 0,505, B 0,508, C 0,497, C_lineal 0,505, control 0,500; n = 168, solo 16 sanas). Tabla completa con IC,
+  recalls, F1 y ROC-AUC en `experiments/external/plantdoc_v1/summary.md`. La AUC «todas» < 0,5 es un artefacto
+  de la convención de no concluyentes.
+- **Caídas Δ y veredicto de H1–H3:** Δ ≈ 0,83–0,85 en todas. H1 (A−B) 0,014 [0,010; 0,019] apoyada;
+  H2 (B−C_lineal) 0,003 [0,001; 0,003] apoyada; H3 (control−A) −0,015 [−0,026; 0,004] no concluyente.
+  H1 y H2 son diferencias de una o pocas imágenes sobre 168 concluyentes: no son una ventaja real. La BA de val
+  se toma como fija (los IC no recogen su incertidumbre). BA del control 0,112 [0,096; 0,128], no incluye 0,5.
+- **Casos especiales:** `mosaic_virus` 40/54 no concluyentes (recall 0,93 en las 14 concluyentes);
+  `yellow_virus` 64/75 (0,91 en 11); `spider_mites` 2/2 y `tomato_V8.jpg` 1/1 no concluyentes.
+- **Diagnóstico de cambio de dominio:** nitidez ×0,07, `glcm_contrast` ×0,19, `l_std` ×0,75, `v_std` ×0,80,
+  área de la hoja ×0,60, toque del borde 0 → 0,069 (medianas PlantDoc/PlantVillage train). `domain_shift.png`.
+- **Errores por categoría (clasificación manual, una persona):** no concluyentes (muestra de 48): segmentación
+  fallida 28, varias hojas 8, fondo complejo 5, otros 7. FN de A (8): segmentación 2, varias hojas 3, fondo 1,
+  síntoma poco visible 1, etiqueta dudosa 1. FP de A (15): otros 8 (hojas sueltas sobre fondo blanco), varias hojas 3,
+  iluminación 2, segmentación 1, etiqueta dudosa 1. Rejillas y `error_categories.csv` en `experiments/external/plantdoc_v1/`.
+- **Decisiones tomadas durante la tarea:** D031–D034 (H3 redefinida por el alumno, guarda reforzada, control = SVM
+  lineal, BA de val fija). Los scripts de informe y rejillas se escribieron después de la ejecución; la lógica de
+  métricas ya estaba congelada en `src/external.py`.
+- **Pendientes / trabajo futuro:** revisar el criterio de «no concluyente» (decisión del alumno, no tocado);
+  segmentación más robusta; fotos propias con más sanas; entender por qué las sanas sobre fondo blanco salen enfermas.
