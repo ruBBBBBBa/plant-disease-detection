@@ -35,7 +35,7 @@ metodología de la memoria. Las propuestas pendientes se marcan como tales.
 | D027 | 2026-11-16 | Commit exacto, registro exclusivo y SHA-1; informes solo desde predicciones. | Revisión Codex exp2 | — | Aceptada (T05) |
 | D028 | 2026-11-16 | Sesgo: comparar mismo estimador entre grupos en evaluation.md; no ajustar con test. | Revisión Codex exp2 | — | Aceptada (T05) |
 | D029 | 2026-11-16 | mask_empty: fuera de train; error en evaluación y ROC. Bootstrap por hoja repetida. | Revisión Codex exp2 | — | Aceptada (T05) |
-| D030 | 2026-11-16 | A=combinadas + svm_lineal: val BA=0.959459; B=color_manchas + svm_lineal: val BA=0.945946; C=color_manchas_sin_l_v + svm_rbf: val BA=0.952703. Elección solo con val. | Revisión Codex exp2 | — | Aceptada (T05) |
+| D030 | 2026-11-18 | Variantes preregistradas para fase 5: A = combinadas + svm_lineal (val BA 0,959459); B = color_manchas + svm_lineal (0,945946); C = color_manchas_sin_l_v + svm_rbf (0,952703), elegida por el criterio de val dentro de ese grupo; C_lineal = color_manchas_sin_l_v + svm_lineal (0,942568, ya calculada en exp2). La hipótesis sobre l_std/v_std se contrasta comparando B con C_lineal: mismo modelo, solo cambian las características. En val, textura + svm_lineal empata con combinadas + svm_lineal (0,959459); se eligió combinadas por desempate alfabético. | Resultados guardados de exp2; elección y preregistro sin usar test | C se mantiene como elegida del grupo; C_lineal permite la comparación con estimador fijo | Aceptada (T05) |
 
 ### Repetición excepcional de test (T05)
 
@@ -43,4 +43,4 @@ La segunda ejecución invalida exp1 por fallos de bootstrap y mask_empty.
 Modelos, grids y elección se congelan antes de test y no cambian por sus resultados.
 El registro conserva commit, fecha y SHA-1 de cada CSV. C no se evalúa en test.
 PlantDoc: hipótesis B menos dependiente de textura; C sin l_std/v_std.
-B/C no aíslan causalmente v_std: también difieren el estimador y l_std.
+B/C no aíslan el efecto de l_std/v_std porque cambia también el estimador. Para contrastar esa hipótesis en fase 5 se compararán B y C_lineal, manteniendo svm_lineal y eliminando conjuntamente l_std y v_std.
