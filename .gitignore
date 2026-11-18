@@ -47,7 +47,8 @@ Thumbs.db
 
 .agents/
 .claude/*
-!.claude/settings.json  # guardas de T00b (D038)
+# .claude/settings.json se versiona: guardas de T00b (D038)
+!.claude/settings.json
 skills/
 skills-lock.json
 
