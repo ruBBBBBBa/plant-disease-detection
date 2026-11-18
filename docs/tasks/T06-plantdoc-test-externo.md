@@ -1,6 +1,6 @@
 # T06 — Test externo en PlantDoc y análisis de errores
 
-- **Estado:** Pendiente (siguiente)
+- **Estado:** En curso
 - **Rama:** `t06-plantdoc-external`
 - **Depende de:** T05 (modelos `exp2`, variantes preregistradas en D030)
 - **Referencias:** `PROJECT_CONTEXT.md` §2 («análisis no concluyente») y §7 (test externo);

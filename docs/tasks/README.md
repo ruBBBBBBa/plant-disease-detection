@@ -27,12 +27,17 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T05](T05-clasificacion-evaluacion.md) | Clasificación clásica y evaluación (con control del sesgo de nitidez) | En revisión | `t05-classification` |
+| [T05](T05-clasificacion-evaluacion.md) | Clasificación clásica y evaluación (con control del sesgo de nitidez) | Hecha | `t05-classification` (PR #5) |
+
+## Fase 5 — Test externo y análisis de errores
+
+| ID | Tarea | Estado | Rama / PR |
+|---|---|---|---|
+| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | En curso | `t06-plantdoc-external` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
 Cada fase se convierte en ficheros de tarea cuando la anterior está cerrada, con sus resultados reales delante.
 
-- **Fase 5 — Test externo y análisis de errores:** PlantDoc, falsos negativos/positivos, «análisis no concluyente».
 - **Fase 6 — Explicación visual e inferencia:** CLI de inferencia con máscaras, regiones sospechosas y estadísticas.
 - **Ampliaciones condicionadas:** patata/pimiento, enfermedades concretas, vídeo (CamShift/KLT), Streamlit.
