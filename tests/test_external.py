@@ -151,3 +151,26 @@ def test_guard_requires_exact_commit_and_clean_tree(tmp_path, monkeypatch) -> No
     monkeypatch.setattr(tr, "check_git_clean", lambda: True)
     with pytest.raises(SystemExit):
         module.reserve_external("otro", tmp_path)
+
+
+def test_grid_attribution_does_not_read_images(tmp_path, monkeypatch):
+    """El crédito acompaña a las rejillas y puede regenerarse sin acceder a PlantDoc."""
+    from scripts import plot_external_errors as plot
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("No se deben leer ni procesar imágenes")
+
+    monkeypatch.setattr(plot.ex, "read_bgr", forbidden)
+    monkeypatch.setattr(plot.ft, "leaf_mask", forbidden)
+    plot.write_attribution(tmp_path)
+    text = (tmp_path / "ATTRIBUTION.md").read_text()
+    for required in (
+        "Singh",
+        "2020",
+        "Nipun Batra",
+        "CC BY 4.0",
+        "https://creativecommons.org/licenses/by/4.0/",
+        "https://github.com/pratikkayal/PlantDoc-Dataset",
+        "Modificaciones",
+    ):
+        assert required in text

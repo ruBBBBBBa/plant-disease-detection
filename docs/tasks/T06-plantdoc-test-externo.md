@@ -154,5 +154,21 @@ Las mejoras que se ocurran al ver los errores van a «Pendientes» como trabajo 
 - **Decisiones tomadas durante la tarea:** D031–D034 (H3 redefinida por el alumno, guarda reforzada, control = SVM
   lineal, BA de val fija). Los scripts de informe y rejillas se escribieron después de la ejecución; la lógica de
   métricas ya estaba congelada en `src/external.py`.
-- **Pendientes / trabajo futuro:** revisar el criterio de «no concluyente» (decisión del alumno, no tocado);
+- **Pendientes / trabajo futuro:** se mantiene el criterio de «no concluyente» como límite de validez (D035);
   segmentación más robusta; fotos propias con más sanas; entender por qué las sanas sobre fondo blanco salen enfermas.
+
+
+### Revisión Codex — PR #6
+
+- Sin P0 señalados. P1 corregido: atribución junto a las rejillas en
+  `experiments/external/plantdoc_v1/ATTRIBUTION.md` (Singh et al., 2020; autores, fuente,
+  CC BY 4.0 y modificaciones). El generador escribe el aviso mediante una función independiente.
+- Prueba de regresión: crear la atribución sin leer imágenes ni calcular máscaras.
+  Ruff y formato correctos; pytest: **100 passed**.
+- No se ejecutó `eval_external.py`, ni se abrieron o procesaron imágenes de PlantDoc.
+  No se regeneraron tablas ni rejillas, ni cambiaron cifras, predicciones o métricas congeladas.
+- Decisiones del alumno: D034 interpreta H1/H2 como formalmente apoyadas sin relevancia
+  práctica; D035 mantiene el límite de validez; D036 fija B para fase 6 por principios;
+  D037 deja sin verificar la posible causa de los FP en hojas sanas sobre fondo blanco.
+- Para el alumno: la hipótesis D037 queda pendiente; no se ha comprobado ni usado para ajustar.
+  Sin reentrenamiento, cambios de umbrales/modelos ni merge.

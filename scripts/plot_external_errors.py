@@ -28,6 +28,27 @@ from src import features as ft  # noqa: E402
 CELL, COLS, PER_GRID = 256, 4, 16
 
 
+def write_attribution(out_dir: Path) -> None:
+    """Escribe el crédito junto a las rejillas sin leer ni procesar imágenes."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "ATTRIBUTION.md").write_text(
+        "# Atribución de las fotografías de las rejillas\n\n"
+        "PlantDoc: A Dataset for Visual Plant Disease Detection — Singh et al. (2020).\n"
+        "Autores: Davinder Singh, Naman Jain, Pranjali Jain, Pratik Kayal, "
+        "Sudhakar Kumawat y Nipun Batra.\n\n"
+        "Fuente: [PlantDoc-Dataset](https://github.com/pratikkayal/PlantDoc-Dataset).\n"
+        "Publicación: [Singh et al., 2020](https://doi.org/10.1145/3371158.3371196).\n"
+        "Licencia: [Creative Commons Attribution 4.0 International (CC BY 4.0)]"
+        "(https://creativecommons.org/licenses/by/4.0/).\n\n"
+        "Modificaciones: reescalado conservando la proporción (lado mayor de 256 px), "
+        "normalización de canales a BGR, superposición de contornos de máscara y etiquetas, "
+        "y composición sobre un lienzo negro en rejillas de errores/no concluyentes. "
+        "Las fotografías originales no se han modificado. "
+        "La atribución no implica el respaldo de los autores al análisis.\n",
+        encoding="utf-8",
+    )
+
+
 def cell(path: Path, seg_config: dict, text: str, color: tuple[int, int, int]) -> np.ndarray:
     """Miniatura normalizada con el contorno de la máscara (verde) y una etiqueta."""
     image = ex.read_bgr(path)
@@ -53,6 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         "--out-dir", type=Path, default=REPO_ROOT / "experiments/external/plantdoc_v1"
     )
     args = parser.parse_args(argv)
+    write_attribution(args.out_dir)
     config = json.loads((REPO_ROOT / "configs/external.json").read_text())
     seg_config = json.loads((REPO_ROOT / "configs/segmentation.json").read_text())
     index_rows = []
