@@ -3,7 +3,7 @@
 - **Estado:** Pendiente (después de T07, o en paralelo si T07 está bloqueada esperando fotos)
 - **Rama:** `t08-taiwan-external`
 - **Depende de:** T06 (`eval_external.py`, criterio de «no concluyente», variantes A/B y límite de
-  validez D035)
+  validez D035) y T07 (resultado de las fotos propias, D044, del que sale la hipótesis H9)
 - **Referencias:** Huang, M.-L. y Chang, Y.-H. (2020). *Dataset of Tomato Leaves*. Mendeley Data, V1.
   DOI: 10.17632/ngdgg79rzb.1.
 
@@ -14,6 +14,14 @@ sobre fondo uniforme) con un dataset nuevo e independiente. Según su descripci�
 Taiwán tiene seis clases (cinco enfermedades y sanas) e imágenes con **una o varias hojas** y con
 **fondo simple o complejo**. Así se puede comparar el rendimiento entre condiciones dentro de la
 misma fuente, cosa que PlantDoc no permitía.
+
+Además, contrasta una **hipótesis surgida de T07**. Con las fotos propias, el modo ROI segmentó los
+folíolos de forma aparentemente adecuada, pero la variante B llamó «enferma» a casi todas las hojas
+sanas (93 de 97 folíolos; 2 sanas y 2 no concluyentes), con contribuciones dominadas por el
+histograma de b\*. La explicación probable, no demostrada, es que las características de color
+dependen de la iluminación y del balance de blancos de la cámara. Si es así, **normalizar el color**
+antes de extraer las características debería reducir el fallo en datos nuevos. Las fotos propias ya
+están usadas, así que la hipótesis se comprueba aquí, con datos que nadie ha mirado.
 
 Igual que PlantDoc, este dataset **se usa una sola vez** y nada se ajusta con él.
 
@@ -59,13 +67,30 @@ Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (audito
 
    Una herramienta mínima que muestre cada imagen y guarde las dos etiquetas con dos teclas es
    suficiente. No muestra máscaras ni predicciones.
+6. **Variante B′ con normalización de color (solo PlantVillage).**
+   - **Normalización «gray world»** (supone que la media de la escena es gris neutro): se escala cada
+     canal B, G y R para que su media en la imagen completa sea igual a la media de los tres canales,
+     y se recorta a [0, 255] en `uint8`. Es una técnica clásica de constancia de color y no se aprende
+     de los datos. Se documenta su punto débil: en imágenes donde la hoja ocupa casi todo, la «escena»
+     es verde y la corrección también altera el color de la hoja.
+   - **Dónde se aplica:** solo para **extraer las características**. La segmentación (K-means de
+     T03) y el criterio de «no concluyente» se calculan sobre la imagen sin normalizar, igual que en
+     B. Así B y B′ comparten máscara y cobertura, y solo cambia el color que ven las características.
+   - **Entrenamiento:** mismo grupo (`color_manchas`) y mismo modelo (SVM lineal) que B, con la misma
+     búsqueda de C por CV agrupada por hoja en `train` de PlantVillage. Se informa de la BA de `val` de
+     B′ junto a la de B. **No se ejecuta el test interno de PlantVillage** con B′ (como C en T05).
+   - Si la BA de `val` de B′ cae más de 5 puntos respecto a B, se informa como coste de la
+     normalización, pero B′ se evalúa igualmente en Taiwán: la hipótesis es sobre generalización.
+   - B′ **no se evalúa con las fotos propias**: ya están usadas.
+   - Todo esto entra en el commit congelado de la fase B y se registra como decisión, citando que la
+     hipótesis nace del resultado de T07.
 
 ## Fase B — protocolo congelado y ejecución única
 
 1. **Reutilizar `eval_external.py`** (parametrizado por fuente) con la misma normalización, el mismo
    criterio de «no concluyente» (D031) y la misma guarda: commit exacto, árbol limpio y se niega si
    existe cualquier `execution_*.json` en `experiments/external/taiwan_v1/`. Evalúa B (por defecto,
-   D036) y A como referencia, en modo automático. Sin ROI: el dataset no trae rectángulos y
+   D036), B′ (normalización de color) y A como referencia, en modo automático. Sin ROI: el dataset no trae rectángulos y
    dibujarlos aquí sería otro proyecto.
 2. **Métricas** (igual que en T06): lecturas «todas» y «solo concluyentes» con su cobertura;
    balanced accuracy, recall por clase, matriz de confusión; IC 95 % por bootstrap sobre imágenes.
@@ -77,19 +102,24 @@ Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (audito
    - **H7:** la cobertura (porcentaje de imágenes concluyentes) es mayor en `single + simple` que en
      el resto.
    - **H8:** en la lectura «todas», la balanced accuracy es mayor en `single + simple` que en el resto.
-   - **Descriptivo, sin veredicto:** comparación con los resultados de PlantDoc (T06).
+   - **H9 (surge de T07):** en el conjunto completo de Taiwán, lectura «todas», la balanced accuracy
+     de B′ es mayor que la de B. Como las dos variantes ven las mismas imágenes con la misma máscara,
+     esta comparación usa **bootstrap emparejado** sobre imágenes. Se informa también la diferencia en
+     el recall de sanas, que es donde falló B en T07, de forma descriptiva y sin veredicto.
+   - **Descriptivo, sin veredicto:** comparación con los resultados de PlantDoc (T06) y H9 desglosada
+     por condición `leaves × background`.
 
    Si alguna celda tiene menos de 20 imágenes de alguna clase, se informa igual, pero el veredicto
    de la hipótesis afectada se declara «no concluyente por tamaño».
 4. **Informe** `experiments/external/taiwan_v1/summary.md` con las tablas, los veredictos, las
    enfermedades no vistas y una rejilla de aciertos y errores por condición. Atribución y licencia
    del dataset junto a las rejillas.
-5. **Tests** con datos sintéticos: el mapeo de etiquetas de `taiwan`, la exclusión por casi-duplicado,
+5. **Tests** con datos sintéticos: el mapeo de etiquetas de `taiwan`, la exclusión por casi-duplicado, la normalización gray world (una imagen con dominante de color queda con medias de canal iguales y en `uint8`; la máscara de B′ es idéntica a la de B),
    el bootstrap no emparejado y la guarda.
 
 ## Fuera de alcance
 
-Ajustar umbrales, segmentación o modelos con este dataset; entrenar con él; ROI manual; los otros
+Ajustar umbrales, segmentación o modelos con este dataset; entrenar con él; elegir el método de normalización mirando Taiwán o las fotos propias; ROI manual; los otros
 datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 
 ## Criterios de aceptación
@@ -98,7 +128,8 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
       buscados y excluidos.
 - [ ] Condiciones anotadas por el alumno y versionadas **antes** del commit congelado.
 - [ ] Ejecución única registrada; predicciones guardadas; informe regenerable sin volver a predecir.
-- [ ] Veredictos de H7 y H8 con IC, sin forzar conclusiones.
+- [ ] B′ entrenada solo con PlantVillage, con su BA de `val` junto a la de B, y congelada antes de procesar Taiwán.
+- [ ] Veredictos de H7, H8 y H9 con IC, sin forzar conclusiones.
 - [ ] `ruff` y `pytest` en verde; `data/raw/` intacto; nada pesado en git.
 
 ## Decisiones que quedan para el alumno al cerrar T08
@@ -114,7 +145,8 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 - **Recuento por clase y por condición `leaves × background`:**
 - **Commit congelado y registro de la ejecución:**
 - **Resultados (todas / solo concluyentes + cobertura), total y por condición:**
-- **Veredicto H7–H8:**
+- **BA de `val` de B′ frente a B:**
+- **Veredicto H7–H9:**
 - **Enfermedades no vistas:**
 - **Decisiones tomadas durante la tarea:**
 - **Pendientes:**
