@@ -1,6 +1,6 @@
 # T07 — Herramienta de inferencia, ROI manual y test con fotos propias
 
-- **Estado:** En curso (fase A congelada; fase B a la espera de las fotos y los CSV)
+- **Estado:** En revisión
 - **Rama:** `t07-inference-own-photos`
 - **Depende de:** T06 (D035 límite de validez, D036 variante por defecto B, D037 hipótesis del fondo blanco)
 - **Referencias:** `PROJECT_CONTEXT.md` §2 (evidencias visuales, «no concluyente») y §4 (fotos
@@ -207,11 +207,26 @@ ampliación posterior si queda tiempo). Vídeo.
   - No se ha abierto, listado ni procesado nada de `data/raw/own/`.
 - **Commit congelado:** el commit `T07: fase A congelada …` de esta rama (hash en el PR y en el
   registro de `eval_own.py`).
-- **Fase B — fotos recibidas (hojas, fondos, alteradas):**
-- **Resultados por fondo × modo:**
-- **Veredicto H4–H6:**
-- **Hojas alteradas:**
+- **Fase B — fotos recibidas (hojas, fondos, alteradas):** `python scripts/eval_own.py --check-only`
+  sin problemas: 33 fotos y 100 ROI; 10 hojas compuestas sanas con los tres fondos (30 fotos,
+  97 folíolos) y 1 alterada (3 fotos, 3 ROI). Ejecución única con
+  `python scripts/eval_own.py --frozen-commit 2b6a416` (código congelado en `fba1cac`; después
+  solo entraron `.gitignore` y los CSV). Informe: `experiments/own/v1/summary.md`, regenerable con
+  `scripts/report_own.py` y `scripts/plot_own.py`.
+- **Resultados por fondo × modo:** B en modo ROI: 95 de 97 folíolos sanos predichos `diseased`
+  (fallo 0,990, cobertura 0,989); en modo automático, 80 % no concluyentes y el resto FP (fallo
+  1,000). A, como referencia: fallo 0,967 (ROI) y 0,933 (auto). En modo ROI la segmentación es
+  buena; el fallo es del clasificador: la b* de las hojas (p. ej. 63,6) se sale del rango del
+  histograma de train ([1, 48]) y `b_hist_07` (z ≈ +6 de media) empuja a `diseased`.
+- **Veredicto H4–H6:** las tres «no concluyentes» por efecto techo (H4 0,000 [0,000, 0,000];
+  H5 0,014 [0,000, 0,043]; H6 0,010 [0,000, 0,029]). D037 sigue sin verificar. Descriptivo, sin
+  veredicto: la puntuación es mayor sobre blanco en 9 de 10 hojas.
+- **Hojas alteradas:** `a01`: no concluyente en modo automático; en modo ROI, `diseased` en blanco
+  y natural y no concluyente en gris. No se distingue de las sanas, que también salen enfermas.
 - **Decisiones tomadas durante la tarea:** D040 (tasa de fallo para H4–H6), D041 (simulación de la
   ROI, margen del 10 % y regla de dibujo), D042 (modo ROI: GrabCut y «no concluyente» sobre el
   recorte), D043 (agregación por hoja y bootstrap).
-- **Pendientes:** fase B (cuando el alumno confirme fotos, `own_photos.csv` y `own_rois.csv`).
+- **Pendientes:** decisiones del alumno (modo por defecto, versionar miniaturas, figuras para la
+  memoria; las candidatas están en `data/processed/own_v1/`). Fuera de alcance: cualquier
+  corrección del cambio de dominio de color (p. ej. normalizar el color o ampliar los rangos de los
+  histogramas) exigiría reentrenar y una evaluación nueva con otras fotos.
