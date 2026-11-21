@@ -1,0 +1,11 @@
+{
+  "commit": "2b6a416729fd92166e5e6266d7f7c5bd804545c4",
+  "date": "2026-11-21T15:30:07.297724+00:00",
+  "status": "complete",
+  "n_photos": 33,
+  "n_rois": 100,
+  "photos_sha1": "b7325899bce16cc6b4d7702364aff320c149acaf",
+  "rois_sha1": "9e1c3988244617e740448f5bda46aadd95be5040",
+  "own_config_sha1": "fb97305fef787c54be7a616200c70478825ed70c",
+  "predictions_sha1": "84f00c6395003dc470152ab612083d471d9bf024"
+}

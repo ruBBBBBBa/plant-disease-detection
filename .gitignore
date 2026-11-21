@@ -42,3 +42,10 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+#Agentes
+
+.agents/
+.claude/
+skills/
+skills-lock.json

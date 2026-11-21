@@ -33,11 +33,16 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | En revisión | `t06-plantdoc-external` |
+| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | Hecha | `t06-plantdoc-external` (PR #6) |
+
+## Fase 6 — Explicación visual e inferencia
+
+| ID | Tarea | Estado | Rama / PR |
+|---|---|---|---|
+| [T07](T07-inferencia-y-fotos-propias.md) | Herramienta de inferencia, ROI manual y test con fotos propias | En revisión | `t07-inference-own-photos` |
 
 ## Hoja de ruta (sin detallar a propósito)
 
 Cada fase se convierte en ficheros de tarea cuando la anterior está cerrada, con sus resultados reales delante.
 
-- **Fase 6 — Explicación visual e inferencia:** CLI de inferencia con máscaras, regiones sospechosas y estadísticas.
 - **Ampliaciones condicionadas:** patata/pimiento, enfermedades concretas, vídeo (CamShift/KLT), Streamlit.
