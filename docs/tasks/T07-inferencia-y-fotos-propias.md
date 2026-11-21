@@ -32,9 +32,22 @@ test **no mide el recall de enfermas**: eso ya está cubierto por PlantVillage y
 - **Etiquetas:** `data/annotations/own_photos.csv` (versionado), con las columnas
   `file, leaf_id, background, label, notes`; `label` ∈ {`healthy`, `altered`}. Las fotos de la misma
   hoja comparten `leaf_id`: son un grupo, como en PlantVillage.
-- **ROI:** `data/annotations/own_rois.csv` (versionado), con las columnas `file, x, y, w, h`. Las
-  coordenadas son sobre la imagen original y se dibujan con `scripts/annotate_roi.py`, que solo
-  muestra la foto y guarda el rectángulo; no segmenta ni predice.
+- **Condiciones reales de la sesión de fotos** (se declaran tal cual; no se corrigen):
+  - Muchas fotos muestran una **hoja compuesta** (varios folíolos y el raquis), no un folíolo suelto.
+    `leaf_id` identifica la hoja compuesta.
+  - Las hojas tienen **residuo blanco de un tratamiento** y gotas de agua. Siguen siendo `healthy`;
+    el residuo es un factor de confusión declarado.
+  - La cartulina «gris» es casi negra (`background = gris_oscuro`) y en algunas fotos no tapa todo
+    el fondo. No todas las hojas tienen los tres fondos.
+  - En `notes` se marcan, con palabras clave fijas separadas por `;`: `residuo`, `gotas`,
+    `compuesta`, `fondo_incompleto`. Sirven para estratificar el informe; no se ajusta nada con ellas.
+- **ROI, una por folíolo:** `data/annotations/own_rois.csv` (versionado), con las columnas
+  `file, leaflet_id, x, y, w, h`. Una foto puede tener **varias filas**, una por folíolo visible
+  entero. `leaflet_id` (`f1`, `f2`…) identifica el mismo folíolo en las fotos de la misma hoja con
+  distinto fondo, cuando se pueda reconocer. Regla fija para dibujarlas: el folíolo entero con un
+  margen pequeño, sin elegir folíolos según su aspecto. Las coordenadas son sobre la imagen original
+  y se dibujan con `scripts/annotate_roi.py`, que solo muestra la foto y guarda los rectángulos; no
+  segmenta ni predice.
 - Los agentes **no abren ni procesan las fotos propias** hasta que exista el commit congelado (fase B).
   Dibujar las ROI es trabajo del alumno y está permitido antes de congelar.
 
@@ -74,19 +87,30 @@ test **no mide el recall de enfermas**: eso ya está cubierto por PlantVillage y
    como referencia. Guarda las predicciones por foto (comprimidas, < 2 MB). Las tablas y rejillas se
    regeneran desde ellas.
 
-4. **Métricas e hipótesis, fijadas antes de congelar.** La unidad de remuestreo es la **hoja**
-   (bootstrap agrupado y emparejado por `leaf_id`, 10 000 réplicas, semilla 42). Para las sanas:
-   - **tasa de falsos positivos (FP)** y **tasa de no concluyentes**, por fondo y por modo;
-   - lectura «solo concluyentes» siempre con su cobertura.
+4. **Métricas e hipótesis, fijadas antes de congelar.**
+   - **Unidades:** en modo automático se evalúa cada **foto**; en modo ROI, cada **folíolo** (fila de
+     `own_rois.csv`). Las tasas se agregan primero por `leaf_id` y fondo, y el bootstrap remuestrea
+     **hojas compuestas** (`leaf_id`), nunca folíolos ni fotos (10 000 réplicas, semilla 42).
+   - Para las sanas: **tasa de falsos positivos (FP)** y **tasa de no concluyentes**, por fondo y por
+     modo; lectura «solo concluyentes» siempre con su cobertura. Cada tabla indica cuántas hojas y
+     cuántos folíolos entran.
+   - **Estratificación descriptiva** por las palabras clave de `notes` (residuo, gotas, compuesta,
+     fondo incompleto). Sin veredicto.
 
-   Las hipótesis usan la variante B. Regla: «apoyada» si el IC 95 % de la diferencia emparejada
-   excluye 0 con el signo esperado; «no apoyada (efecto contrario)» si lo excluye con el signo
-   opuesto; en otro caso, «no concluyente».
-   - **H4:** en modo automático, la tasa de FP con fondo **gris** es menor que con fondo **natural**.
-   - **H5 (contrasta D037):** en modo automático, la tasa de FP con fondo **blanco** es mayor que con
-     fondo **gris**.
-   - **H6:** con fondo **natural**, el modo ROI reduce la tasa de «no concluyente + FP» frente al modo
-     automático.
+   Las hipótesis usan la variante B. Las comparaciones entre fondos se emparejan por `leaf_id` y solo
+   usan las hojas que tienen fotos en los dos fondos comparados. Regla: «apoyada» si el IC 95 % de la
+   diferencia emparejada excluye 0 con el signo esperado; «no apoyada (efecto contrario)» si lo
+   excluye con el signo opuesto; en otro caso, «no concluyente».
+   - **H4:** en modo ROI, la tasa de FP con fondo **gris oscuro** es menor que con fondo **natural**.
+   - **H5 (contrasta D037):** en modo ROI, la tasa de FP con fondo **blanco** es mayor que con fondo
+     **gris oscuro**.
+   - **H6:** juntando todos los fondos, el modo ROI reduce la tasa de «no concluyente + FP» frente al
+     modo automático (por hoja: tasa del modo ROI sobre sus folíolos frente a tasa del modo
+     automático sobre sus fotos).
+
+   H4 y H5 se miden en modo ROI porque, con hojas compuestas, el modo automático marcará casi todo
+   como no concluyente por la forma de la máscara, y no por el fondo. El modo automático se informa
+   igualmente, de forma descriptiva.
 
    Con 20–30 hojas los IC serán anchos: un «no concluyente» es un resultado legítimo y se informa así.
    Las hojas «alteradas» se describen aparte: qué predice el sistema y por qué, sin métricas de acierto.
@@ -96,8 +120,8 @@ test **no mide el recall de enfermas**: eso ya está cubierto por PlantVillage y
    - una imagen no concluyente no lleva predicción;
    - las contribuciones lineales suman la puntuación de decisión (menos el término independiente);
    - el modo ROI recorta, reescala y transforma las coordenadas correctamente;
-   - `annotate_roi.py` guarda las coordenadas en la imagen original;
-   - el bootstrap remuestrea hojas;
+   - `annotate_roi.py` guarda varias ROI por foto con su `leaflet_id`, en coordenadas de la imagen original;
+   - el bootstrap remuestrea hojas compuestas (no folíolos ni fotos);
    - la guarda de `eval_own.py` impide una segunda ejecución.
 
 **Commit congelado:** todo lo anterior, con `ruff` y `pytest` en verde, sin haber procesado las
@@ -106,8 +130,10 @@ fotos, `own_photos.csv` y `own_rois.csv` están listos y versionados.
 
 ## Fase B — ejecución única (con las fotos del alumno)
 
-1. Comprobar que cada fichero del CSV existe en `data/raw/own/`, que no hay fotos sin anotar y que
-   cada `leaf_id` sano tiene los tres fondos. Si algo falla, parar y avisar; no corregir a mano.
+1. Comprobar que cada fichero del CSV existe en `data/raw/own/`, que no hay fotos sin anotar, que
+   cada foto sana tiene al menos una ROI y que los `leaflet_id` son coherentes. Informar de cuántas
+   hojas tienen cada combinación de fondos (no se exige tener los tres). Si algo falla, parar y
+   avisar; no corregir a mano.
 2. Ejecutar `eval_own.py` **una vez**.
 3. Informe `experiments/own/v1/summary.md`:
    - tablas por fondo × modo;
