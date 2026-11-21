@@ -213,10 +213,11 @@ ampliación posterior si queda tiempo). Vídeo.
   `python scripts/eval_own.py --frozen-commit 2b6a416` (código congelado en `fba1cac`; después
   solo entraron `.gitignore` y los CSV). Informe: `experiments/own/v1/summary.md`, regenerable con
   `scripts/report_own.py` y `scripts/plot_own.py`.
-- **Resultados por fondo × modo:** B en modo ROI: 95 de 97 folíolos sanos predichos `diseased`
+- **Resultados por fondo × modo:** B en modo ROI: 93 de 97 folíolos sanos predichos `diseased`,
+  2 `healthy` y 2 no concluyentes
   (fallo 0,990, cobertura 0,989); en modo automático, 80 % no concluyentes y el resto FP (fallo
   1,000). A, como referencia: fallo 0,967 (ROI) y 0,933 (auto). En modo ROI la segmentación es
-  buena; el fallo es del clasificador. Explicación probable, no demostrada: la b* de las hojas
+  aparentemente adecuada; sin máscaras de referencia no se puede descartar que contribuya al fallo. Explicación probable, no demostrada: la b* de las hojas
   (p. ej. 63,6) se sale del rango del histograma de train ([1, 48]) y `b_hist_07` (z ≈ +6 de
   media) empuja a `diseased`. El residuo del tratamiento, presente en todas las fotos, es un factor
   de confusión que este test no separa.
@@ -234,3 +235,23 @@ ampliación posterior si queda tiempo). Vídeo.
 - **Pendientes:** ninguno de T07. Fuera de alcance: cualquier
   corrección del cambio de dominio de color (p. ej. normalizar el color o ampliar los rangos de los
   histogramas) exigiría reentrenar y una evaluación nueva con otras fotos.
+
+
+### Revisión Codex — PR #8
+
+- P0 corregido desde `experiments/own/v1/predictions.csv.gz`: B-ROI, sanas:
+  93 `diseased`, 2 `healthy` y 2 no concluyentes. Son 95 fallos (FP + abstenciones),
+  no 95 predicciones `diseased`. Resumen, Entrega y D044 reconciliados.
+- P1 de anotaciones ya resuelto en la rama recibida: no existe `data/annotations/*`
+  en `.gitignore`; `git check-ignore data/annotations/new_review_annotation.csv`
+  devuelve 1 (ruta no ignorada). No se crea el archivo de prueba.
+- P1 causal corregido: segmentación aparentemente adecuada; no se descarta su contribución
+  al fallo sin máscaras de referencia. Color como explicación probable, no demostrada;
+  residuo del tratamiento como factor de confusión (D044, D045 y D048).
+- Cierre ya aplicado: D045 (ROI y aviso en figura/JSON), D046–D047 (cuatro rejillas y
+  cuatro ejemplos reducidos versionados; todos < 2 MB), D049 (anotaciones versionables).
+  No se duplican decisiones ya registradas ni se regeneran figuras.
+- Ruff y formato correctos; pytest: 110 passed. No se ejecutó `eval_own.py` ni se
+  repitió la evaluación; predicciones, métricas y registro único permanecen intactos.
+- Para el alumno: la causa del cambio de dominio sigue sin aislarse; no se ha usado
+  este conjunto para ajustar nada. Sin merge.

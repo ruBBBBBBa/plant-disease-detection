@@ -16,7 +16,7 @@
 ## Resultado principal
 
 **Con fotos reales de móvil, el sistema no sirve para hojas sanas.** La variante B marca como
-`diseased` 95 de los 97 folíolos sanos en modo ROI, y en modo automático el 80 % de las fotos son
+`diseased` 93 de los 97 folíolos sanos en modo ROI (2 `healthy` y 2 no concluyentes), y en modo automático el 80 % de las fotos son
 no concluyentes y el resto, FP. Es coherente con el colapso en PlantDoc (D034) y con el límite de
 validez de D035.
 
@@ -56,8 +56,8 @@ verificar**.
 Lo que sigue describe qué empuja la puntuación; **no demuestra la causa**. No hay en este test
 ningún experimento que aísle el color del residuo del tratamiento o de la cámara.
 
-- **La segmentación no es el problema en modo ROI.** En las rejillas, los contornos se ajustan a los
-  folíolos; la mediana de `leaf_area_frac` en el recorte es 0,42 (dentro de rango) y solo 2 de 97
+- **La segmentación es aparentemente adecuada en modo ROI.** En las rejillas, los contornos se ajustan a los
+  folíolos, pero no hay máscaras de referencia que permitan descartar su contribución al fallo; la mediana de `leaf_area_frac` en el recorte es 0,42 (dentro de rango) y solo 2 de 97
   folíolos quedan no concluyentes (`c02_natural f3` y `c06_natural f5`, con máscara casi vacía).
 - **En modo automático sí lo es:** la hoja compuesta ocupa poco encuadre (mediana de
   `leaf_area_frac` 0,15) y hay varias hojas, tierra o la mano en la foto. Motivos de no concluyente
