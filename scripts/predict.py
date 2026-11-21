@@ -1,13 +1,15 @@
 """Inferencia sobre una foto (T07): figura con máscara, regiones candidatas y predicción + JSON.
 
-Modo automático (K-means de T03) por defecto; modo ROI con ``--roi x,y,w,h`` (coordenadas de la
-imagen original) o ``--select-roi`` (se dibuja con el ratón). La puntuación es la del SVM
+Modo ROI por defecto (D045): la ROI se dibuja con el ratón o se da con ``--roi x,y,w,h``
+(coordenadas de la imagen original); rectángulo pegado al folíolo, sin margen. ``--auto`` usa el
+modo automático (K-means de T03). La puntuación es la del SVM
 (``decision_function``) y **no es una probabilidad**. Si la máscara es no concluyente (D031/D035)
 no hay predicción: se muestra el motivo.
 
 Ejemplos:
     python scripts/predict.py --image foto.jpg --out reports/inference
-    python scripts/predict.py --image foto.jpg --select-roi --out reports/inference
+    python scripts/predict.py --image foto.jpg --roi 120,80,300,200
+    python scripts/predict.py --image foto.jpg --auto
 """
 
 from __future__ import annotations
@@ -62,12 +64,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--image", type=Path, required=True)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--roi", type=inf.parse_roi, help="x,y,w,h en la imagen original")
-    group.add_argument("--select-roi", action="store_true", help="dibujar la ROI con el ratón")
+    group.add_argument("--auto", action="store_true", help="modo automático (K-means) sin ROI")
     parser.add_argument("--variant", default="B", choices=["A", "B"], help="por defecto B (D036)")
     parser.add_argument("--out", type=Path, default=REPO_ROOT / "reports/inference")
     args = parser.parse_args(argv)
     roi = args.roi
-    if args.select_roi:
+    if roi is None and not args.auto:  # por defecto, ROI dibujada con el ratón
         image = ex.read_bgr(args.image)
         if image is None:
             raise SystemExit(f"Error: no se puede leer la imagen {args.image}")

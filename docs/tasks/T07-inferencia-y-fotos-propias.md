@@ -216,8 +216,10 @@ ampliación posterior si queda tiempo). Vídeo.
 - **Resultados por fondo × modo:** B en modo ROI: 95 de 97 folíolos sanos predichos `diseased`
   (fallo 0,990, cobertura 0,989); en modo automático, 80 % no concluyentes y el resto FP (fallo
   1,000). A, como referencia: fallo 0,967 (ROI) y 0,933 (auto). En modo ROI la segmentación es
-  buena; el fallo es del clasificador: la b* de las hojas (p. ej. 63,6) se sale del rango del
-  histograma de train ([1, 48]) y `b_hist_07` (z ≈ +6 de media) empuja a `diseased`.
+  buena; el fallo es del clasificador. Explicación probable, no demostrada: la b* de las hojas
+  (p. ej. 63,6) se sale del rango del histograma de train ([1, 48]) y `b_hist_07` (z ≈ +6 de
+  media) empuja a `diseased`. El residuo del tratamiento, presente en todas las fotos, es un factor
+  de confusión que este test no separa.
 - **Veredicto H4–H6:** las tres «no concluyentes» por efecto techo (H4 0,000 [0,000, 0,000];
   H5 0,014 [0,000, 0,043]; H6 0,010 [0,000, 0,029]). D037 sigue sin verificar. Descriptivo, sin
   veredicto: la puntuación es mayor sobre blanco en 9 de 10 hojas.
@@ -225,8 +227,10 @@ ampliación posterior si queda tiempo). Vídeo.
   y natural y no concluyente en gris. No se distingue de las sanas, que también salen enfermas.
 - **Decisiones tomadas durante la tarea:** D040 (tasa de fallo para H4–H6), D041 (simulación de la
   ROI, margen del 10 % y regla de dibujo), D042 (modo ROI: GrabCut y «no concluyente» sobre el
-  recorte), D043 (agregación por hoja y bootstrap).
-- **Pendientes:** decisiones del alumno (modo por defecto, versionar miniaturas, figuras para la
-  memoria; las candidatas están en `data/processed/own_v1/`). Fuera de alcance: cualquier
+  recorte), D043 (agregación por hoja y bootstrap), D044 (resultado). Cierre (alumno): D045 (ROI
+  por defecto en `predict.py` y aviso fijo), D046–D047 (figuras reducidas versionadas en
+  `experiments/own/v1/figures/` con `scripts/export_own_figures.py`), D048 (b* como explicación
+  probable, residuo como confusión), D049 (`data/annotations/` deja de ignorarse).
+- **Pendientes:** ninguno de T07. Fuera de alcance: cualquier
   corrección del cambio de dominio de color (p. ej. normalizar el color o ampliar los rangos de los
   histogramas) exigiría reentrenar y una evaluación nueva con otras fotos.

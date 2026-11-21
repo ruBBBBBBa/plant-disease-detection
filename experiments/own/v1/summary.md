@@ -53,6 +53,9 @@ verificar**.
 
 ## Por qué falla (descriptivo; no se ajusta nada)
 
+Lo que sigue describe qué empuja la puntuación; **no demuestra la causa**. No hay en este test
+ningún experimento que aísle el color del residuo del tratamiento o de la cámara.
+
 - **La segmentación no es el problema en modo ROI.** En las rejillas, los contornos se ajustan a los
   folíolos; la mediana de `leaf_area_frac` en el recorte es 0,42 (dentro de rango) y solo 2 de 97
   folíolos quedan no concluyentes (`c02_natural f3` y `c06_natural f5`, con máscara casi vacía).
@@ -60,7 +63,7 @@ verificar**.
   `leaf_area_frac` 0,15) y hay varias hojas, tierra o la mano en la foto. Motivos de no concluyente
   en B, sobre las 27 fotos no concluyentes (incluidas las 3 de la alterada): `leaf_area_frac` 17,
   `mask_solidity` 9, `border_touch_frac` 2 (una foto puede tener varios).
-- **El clasificador recibe colores fuera del rango de PlantVillage.** Contribución media de B sobre
+- **Explicación probable, no demostrada: colores fuera del rango de PlantVillage.** Contribución media de B sobre
   los 95 folíolos sanos concluyentes (`contributions_B_roi.csv`):
 
   | Característica | Contribución media | z medio |
@@ -76,14 +79,16 @@ verificar**.
   ([1, 48]); el 97,6 % de los píxeles cae en el último bin (`b_hist_07`, z = +11,0). Las hojas
   fotografiadas con el móvil son mucho más amarillo-verdosas y saturadas que las de PlantVillage.
   El mismo coeficiente que en PlantVillage separa «más amarillo = más enfermo» empuja aquí a sanas
-  hacia `diseased`. Las manchas casi no intervienen (`spot_area_frac` mediano 0,000).
+  hacia `diseased`; es la explicación más probable, pero no está demostrada. Las manchas casi no intervienen (`spot_area_frac` mediano 0,000).
   Esto ilustra la regla 8 de `AGENTS.md`: no se puede asumir que amarillo = enfermo.
 - **Exposición según el fondo (descriptivo, sin veredicto):** la puntuación media por hoja es más
   alta sobre blanco (mediana 11,6) que sobre natural (7,6) y gris oscuro (4,1); 9 de 10 hojas
   puntúan más sobre blanco que sobre gris. Va en el sentido de D037, pero la puntuación **no es la
   medida preregistrada** y no se le da veredicto. En las rejillas, sobre la cartulina blanca las hojas
   salen más oscuras (la cámara compensa la exposición).
-- **Notas:** `residuo` está en todas las fotos, así que no se puede comparar con/sin. Por unidad
+- **Residuo del tratamiento: factor de confusión.** `residuo` está en todas las fotos, así que no se
+  puede comparar con/sin ni separar su efecto del del color o la cámara.
+- **Otras notas:** Por unidad
   (no por hoja), en B-ROI: con `gotas` 34/36 fallos y sin ellas 61/61; con `compuesta` 83/85 y sin
   ella 12/12. Diferencias de una o dos unidades: sin lectura.
 
@@ -100,13 +105,14 @@ distingue «alterada» de «sana»: no se puede leer nada de su predicción.
 
 ## Figuras
 
-Todas contienen fotos propias, así que están en `data/processed/own_v1/` (fuera de git) hasta que
-el alumno decida si se versionan:
+Las originales (a tamaño completo) están en `data/processed/own_v1/`, fuera de git. Copias
+reducidas versionadas en `figures/` (D046–D047; `python scripts/export_own_figures.py`). Los
+ejemplos se regeneraron con el aviso de D045, con las mismas ROI y puntuaciones:
 
 - `grid_photos_{gris_oscuro,blanco,natural}.jpg`: cada foto con sus ROI coloreadas por resultado
   (verde acierto, rojo FP, gris no concluyente) y la máscara del modo automático.
 - `grid_rois.jpg`: los 100 recortes con su máscara, resultado y puntuación.
-- `examples/` (`predict.py`), candidatas para la memoria: `c01_gris_auto` (no concluyente,
+- Ejemplos de `predict.py` elegidos para la memoria: `c01_gris_auto` (no concluyente,
   `mask_solidity`), `c01_gris_roi` (FP con la contribución de `b_hist_07`), `c06_natural_roi`
   (`f2`, uno de los dos aciertos, −2,4) y `a01_blanco_roi` (hoja alterada, +15,9).
 
@@ -114,5 +120,5 @@ el alumno decida si se versionan:
 
 - 10 hojas de una sola planta, un móvil y una sesión: no generaliza a otras condiciones.
 - Todas las hojas tienen residuo blanco de tratamiento: es un factor de confusión que no se puede
-  separar del cambio de cámara con estos datos.
+  separar del color ni del cambio de cámara con estos datos.
 - Con el efecto techo, H4–H6 no tienen potencia; la ausencia de veredicto no es ausencia de efecto.

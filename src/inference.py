@@ -30,6 +30,8 @@ SCORE_NOTE = "puntuación de decisión del SVM, no una probabilidad"
 FIXED_WARNINGS = [
     "Las regiones candidatas son zonas de color anómalo, no «dónde ve la enfermedad» el modelo.",
     "El sistema solo es fiable con una hoja sola sobre fondo uniforme (D035).",
+    "Validado solo en imágenes tipo PlantVillage (una hoja, fondo uniforme). En pruebas con "
+    "fotos reales (T06, T07) dio falsos positivos casi siempre.",
 ]
 LABELS = {0: "healthy", 1: "diseased"}
 
