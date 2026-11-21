@@ -17,12 +17,31 @@ misma fuente, cosa que PlantDoc no permitía.
 
 Igual que PlantDoc, este dataset **se usa una sola vez** y nada se ajusta con él.
 
+## Ya comprobado (21-nov-2026, solo la lista de ficheros del archivo del alumno)
+
+- **Licencia:** CC BY 4.0, según la página del dataset en Mendeley Data.
+- **El archivo descargado (`taiwan.7z`) solo contiene la parte de Taiwán**, no la de PlantVillage:
+  5.598 JPG en dos carpetas.
+  - `Preprocessed data/{Train,Test}/<clase>/`: **622 imágenes originales**, redimensionadas a
+    227×227. Por clase: Bacterial spot 110, Black mold 67, Gray spot 84, Late blight 98, health 106 y
+    powdery mildew 157.
+  - `data augmentation/{Train,Test}/<clase>/`: 4.976 versiones aumentadas de las mismas imágenes
+    (rotaciones, espejos y brillo; sufijos como `_mirror` o `_change_90`). **Se excluyen por
+    completo**: son copias transformadas de las originales.
+- El reparto Train/Test del propio dataset **no se usa**: las 622 originales son todas test externo
+  (no se entrena con nada de aquí). Se conserva como columna `original_split`.
+- **Enfermedades vistas en el entrenamiento:** Bacterial spot y Late blight. **No vistas:** Black mold,
+  Gray spot y powdery mildew. El oídio (powdery mildew) produce manchas blancas, como el residuo de las
+  fotos propias de T07: anotarlo como posible confusión al comparar.
+
+Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (auditoría del punto 3).
+
 ## Fase A — descarga, auditoría y anotación de condiciones (antes de congelar)
 
 1. **Descarga (la hace el alumno).** Desde Mendeley Data (DOI de arriba), a `data/raw/taiwan/`, que
    no se versiona. **Revisar la licencia** en la página del dataset y anotarla en `data/README.md`.
    Si la licencia no permite este uso, parar y avisar.
-2. **Usar solo el subconjunto de Taiwán.** El paquete incluye además un subconjunto seleccionado de
+2. **Usar solo `Preprocessed data` (622 originales).** Se excluyen `data augmentation` y, si apareciera, el subconjunto de
    PlantVillage: ese se **excluye por completo**, porque solaparía con el entrenamiento.
 3. **Auditoría** con `scripts/audit_dataset.py` (estructura real, clases, recuentos, tamaños,
    ilegibles, duplicados). Además, buscar **casi-duplicados frente a PlantVillage** con el dHash de
