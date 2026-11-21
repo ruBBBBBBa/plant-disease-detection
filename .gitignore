@@ -8,6 +8,7 @@ data/**/*.jpeg
 data/**/*.JPG
 data/**/*.png
 data/**/*.zip
+data/annotations/*
 
 # Inventarios y manifiesto regenerables (> 2 MB): scripts/audit_dataset.py, scripts/prepare_dataset.py
 reports/**/inventory*.csv
@@ -42,3 +43,10 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+#Agentes
+
+.agents/
+.claude/
+skills/
+skills-lock.json
