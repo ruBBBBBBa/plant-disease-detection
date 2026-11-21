@@ -40,7 +40,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T07](T07-inferencia-y-fotos-propias.md) | Herramienta de inferencia, ROI manual y test con fotos propias | En revisión | `t07-inference-own-photos` |
+| [T07](T07-inferencia-y-fotos-propias.md) | Herramienta de inferencia, ROI manual y test con fotos propias | Hecha | `t07-inference-own-photos` (PR #8) |
 
 ## Hoja de ruta (sin detallar a propósito)
 
