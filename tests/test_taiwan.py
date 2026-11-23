@@ -262,3 +262,32 @@ def test_report_taiwan_end_to_end_on_synthetic_predictions(tmp_path: Path) -> No
     assert h["H8"]["verdict"] in {"apoyada", "no apoyada (efecto contrario)", "no concluyente"}
     assert "H9" in h and "verdict" in h["H9"]
     assert "## Hipótesis" in (tmp_path / "tables.md").read_text()
+
+
+def test_condition_readings_without_healthy_and_without_conclusive() -> None:
+    """Sin sanas BA/recall sano son no medibles; NC no entra en la matriz concluyente."""
+    report = load_script("report_taiwan")
+    cell = pd.DataFrame(
+        {
+            "leaves": ["leaflet"] * 3,
+            "background": ["simple"] * 3,
+            "y_true": [1, 1, 1],
+            "y_pred": [1, 0, 0],
+            "score": [0.8, 0.2, -0.5],
+            "inconclusive": [False, False, True],
+        }
+    )
+    all_rows, conclusive = report.condition_rows(cell, 20, 42)
+    for row in (all_rows, conclusive):
+        assert np.isnan(row["balanced_accuracy"]) and np.isnan(row["recall_healthy"])
+        assert row["n_healthy"] == row["n_healthy_total"] == 0
+        assert np.isclose(row["coverage"], 2 / 3)
+        assert report.fmt(row["balanced_accuracy"]) == "no medible"
+    assert all_rows["confusion_matrix"] == [[0, 0], [2, 1]]
+    assert conclusive["confusion_matrix"] == [[0, 0], [1, 1]]
+    assert conclusive["n_diseased"] == 2 and conclusive["recall_diseased"] == 0.5
+    cell["inconclusive"] = True
+    empty = report.condition_rows(cell, 20, 42)[1]
+    assert empty["n"] == 0 and empty["coverage"] == 0
+    assert empty["confusion_matrix"] == [[0, 0], [0, 0]]
+    assert np.isnan(empty["recall_diseased"])

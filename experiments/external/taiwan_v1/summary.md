@@ -33,18 +33,49 @@ Tablas completas en [`tables.md`](tables.md). Lo esencial:
   todo lo sano se llama «enfermo».
 - BA de `val` en PlantVillage (referencia): A 0,959, B 0,946, B′ 0,963.
 
-## Por condición (B, lectura «todas»)
+## Por condición `leaves × background` (ambas lecturas)
 
-| Hojas | Fondo | n (sanas / enfermas) | Cobertura | Recall enfermas [IC95] |
-|---|---|---|---:|---|
-| leaflet | simple | 198 (0 / 198) | 62,6 % | 0,419 [0,348; 0,490] |
-| compound | simple | 22 (0 / 22) | 68,2 % | 0,591 [0,364; 0,818] |
-| multiple | simple | 6 (0 / 6) | 0,0 % | 0,000 |
-| leaflet | complex | 244 (37 / 207) | 24,2 % | 0,179 [0,126; 0,230] |
-| compound | complex | 94 (37 / 57) | 17,0 % | 0,105 [0,034; 0,191] |
-| multiple | complex | 58 (32 / 26) | 17,2 % | 0,077 [0,000; 0,200] |
+| Variante | Hojas | Fondo | Lectura | Total celda (sanas / enfermas) | n lectura (sanas / enfermas) | Cobertura | BA [IC95] | Recall sanas | Recall enfermas [IC95] | Matriz [[TN, FP], [FN, TP]] |
+|---|---|---|---|---|---|---:|---|---|---|---|
+| A | compound | complex | todas | 94 (37 / 57) | 94 (37 / 57) | 17.0% | 0.061 [0.023; 0.107] | 0.000 | 0.123 [0.047; 0.214] | [[0, 37], [50, 7]] |
+| A | compound | complex | solo concluyentes | 94 (37 / 57) | 16 (7 / 9) | 17.0% | 0.389 [0.250; 0.500] | 0.000 | 0.778 [0.500; 1.000] | [[0, 7], [2, 7]] |
+| A | compound | simple | todas | 22 (0 / 22) | 22 (0 / 22) | 68.2% | no medible | no medible | 0.500 [0.317; 0.727] | [[0, 0], [11, 11]] |
+| A | compound | simple | solo concluyentes | 22 (0 / 22) | 15 (0 / 15) | 68.2% | no medible | no medible | 0.733 [0.533; 0.933] | [[0, 0], [4, 11]] |
+| A | leaflet | complex | todas | 244 (37 / 207) | 244 (37 / 207) | 24.2% | 0.096 [0.062; 0.135] | 0.027 | 0.164 [0.114; 0.215] | [[1, 36], [173, 34]] |
+| A | leaflet | complex | solo concluyentes | 244 (37 / 207) | 59 (11 / 48) | 24.2% | 0.400 [0.302; 0.525] | 0.091 | 0.708 [0.574; 0.830] | [[1, 10], [14, 34]] |
+| A | leaflet | simple | todas | 198 (0 / 198) | 198 (0 / 198) | 62.6% | no medible | no medible | 0.348 [0.288; 0.414] | [[0, 0], [129, 69]] |
+| A | leaflet | simple | solo concluyentes | 198 (0 / 198) | 124 (0 / 124) | 62.6% | no medible | no medible | 0.556 [0.468; 0.645] | [[0, 0], [55, 69]] |
+| A | multiple | complex | todas | 58 (32 / 26) | 58 (32 / 26) | 17.2% | 0.054 [0.000; 0.126] | 0.031 | 0.077 [0.000; 0.200] | [[1, 31], [24, 2]] |
+| A | multiple | complex | solo concluyentes | 58 (32 / 26) | 10 (8 / 2) | 17.2% | 0.562 [0.500; 0.688] | 0.125 | 1.000 [1.000; 1.000] | [[1, 7], [0, 2]] |
+| A | multiple | simple | todas | 6 (0 / 6) | 6 (0 / 6) | 0.0% | no medible | no medible | 0.000 [0.000; 0.000] | [[0, 0], [6, 0]] |
+| A | multiple | simple | solo concluyentes | 6 (0 / 6) | 0 (0 / 0) | 0.0% | no medible | no medible | no medible | [[0, 0], [0, 0]] |
+| B | compound | complex | todas | 94 (37 / 57) | 94 (37 / 57) | 17.0% | 0.053 [0.017; 0.096] | 0.000 | 0.105 [0.034; 0.191] | [[0, 37], [51, 6]] |
+| B | compound | complex | solo concluyentes | 94 (37 / 57) | 16 (7 / 9) | 17.0% | 0.333 [0.167; 0.500] | 0.000 | 0.667 [0.333; 1.000] | [[0, 7], [3, 6]] |
+| B | compound | simple | todas | 22 (0 / 22) | 22 (0 / 22) | 68.2% | no medible | no medible | 0.591 [0.364; 0.818] | [[0, 0], [9, 13]] |
+| B | compound | simple | solo concluyentes | 22 (0 / 22) | 15 (0 / 15) | 68.2% | no medible | no medible | 0.867 [0.667; 1.000] | [[0, 0], [2, 13]] |
+| B | leaflet | complex | todas | 244 (37 / 207) | 244 (37 / 207) | 24.2% | 0.116 [0.075; 0.166] | 0.054 | 0.179 [0.126; 0.230] | [[2, 35], [170, 37]] |
+| B | leaflet | complex | solo concluyentes | 244 (37 / 207) | 59 (11 / 48) | 24.2% | 0.476 [0.353; 0.616] | 0.182 | 0.771 [0.646; 0.881] | [[2, 9], [11, 37]] |
+| B | leaflet | simple | todas | 198 (0 / 198) | 198 (0 / 198) | 62.6% | no medible | no medible | 0.419 [0.348; 0.490] | [[0, 0], [115, 83]] |
+| B | leaflet | simple | solo concluyentes | 198 (0 / 198) | 124 (0 / 124) | 62.6% | no medible | no medible | 0.669 [0.589; 0.750] | [[0, 0], [41, 83]] |
+| B | multiple | complex | todas | 58 (32 / 26) | 58 (32 / 26) | 17.2% | 0.054 [0.000; 0.123] | 0.031 | 0.077 [0.000; 0.200] | [[1, 31], [24, 2]] |
+| B | multiple | complex | solo concluyentes | 58 (32 / 26) | 10 (8 / 2) | 17.2% | 0.562 [0.500; 0.700] | 0.125 | 1.000 [1.000; 1.000] | [[1, 7], [0, 2]] |
+| B | multiple | simple | todas | 6 (0 / 6) | 6 (0 / 6) | 0.0% | no medible | no medible | 0.000 [0.000; 0.000] | [[0, 0], [6, 0]] |
+| B | multiple | simple | solo concluyentes | 6 (0 / 6) | 0 (0 / 0) | 0.0% | no medible | no medible | no medible | [[0, 0], [0, 0]] |
+| B_prime | compound | complex | todas | 94 (37 / 57) | 94 (37 / 57) | 17.0% | 0.080 [0.031; 0.138] | 0.054 | 0.105 [0.034; 0.191] | [[2, 35], [51, 6]] |
+| B_prime | compound | complex | solo concluyentes | 94 (37 / 57) | 16 (7 / 9) | 17.0% | 0.476 [0.250; 0.709] | 0.286 | 0.667 [0.333; 1.000] | [[2, 5], [3, 6]] |
+| B_prime | compound | simple | todas | 22 (0 / 22) | 22 (0 / 22) | 68.2% | no medible | no medible | 0.318 [0.136; 0.545] | [[0, 0], [15, 7]] |
+| B_prime | compound | simple | solo concluyentes | 22 (0 / 22) | 15 (0 / 15) | 68.2% | no medible | no medible | 0.467 [0.200; 0.733] | [[0, 0], [8, 7]] |
+| B_prime | leaflet | complex | todas | 244 (37 / 207) | 244 (37 / 207) | 24.2% | 0.117 [0.065; 0.179] | 0.108 | 0.126 [0.081; 0.172] | [[4, 33], [181, 26]] |
+| B_prime | leaflet | complex | solo concluyentes | 244 (37 / 207) | 59 (11 / 48) | 24.2% | 0.453 [0.302; 0.622] | 0.364 | 0.542 [0.400; 0.680] | [[4, 7], [22, 26]] |
+| B_prime | leaflet | simple | todas | 198 (0 / 198) | 198 (0 / 198) | 62.6% | no medible | no medible | 0.232 [0.177; 0.293] | [[0, 0], [152, 46]] |
+| B_prime | leaflet | simple | solo concluyentes | 198 (0 / 198) | 124 (0 / 124) | 62.6% | no medible | no medible | 0.371 [0.290; 0.452] | [[0, 0], [78, 46]] |
+| B_prime | multiple | complex | todas | 58 (32 / 26) | 58 (32 / 26) | 17.2% | 0.070 [0.014; 0.150] | 0.062 | 0.077 [0.000; 0.200] | [[2, 30], [24, 2]] |
+| B_prime | multiple | complex | solo concluyentes | 58 (32 / 26) | 10 (8 / 2) | 17.2% | 0.625 [0.500; 0.786] | 0.250 | 1.000 [1.000; 1.000] | [[2, 6], [0, 2]] |
+| B_prime | multiple | simple | todas | 6 (0 / 6) | 6 (0 / 6) | 0.0% | no medible | no medible | 0.000 [0.000; 0.000] | [[0, 0], [6, 0]] |
+| B_prime | multiple | simple | solo concluyentes | 6 (0 / 6) | 0 (0 / 0) | 0.0% | no medible | no medible | no medible | [[0, 0], [0, 0]] |
 
-La BA solo existe en las celdas `complex` (las únicas con sanas) y en todas ellas es ≤ 0,116.
+No medible: falta la clase necesaria en esa lectura. Cobertura = concluyentes / total de la celda; matrices y soportes corresponden a cada lectura.
+
 
 ## Hipótesis (fijadas antes de ejecutar)
 

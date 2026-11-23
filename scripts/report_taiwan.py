@@ -32,9 +32,9 @@ CONDITION = ["leaves", "background"]
 
 
 def fmt(value: float, ci: list[float] | None = None) -> str:
-    """Número con tres decimales y, si hay, su IC 95 %; «—» si la métrica no existe (NaN)."""
+    """Número con tres decimales y, si hay, su IC 95 %; «no medible» si la métrica no existe (NaN)."""
     if np.isnan(value):
-        return "—"
+        return "no medible"
     return f"{value:.3f}" if ci is None else f"{value:.3f} [{ci[0]:.3f}; {ci[1]:.3f}]"
 
 
@@ -71,18 +71,34 @@ def group_vectors(pred: pd.DataFrame, focus: dict, metric: str) -> tuple[np.ndar
     return hit[mask].to_numpy(int), hit[~mask].to_numpy(int)
 
 
-def cell_metrics(cell: pd.DataFrame, n_boot: int, seed: int) -> dict:
-    """Cobertura, BA y recalls de una celda (lectura «todas»); NaN si falta la clase necesaria.
+def cell_metrics(cell: pd.DataFrame, n_boot: int, seed: int, reading: str = "all") -> dict:
+    """Dos lecturas de una celda; matriz y soportes propios, cobertura sobre toda la celda.
 
     Sin sanas (p. ej. todo el fondo ``simple`` de Taiwán) no existen la BA ni el recall de sanas.
     """
-    m = ex.reading_metrics(cell, "all", with_ci=False)
-    y, p = cell["y_true"].to_numpy(), cell["y_pred"].to_numpy()
+    rows = cell if reading == "all" else cell[~cell["inconclusive"]]
+    m = (
+        ex.reading_metrics(cell, reading, with_ci=False)
+        if len(rows)
+        else {
+            "coverage": float((~cell["inconclusive"]).mean()),
+            "balanced_accuracy": np.nan,
+            "recall_healthy": np.nan,
+            "recall_diseased": np.nan,
+            "confusion_matrix": [[0, 0], [0, 0]],
+        }
+    )
+    y, p = rows["y_true"].to_numpy(), rows["y_pred"].to_numpy()
     n_h, n_d = int((y == 0).sum()), int((y == 1).sum())
     both = n_h > 0 and n_d > 0
     nan2 = [np.nan, np.nan]
     return {
-        "n": len(cell),
+        "reading": reading,
+        "n": len(rows),
+        "n_total": len(cell),
+        "n_healthy_total": int((cell["y_true"] == 0).sum()),
+        "n_diseased_total": int((cell["y_true"] == 1).sum()),
+        "confusion_matrix": m["confusion_matrix"],
         "n_healthy": n_h,
         "n_diseased": n_d,
         "coverage": m["coverage"],
@@ -105,10 +121,11 @@ def cell_metrics(cell: pd.DataFrame, n_boot: int, seed: int) -> dict:
 
 
 def condition_rows(pred: pd.DataFrame, n_boot: int, seed: int) -> list[dict]:
-    """Métricas de una variante en cada celda ``leaves × background`` (lectura «todas»)."""
+    """Ambas lecturas por celda, con soportes y cobertura referida a la celda completa."""
     return [
-        {"leaves": leaves, "background": background} | cell_metrics(cell, n_boot, seed)
+        {"leaves": leaves, "background": background} | cell_metrics(cell, n_boot, seed, reading)
         for (leaves, background), cell in pred.groupby(CONDITION)
+        for reading in ex.READINGS
     ]
 
 
@@ -186,21 +203,28 @@ def main(argv: list[str] | None = None) -> int:
             )
 
     # ------------------------------------------------------------------ por condición
-    lines += ["", "## Por condición `leaves × background` (lectura «todas»)", ""]
+    lines += ["", "## Por condición `leaves × background` (ambas lecturas)", ""]
     lines += [
-        "| Variante | Hojas | Fondo | n (sanas / enfermas) | Cobertura | BA [IC95] | Recall sanas | Recall enfermas [IC95] |",
-        "|---|---|---|---|---:|---|---:|---|",
+        "| Variante | Hojas | Fondo | Lectura | Total celda (sanas / enfermas) | n lectura (sanas / enfermas) | Cobertura | BA [IC95] | Recall sanas | Recall enfermas [IC95] | Matriz [[TN, FP], [FN, TP]] |",
+        "|---|---|---|---|---|---|---:|---|---|---|---|",
     ]
     for name, entry in result["variants"].items():
         for r in entry["by_condition"]:
             ci = r["ci95"]
             lines.append(
-                f"| {name} | {r['leaves']} | {r['background']} | {r['n']} ({r['n_healthy']} / {r['n_diseased']}) | "
+                f"| {name} | {r['leaves']} | {r['background']} | {'todas' if r['reading'] == 'all' else 'solo concluyentes'} | "
+                f"{r['n_total']} ({r['n_healthy_total']} / {r['n_diseased_total']}) | "
+                f"{r['n']} ({r['n_healthy']} / {r['n_diseased']}) | "
                 f"{r['coverage']:.1%} | {fmt(r['balanced_accuracy'], ci['balanced_accuracy'])} | "
-                f"{fmt(r['recall_healthy'])} | {fmt(r['recall_diseased'], ci['recall_diseased'])} |"
+                f"{fmt(r['recall_healthy'])} | {fmt(r['recall_diseased'], ci['recall_diseased'])} | {r['confusion_matrix']} |"
             )
 
     # ------------------------------------------------------------------ hipótesis
+    lines += [
+        "",
+        "No medible: falta la clase necesaria en esa lectura. Cobertura = concluyentes / total de la celda; matrices y soportes corresponden a cada lectura.",
+        "",
+    ]
     lines += ["", "## Hipótesis (fijadas antes de ejecutar, `configs/taiwan.json`)", ""]
     lines += [
         "| H | Contraste | Grupos (n) | Diferencia [IC95] | Veredicto |",
@@ -307,8 +331,8 @@ def main(argv: list[str] | None = None) -> int:
         "|---|---|---:|---:|---:|---|---|",
     ]
     for old, new in zip(
-        result["variants"]["B"]["by_condition"],
-        result["variants"]["B_prime"]["by_condition"],
+        [r for r in result["variants"]["B"]["by_condition"] if r["reading"] == "all"],
+        [r for r in result["variants"]["B_prime"]["by_condition"] if r["reading"] == "all"],
         strict=True,
     ):
         lines.append(

@@ -216,3 +216,18 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 - **Pendientes:** las dos decisiones del alumno de arriba (redacción del límite de validez y trabajo
   futuro). Fuera de alcance y sin hacer: reajustar umbrales para color normalizado; segmentación
   para fondos complejos o negros; ROI manual.
+
+
+### Revisión Codex — informe por condición
+
+- P1 corregido: para A, B y B′ se incluyen ambas lecturas por celda `leaves × background`,
+  cada una con matriz [[TN, FP], [FN, TP]], recall por clase, BA, soportes por clase de la
+  lectura y de la celda completa, y cobertura (concluyentes / total de la celda).
+- Sin una clase, su recall y la BA se muestran como «no medible». Sin concluyentes,
+  matriz nula y métricas no medibles. Test sintético con una celda sin sanas y otra lectura vacía.
+- `python scripts/report_taiwan.py` regeneró tablas y métricas solo desde datos guardados.
+  El bloque por condición de `summary.md` procede de las nuevas tablas.
+- Comparación estructural con el JSON previo: totales, métricas globales, por enfermedad,
+  lecturas «todas» por celda e hipótesis H7–H9 idénticos, incluidos IC y veredictos.
+- Ruff y formato correctos; pytest: 137 passed. No se ejecutó `eval_external.py`, ni se
+  procesaron imágenes, ni se cambiaron modelos, umbrales o decisiones.
