@@ -46,7 +46,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T08](T08-taiwan-test-externo.md) | Segundo test externo (Taiwán) y variante B′ con normalización de color | En revisión | `t08-taiwan-external` |
+| [T08](T08-taiwan-test-externo.md) | Segundo test externo (Taiwán) y variante B′ con normalización de color | En revisión | `t08-taiwan-external` (PR #9) |
 
 ## Hoja de ruta (sin detallar a propósito)
 
