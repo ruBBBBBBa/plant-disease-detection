@@ -356,11 +356,35 @@ def _zero_features(cfg: dict) -> dict[str, float]:
     return zero
 
 
-def extract_features(image_bgr: np.ndarray, raw_mask: np.ndarray, cfg: dict) -> dict[str, float]:
+def gray_world(image_bgr: np.ndarray) -> np.ndarray:
+    """Normalización de color *gray world* (constancia de color clásica, variante B′ de T08).
+
+    Supone que la media de la escena es gris neutro: escala cada canal B, G y R para que su media
+    en la imagen completa sea la media de los tres canales, y recorta a [0, 255] en ``uint8``.
+    No se aprende de los datos. Punto débil: si la hoja ocupa casi toda la imagen, la «escena»
+    es verde y la corrección también altera el color de la hoja.
+    """
+    pixels = image_bgr.astype(np.float64)
+    means = pixels.reshape(-1, 3).mean(axis=0)
+    gains = np.divide(means.mean(), means, out=np.ones(3), where=means > 0)
+    return np.clip(np.rint(pixels * gains), 0, 255).astype(np.uint8)
+
+
+def extract_features(
+    image_bgr: np.ndarray,
+    raw_mask: np.ndarray,
+    cfg: dict,
+    feature_image: np.ndarray | None = None,
+) -> dict[str, float]:
     """Vector completo: calidad (máscara T03) + color, textura, manchas y diagnóstico.
 
     La calidad y el diagnóstico (nitidez) usan la máscara de T03 tal cual; el resto,
     la máscara preparada con la variante de sombra (``cfg["mask_variant"]``).
+
+    ``feature_image`` (B′, T08): imagen de la que se sacan color, textura y manchas, p. ej. tras
+    ``gray_world``. La máscara, su preparación, ``mask_empty``, la calidad (de la que sale el «no
+    concluyente») y la nitidez salen siempre de ``image_bgr``, así que B y B′ comparten máscara y
+    cobertura. Por defecto es ``image_bgr`` (B, sin cambios).
 
     Devuelve ``mask_empty`` (bool): True si la máscara final no tiene píxeles. En ese caso
     las demás características valdrán 0; la fase 4 decide el tratamiento. Evita NaN silenciosos
@@ -370,13 +394,14 @@ def extract_features(image_bgr: np.ndarray, raw_mask: np.ndarray, cfg: dict) -> 
     mask_empty = not (mask > 0).any()
     if mask_empty:
         return {"mask_empty": True} | _zero_features(cfg)
+    colour = image_bgr if feature_image is None else feature_image
     return (
         {"mask_empty": False}
         | quality_features(raw_mask)
         | sharpness_feature(image_bgr, raw_mask)
-        | color_features(image_bgr, mask, cfg)
-        | texture_features(image_bgr, mask, cfg)
-        | spot_features(image_bgr, mask, cfg)
+        | color_features(colour, mask, cfg)
+        | texture_features(colour, mask, cfg)
+        | spot_features(colour, mask, cfg)
     )
 
 

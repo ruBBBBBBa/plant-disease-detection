@@ -112,3 +112,36 @@ def test_annotate_conditions_keys_order_and_csv(tmp_path: Path) -> None:
         pass
     else:
         raise AssertionError("debería rechazar etiquetas no válidas")
+
+
+def test_gray_world_equalizes_channel_means_in_uint8() -> None:
+    from src import features as ft
+
+    rng = np.random.default_rng(0)
+    image = rng.integers(0, 120, (64, 64, 3)).astype(np.uint8)
+    image[:, :, 2] = np.clip(image[:, :, 2].astype(int) + 100, 0, 255)  # dominante roja (BGR)
+    out = ft.gray_world(image)
+    means = out.reshape(-1, 3).mean(axis=0)
+    assert out.dtype == np.uint8 and out.shape == image.shape
+    assert np.ptp(means) < 1.0  # medias iguales salvo redondeo y recorte
+    assert np.ptp(image.reshape(-1, 3).mean(axis=0)) > 50
+    black = np.zeros((4, 4, 3), np.uint8)  # canal con media 0: ganancia 1, sin dividir por 0
+    assert (ft.gray_world(black) == 0).all()
+
+
+def test_b_prime_shares_mask_and_quality_with_b() -> None:
+    import json
+
+    from src import features as ft
+
+    cfg = json.loads((REPO_ROOT / "configs/features.json").read_text())
+    seg_cfg = json.loads((REPO_ROOT / "configs/segmentation.json").read_text())
+    image = np.full((200, 200, 3), (60, 60, 140), np.uint8)  # fondo con dominante
+    cv2.ellipse(image, (100, 100), (60, 40), 0, 0, 360, (40, 150, 60), -1)  # hoja verde
+    mask = ft.leaf_mask(image, seg_cfg)
+    b = ft.extract_features(image, mask, cfg)
+    b_prime = ft.extract_features(image, mask, cfg, feature_image=ft.gray_world(image))
+    shared = ["mask_empty", "leaf_area_frac", "border_touch_frac", "mask_solidity"]
+    assert {k: b[k] for k in shared} == {k: b_prime[k] for k in shared}
+    assert b["b_mean"] != b_prime["b_mean"]  # solo cambia el color que ven las características
+    assert ft.extract_features(image, mask, cfg, feature_image=image) == b
