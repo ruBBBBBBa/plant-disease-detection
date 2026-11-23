@@ -6,13 +6,17 @@ No muestra máscaras ni predicciones. Se guarda tras cada imagen y, al volver a 
 la primera sin anotar.
 
 Teclas:
-  - hojas:  ``1`` = single (una hoja)       ``2`` = multiple (varias hojas)
-  - fondo:  ``s`` = simple                    ``c`` = complex
+  - hojas:  ``1`` = leaflet   ``2`` = compound   ``3`` = multiple
+  - fondo:  ``s`` = simple    ``c`` = complex
   - ``b`` = volver a la imagen anterior (para corregirla)     ``q`` = salir
 
-Al tener las dos etiquetas pasa a la siguiente. Regla fija del enunciado: ``simple`` = fondo liso
-de un solo color (papel, mesa, cartulina); ``complex`` = cualquier otra cosa (planta, suelo,
-objetos, varias texturas); **si hay dudas, complex**.
+Al tener las dos etiquetas pasa a la siguiente. Reglas fijas del enunciado (D053):
+
+- ``leaflet`` = un solo folíolo, sin otras hojas en primer plano (condición tipo PlantVillage);
+  ``compound`` = una sola hoja compuesta (varios folíolos con su raquis), sin otras hojas enteras;
+  ``multiple`` = se ven otras hojas enteras o casi enteras, o la planta. **Si hay dudas, multiple.**
+- ``simple`` = fondo liso de un solo color (papel, mesa, cartulina); ``complex`` = cualquier otra
+  cosa (planta, suelo, objetos, varias texturas). **Si hay dudas, complex.**
 
 Ejemplos:
     python scripts/annotate_conditions.py
@@ -30,15 +34,18 @@ import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COLUMNS = ["file", "leaves", "background"]
+LEAVES = {"leaflet", "compound", "multiple"}
 KEYS = {
-    "1": ("leaves", "single"),
-    "2": ("leaves", "multiple"),
+    "1": ("leaves", "leaflet"),
+    "2": ("leaves", "compound"),
+    "3": ("leaves", "multiple"),
     "s": ("background", "simple"),
     "c": ("background", "complex"),
 }
 HELP = [
-    "hojas: 1 single / 2 multiple    fondo: s simple / c complex",
-    "simple = liso de un color; si dudas, complex.   b atras  q salir",
+    "hojas: 1 foliolo / 2 compuesta / 3 varias o planta (dudas: 3)",
+    "fondo: s simple (liso, un color) / c complex (dudas: c)",
+    "b atras   q salir",
 ]
 
 
@@ -57,7 +64,7 @@ def read_annotations(path: Path) -> pd.DataFrame:
 
 def write_annotation(path: Path, file: str, leaves: str, background: str) -> pd.DataFrame:
     """Guarda (o reemplaza) la fila de ``file`` y reescribe el CSV ordenado por ``file``."""
-    if leaves not in {"single", "multiple"} or background not in {"simple", "complex"}:
+    if leaves not in LEAVES or background not in {"simple", "complex"}:
         raise ValueError(f"{file}: etiquetas no válidas {leaves!r}, {background!r}")
     table = read_annotations(path)
     table = table[table["file"] != file]
@@ -80,7 +87,7 @@ def render(image: np.ndarray, state: dict, position: str, size: int) -> np.ndarr
     """Imagen ampliada a ``size`` px con una banda de ayuda debajo (sin nombre ni clase)."""
     scale = size / max(image.shape[:2])
     shown = cv2.resize(image, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-    band = np.full((90, shown.shape[1], 3), 255, np.uint8)
+    band = np.full((118, shown.shape[1], 3), 255, np.uint8)
     current = (
         f"{position}   hojas: {state.get('leaves', '-')}   fondo: {state.get('background', '-')}"
     )

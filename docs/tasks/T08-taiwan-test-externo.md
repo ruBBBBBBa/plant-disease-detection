@@ -60,13 +60,21 @@ Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (audito
    (las que no existen en PlantVillage) se marcan como tales para informarlas aparte.
 5. **Anotación de condiciones (la hace el alumno, sin ver predicciones).**
    `data/annotations/taiwan_conditions.csv`, versionado, con las columnas `file, leaves, background`;
-   `leaves` ∈ {`single`, `multiple`} y `background` ∈ {`simple`, `complex`}. Regla fija:
+   `leaves` ∈ {`leaflet`, `compound`, `multiple`} y `background` ∈ {`simple`, `complex`}.
+   Reglas fijas (D053). Hojas, con tres niveles:
+   - `leaflet` = un solo folíolo, sin otras hojas en primer plano (condición tipo PlantVillage);
+   - `compound` = una sola hoja compuesta (varios folíolos con su raquis), sin otras hojas enteras;
+   - `multiple` = se ven otras hojas enteras o casi enteras, o la planta;
+   - si hay dudas, `multiple`.
+
+   Fondo:
    - `simple` = fondo liso de un solo color (papel, mesa, cartulina);
    - `complex` = cualquier otra cosa (planta, suelo, objetos, varias texturas);
    - si hay dudas, `complex`.
 
-   Una herramienta mínima que muestre cada imagen y guarde las dos etiquetas con dos teclas es
-   suficiente. No muestra máscaras ni predicciones.
+   Herramienta: `scripts/annotate_conditions.py` (teclas `1`/`2`/`3` para hojas y `s`/`c` para fondo).
+   Muestra cada imagen sin nombre ni clase, en orden aleatorio fijo, y no muestra máscaras ni
+   predicciones.
 6. **Variante B′ con normalización de color (solo PlantVillage).**
    - **Normalización «gray world»** (supone que la media de la escena es gris neutro): se escala cada
      canal B, G y R para que su media en la imagen completa sea igual a la media de los tres canales,
@@ -99,9 +107,12 @@ Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (audito
 3. **Hipótesis (variante B, fijadas antes de ejecutar).** Las comparaciones son entre grupos distintos
    de imágenes, así que se usa bootstrap no emparejado de la diferencia (10 000 réplicas, semilla 42).
    Se aplica la regla de siempre: apoyada / no apoyada (efecto contrario) / no concluyente.
-   - **H7:** la cobertura (porcentaje de imágenes concluyentes) es mayor en `single + simple` que en
+   - **H7:** la cobertura (porcentaje de imágenes concluyentes) es mayor en `leaflet + simple` que en
      el resto.
-   - **H8:** en la lectura «todas», la balanced accuracy es mayor en `single + simple` que en el resto.
+   - **H8:** en la lectura «todas», la balanced accuracy es mayor en `leaflet + simple` que en el
+     resto.
+   - `compound + simple` se informa aparte, solo descriptivo (sin veredicto); en H7 y H8 forma parte
+     del «resto».
    - **H9 (surge de T07):** en el conjunto completo de Taiwán, lectura «todas», la balanced accuracy
      de B′ es mayor que la de B. Como las dos variantes ven las mismas imágenes con la misma máscara,
      esta comparación usa **bootstrap emparejado** sobre imágenes. Se informa también la diferencia en

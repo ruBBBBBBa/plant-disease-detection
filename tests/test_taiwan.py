@@ -88,7 +88,7 @@ def test_taiwan_audit_reads_only_preprocessed_data(tmp_path: Path) -> None:
 
 def test_annotate_conditions_keys_order_and_csv(tmp_path: Path) -> None:
     tool = load_script("annotate_conditions")
-    state = tool.apply_key({}, "2")
+    state = tool.apply_key({}, "3")
     state = tool.apply_key(state, "x")  # tecla sin efecto
     assert tool.apply_key(state, "s") == {"leaves": "multiple", "background": "simple"}
     files = [f"f{i}.jpg" for i in range(20)]
@@ -99,12 +99,14 @@ def test_annotate_conditions_keys_order_and_csv(tmp_path: Path) -> None:
         and order == tool.annotation_order(files, 42)
     )
     out = tmp_path / "conditions.csv"
-    tool.write_annotation(out, "b.jpg", "single", "simple")
+    assert tool.apply_key({}, "1")["leaves"] == "leaflet"
+    assert tool.apply_key({}, "2")["leaves"] == "compound"
+    tool.write_annotation(out, "b.jpg", "leaflet", "simple")
     tool.write_annotation(out, "a.jpg", "multiple", "complex")
-    table = tool.write_annotation(out, "b.jpg", "single", "complex")  # corrección
+    table = tool.write_annotation(out, "b.jpg", "compound", "complex")  # corrección
     assert table.values.tolist() == [
         ["a.jpg", "multiple", "complex"],
-        ["b.jpg", "single", "complex"],
+        ["b.jpg", "compound", "complex"],
     ]
     try:
         tool.write_annotation(out, "c.jpg", "one", "simple")
