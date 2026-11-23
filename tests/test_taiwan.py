@@ -147,3 +147,118 @@ def test_b_prime_shares_mask_and_quality_with_b() -> None:
     assert {k: b[k] for k in shared} == {k: b_prime[k] for k in shared}
     assert b["b_mean"] != b_prime["b_mean"]  # solo cambia el color que ven las características
     assert ft.extract_features(image, mask, cfg, feature_image=image) == b
+
+
+# --------------------------------------------------------------------------- fase B (sintético)
+
+
+def test_unpaired_bootstrap_resamples_each_group_with_its_size() -> None:
+    from src import external as ex
+
+    better, worse = np.r_[np.ones(90), np.zeros(10)], np.r_[np.ones(30), np.zeros(30)]
+    r = ex.unpaired_bootstrap_diff(better, worse, n_boot=2000, seed=0)
+    assert r["diff"] == 0.9 - 0.5 and r["verdict"] == "apoyada"
+    assert r["ci95"][0] < 0.4 < r["ci95"][1]
+    assert ex.unpaired_bootstrap_diff(worse, better, 2000, 0)["verdict"].startswith("no apoyada")
+    same = ex.unpaired_bootstrap_diff(worse, worse, 2000, 0)
+    assert same["verdict"] == "no concluyente"
+
+
+def test_size_rule_overrides_verdict_below_twenty() -> None:
+    from src import external as ex
+
+    r = {"diff": 0.3, "ci95": [0.1, 0.5], "verdict": "apoyada"}
+    assert ex.size_rule(r, {"foco": 20, "resto": 300})["verdict"] == "apoyada"
+    small = ex.size_rule(r, {"foco": 19, "resto": 300})
+    assert small["verdict"] == "no concluyente por tamaño" and small["small_cells"] == {"foco": 19}
+
+
+def test_extract_image_gray_world_keeps_quality_and_changes_color(tmp_path: Path) -> None:
+    import json
+
+    from src import external as ex
+
+    image = np.full((227, 227, 3), (60, 60, 140), np.uint8)
+    cv2.ellipse(image, (113, 113), (70, 45), 0, 0, 360, (40, 150, 60), -1)
+    path = tmp_path / "leaf.png"
+    cv2.imwrite(str(path), image)
+    cfg = json.loads((REPO_ROOT / "configs/features.json").read_text())
+    seg = json.loads((REPO_ROOT / "configs/segmentation.json").read_text())
+    plain, _ = ex.extract_image(path, seg, cfg, 3.0, 256)
+    gray, _ = ex.extract_image(path, seg, cfg, 3.0, 256, gray_world=True)
+    for k in ["mask_empty", *ex.QUALITY_COLUMNS]:
+        assert plain[k] == gray[k]
+    assert plain["b_mean"] != gray["b_mean"]
+
+
+def test_eval_taiwan_refuses_without_full_annotations(tmp_path: Path) -> None:
+    import pytest
+
+    module = load_script("eval_external")
+    rows = pd.DataFrame({"image_path": ["a.jpg", "b.jpg"]})
+    with pytest.raises(SystemExit):
+        module.check_annotations(rows, tmp_path / "missing.csv")
+    path = tmp_path / "ann.csv"
+    pd.DataFrame({"file": ["a.jpg"], "leaves": ["leaflet"], "background": ["simple"]}).to_csv(
+        path, index=False
+    )
+    with pytest.raises(SystemExit):
+        module.check_annotations(rows, path)
+    module.check_annotations(rows.iloc[:1], path)  # completa: no se queja
+
+
+def test_report_taiwan_end_to_end_on_synthetic_predictions(tmp_path: Path) -> None:
+    import json
+
+    rng = np.random.default_rng(0)
+    n = 240
+    paths = [f"img{i:03d}.jpg" for i in range(n)]
+    y = (np.arange(n) % 4 != 0).astype(int)  # 60 sanas, 180 enfermas
+    leaves = np.where(np.arange(n) < 120, "leaflet", rng.choice(["compound", "multiple"], n))
+    background = np.where((y == 1) & (np.arange(n) < 160), "simple", "complex")
+    disease = np.where(y == 0, "healthy", rng.choice(["late_blight", "gray_spot"], n))
+    pd.DataFrame({"file": paths, "leaves": leaves, "background": background}).to_csv(
+        tmp_path / "ann.csv", index=False
+    )
+    pd.DataFrame({"image_path": paths, "seen_in_training": disease != "gray_spot"}).to_csv(
+        tmp_path / "meta.csv", index=False
+    )
+    (tmp_path / "predictions").mkdir()
+    inconclusive = rng.random(n) < 0.1
+    for name in ("A", "B", "B_prime"):
+        pred = np.where(rng.random(n) < 0.8, y, 1 - y)
+        pred = np.where(inconclusive, 1 - y, pred)
+        pd.DataFrame(
+            {
+                "image_id": paths,
+                "image_path": paths,
+                "disease_name": disease,
+                "binary_label": np.where(y == 1, "diseased", "healthy"),
+                "y_true": y,
+                "y_pred": pred,
+                "score": rng.random(n),
+                "inconclusive": inconclusive,
+            }
+        ).to_csv(tmp_path / "predictions" / f"pred__{name}.csv.gz", index=False)
+    m = {"coverage": 0.8, "balanced_accuracy": 0.6}
+    plantdoc = {"variants": {v: {"all": m, "conclusive": m} for v in ("A", "B")}}
+    (tmp_path / "plantdoc.json").write_text(json.dumps(plantdoc))
+    config = json.loads((REPO_ROOT / "configs/taiwan.json").read_text())
+    config["bootstrap"] |= {"n_boot": 500, "n_boot_descriptive": 20}  # rápido
+    (tmp_path / "taiwan.json").write_text(json.dumps(config))
+    load_script("report_taiwan").main(
+        [
+            "--out-dir", str(tmp_path),
+            "--config", str(tmp_path / "taiwan.json"),
+            "--annotations", str(tmp_path / "ann.csv"),
+            "--metadata", str(tmp_path / "meta.csv"),
+            "--plantdoc", str(tmp_path / "plantdoc.json"),
+        ]
+    )  # fmt: skip
+    result = json.loads((tmp_path / "metrics.json").read_text())
+    h = result["hypotheses"]
+    assert h["H7"]["n_focus"] + h["H7"]["n_rest"] == int(y.sum())  # solo enfermas
+    assert h["H7"]["n_focus"] == int(((leaves == "leaflet") & (background == "simple")).sum())
+    assert h["H8"]["verdict"] in {"apoyada", "no apoyada (efecto contrario)", "no concluyente"}
+    assert "H9" in h and "verdict" in h["H9"]
+    assert "## Hipótesis" in (tmp_path / "tables.md").read_text()

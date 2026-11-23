@@ -1,0 +1,17 @@
+{
+  "_comment": "Protocolo de Taiwán (T08, D051–D054), fijado antes de procesar Taiwán. Normalización y «no concluyente»: configs/external.json (T06), sin cambios.",
+  "variants": {
+    "A": {"group": "combinadas", "model": "svm_lineal", "exp": "exp2"},
+    "B": {"group": "color_manchas", "model": "svm_lineal", "exp": "exp2"},
+    "B_prime": {"group": "color_manchas", "model": "svm_lineal", "exp": "exp2_grayworld", "gray_world": true}
+  },
+  "focus_condition": {"leaves": "leaflet", "background": "simple"},
+  "descriptive_condition": {"leaves": "compound", "background": "simple"},
+  "hypotheses": {
+    "H7": {"variant": "B", "metric": "coverage", "subset": "diseased", "better": "focus", "worse": "rest"},
+    "H8": {"variant": "B", "metric": "recall_diseased_all", "subset": "diseased", "better": "focus", "worse": "rest"},
+    "H9": {"metric": "balanced_accuracy_all", "better": "B_prime", "worse": "B", "paired": true}
+  },
+  "min_class_n": 20,
+  "bootstrap": {"n_boot": 10000, "n_boot_descriptive": 2000, "seed": 42}
+}
