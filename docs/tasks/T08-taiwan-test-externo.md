@@ -140,13 +140,28 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 
 ## Entrega (la rellena el implementador; Codex la completa si corrige algo)
 
-- **Licencia y estructura real del dataset:**
-- **Imágenes excluidas (PlantVillage, duplicados) y motivo:**
-- **Recuento por clase y por condición `leaves × background`:**
+- **Fase A — comandos ejecutados:**
+  `python scripts/audit_dataset.py --source taiwan --compare-with reports/audit/plantvillage/inventory.csv`;
+  `python scripts/prepare_taiwan.py --near-dup-threshold 2`;
+  `python scripts/extract_features.py --subset-only --splits train val --gray-world`;
+  `python scripts/train_classifiers.py cv-val-variant --features data/processed/features_v1_grayworld_subset.csv --out experiments/classification/exp2_grayworld`.
+  Sobre Taiwán no se ha ejecutado segmentación, características ni modelos (solo lectura de ficheros
+  para el inventario y el dHash).
+- **Licencia y estructura real del dataset:** CC BY 4.0 (en `data/README.md`). `Preprocessed data`:
+  622 JPG de 227×227, 3 canales, todos legibles; sin duplicados exactos dentro de Taiwán ni con
+  PlantVillage (`reports/audit/taiwan/summary.md`). `data augmentation` no se lee.
+- **Imágenes excluidas (PlantVillage, duplicados) y motivo:** ninguna. dHash, Hamming ≤ 2 contra las
+  18 160 imágenes de PlantVillage: 0 casi-duplicados; distancia mínima 7 (22 imágenes entre 6 y 10,
+  600 por encima de 10). 0 pares casi duplicados dentro de Taiwán (`reports/data/taiwan_summary.md`).
+- **Recuento por clase y por condición `leaves × background`:** por clase, 622 `external_test`:
+  health 106, Bacterial spot 110, Late blight 98 (vistas); Black mold 67, Gray spot 84,
+  powdery mildew 157 (no vistas). Por condición: pendiente de la anotación del alumno.
 - **Commit congelado y registro de la ejecución:**
 - **Resultados (todas / solo concluyentes + cobertura), total y por condición:**
-- **BA de `val` de B′ frente a B:**
+- **BA de `val` de B′ frente a B:** B′ 0,962838 (IC 95 % [0,926, 0,990]; C = 0,1; CV 0,9815) frente a
+  B 0,945946 ([0,902, 0,976]). El procedimiento de `cv-val-variant` reproduce B exactamente con su CSV
+  original (C = 1, 0,945946). Recall de sanas 0,986 frente a 0,946. Sin coste (D052).
 - **Veredicto H7–H9:**
 - **Enfermedades no vistas:**
-- **Decisiones tomadas durante la tarea:**
+- **Decisiones tomadas durante la tarea:** D050 (exploratorio a posteriori de T07), D051 (manifiesto y casi-duplicados), D052 (B′ y su limitación), D053 (anotación ciega a la clase).
 - **Pendientes:**

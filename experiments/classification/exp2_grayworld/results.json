@@ -1,0 +1,52 @@
+{
+  "commit": "09ad6e1f99ea15ed5486c960425e16d89618eb41",
+  "features_csv": "features_v1_grayworld_subset.csv",
+  "features_sha1": "eb5fa4c913ebb0bb327d4b69f6ecea3824341979",
+  "group": "color_manchas",
+  "model": "svm_lineal",
+  "seed": 42,
+  "cv_folds": 5,
+  "n_train": 1406,
+  "n_val": 296,
+  "cv_best_params": {
+    "clf__C": 0.1
+  },
+  "cv_best_score": 0.9815334665334665,
+  "val_metrics": {
+    "confusion_matrix": [
+      [
+        146,
+        2
+      ],
+      [
+        9,
+        139
+      ]
+    ],
+    "tn": 146,
+    "fp": 2,
+    "fn": 9,
+    "tp": 139,
+    "accuracy": 0.9628378378378378,
+    "balanced_accuracy": 0.9628378378378378,
+    "precision_healthy": 0.9419354838709677,
+    "recall_healthy": 0.9864864864864865,
+    "f1_healthy": 0.9636963696369637,
+    "precision_diseased": 0.9858156028368794,
+    "recall_diseased": 0.9391891891891891,
+    "f1_diseased": 0.9619377162629758,
+    "roc_auc": 0.9951150474799123,
+    "balanced_accuracy_ci95": [
+      0.9256747252691551,
+      0.9895235906862745
+    ],
+    "recall_diseased_ci95": [
+      0.871947310819262,
+      0.9880952380952381
+    ],
+    "roc_auc_ci95": [
+      0.9860299488677867,
+      0.9995351070115547
+    ]
+  }
+}
