@@ -196,6 +196,19 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
   [0,310; 0,477]); H8 **apoyada** (recall de enfermas «todas», 0,237 [0,156; 0,319]; no es
   independiente de H7); H9 **no concluyente** (BA B′ − B = −0,029 [−0,057; 0,002]; recall de sanas
   +0,047 [0,000; 0,094], descriptivo).
+- **Lectura de los resultados (sin cambiar ningún número):**
+  - **H7** indica que la condición `leaflet + simple` aumenta la **analizabilidad** (cobertura), no que
+    la clasificación sea correcta.
+  - **H8 depende de H7:** con un sistema sesgado hacia «diseased», el recall de enfermas sube con la
+    cobertura. No es evidencia independiente de buena clasificación.
+  - **Limitación principal de T08:** ninguna sana tiene fondo `simple`, así que la especificidad en la
+    condición válida (`leaflet + simple`) no se ha podido medir.
+  - **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26):
+    el mismo sesgo hacia «enferma» que en T07.
+  - **H9:** no concluyente, con punto estimado negativo. Gray world con los umbrales de T04 no corrige
+    el sesgo.
+  - **Autoría de la anotación:** las etiquetas de `data/annotations/taiwan_conditions.csv` son de
+    Rubba; el commit `c8afde9` (hecho por el implementador) fue solo mecánico.
 - **Enfermedades no vistas:** recall de B «todas» / «solo concluyentes»: black mold 0,358 / 0,706,
   gray spot 0,262 / 0,786, powdery mildew 0,191 / 0,698; parecido a las vistas, pero con sanas casi
   siempre llamadas enfermas no indica que se reconozcan.

@@ -65,6 +65,21 @@ Matices, sin cambiar los veredictos:
   el de enfermas (0,273 → 0,169 en «todas»). Mide «gray world con los umbrales de T04» (D052), no un
   sistema reajustado para color normalizado.
 
+## Lectura de los resultados
+
+- **H7** indica que la condición `leaflet + simple` aumenta la **analizabilidad** (cobertura), no que
+  la clasificación sea correcta.
+- **H8 depende de H7:** con un sistema sesgado hacia «diseased», el recall de enfermas sube con la
+  cobertura. No es evidencia independiente de buena clasificación.
+- **Limitación principal de T08:** ninguna sana tiene fondo `simple`, así que la especificidad en la
+  condición válida (`leaflet + simple`) no se ha podido medir.
+- **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26):
+  el mismo sesgo hacia «enferma» que en T07.
+- **H9:** no concluyente, con punto estimado negativo. Gray world con los umbrales de T04 no corrige
+  el sesgo.
+- **Autoría de la anotación:** las etiquetas de `data/annotations/taiwan_conditions.csv` son de
+  Rubba; el commit `c8afde9` (hecho por el implementador) fue solo mecánico.
+
 ## Enfermedades no vistas (B)
 
 | Enfermedad | n | Recall «todas» | Recall «solo concluyentes» (n) |
