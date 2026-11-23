@@ -107,10 +107,15 @@ Sin comprobar: dimensiones reales de cada imagen, ilegibles y duplicados (audito
 3. **Hipótesis (variante B, fijadas antes de ejecutar).** Las comparaciones son entre grupos distintos
    de imágenes, así que se usa bootstrap no emparejado de la diferencia (10 000 réplicas, semilla 42).
    Se aplica la regla de siempre: apoyada / no apoyada (efecto contrario) / no concluyente.
-   - **H7:** la cobertura (porcentaje de imágenes concluyentes) es mayor en `leaflet + simple` que en
-     el resto.
-   - **H8:** en la lectura «todas», la balanced accuracy es mayor en `leaflet + simple` que en el
-     resto.
+   - **H7 (solo imágenes enfermas, D054):** la cobertura (porcentaje de imágenes concluyentes) es
+     mayor en `leaflet + simple` que en el resto.
+   - **H8 (solo imágenes enfermas, D054):** en la lectura «todas», el recall de enfermas es mayor en
+     `leaflet + simple` que en el resto.
+   - Por qué solo enfermas: en la anotación no hay ninguna imagen sana con fondo `simple` (las 106
+     sanas son `complex`), así que la BA de `leaflet + simple` no existe y, con ambas clases, la
+     condición se confundiría con la clase. Se ve en los recuentos de la anotación, antes de procesar
+     ninguna imagen. Sigue habiendo confusión con la enfermedad (la mezcla de enfermedades cambia
+     entre condiciones); se informa el desglose por enfermedad, solo descriptivo.
    - `compound + simple` se informa aparte, solo descriptivo (sin veredicto); en H7 y H8 forma parte
      del «resto».
    - **H9 (surge de T07):** en el conjunto completo de Taiwán, lectura «todas», la balanced accuracy
