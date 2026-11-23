@@ -97,3 +97,30 @@ cuenta que en la nube **no tiene los datasets**, así que no puede volver a ejec
 - Commits identificables: `TNN: …` (Claude Code) y `review(TNN): …` (Codex).
 - La tarea es el contrato: si un agente quiere cambiar el alcance, lo propone en el PR y decide Rubba.
 - Las tareas futuras se detallan cuando la anterior está cerrada, con los resultados reales delante.
+
+## Bucle de mutación (opcional, D038)
+
+Un agente añade tests para subir el porcentaje de mutantes muertos de **un** módulo de `src/`.
+Instrucciones del agente en [`loop/program.md`](../loop/program.md); el juez es `loop/evaluate.py`.
+Se lanza siempre en un **worktree aparte**, nunca en la copia normal:
+
+```bash
+git switch main && git pull
+git worktree add ../pdd-loop-mutation -b loop/mutation-<modulo> main
+cd ../pdd-loop-mutation
+# Si el módulo no es el de loop/config.json, cambia "target_module" y haz commit ANTES del tag.
+git tag loop-base-mutation                    # base contra la que se vigilan los protegidos
+mkdir -p .claude && cp loop/claude-settings.json .claude/settings.local.json
+source ../plant-disease-detection/.venv/bin/activate   # el worktree no tiene .venv propio
+claude                                        # en modo auto
+```
+
+Prompt: `Lee loop/program.md y empieza por la línea base.`
+
+- El hook `loop/keep_going.py` no deja parar al agente hasta el límite de iteraciones, de
+  descartes seguidos o hasta que exista `loop/STOP`. Para pararlo a mano: `touch loop/STOP`.
+- Resultados locales (sin versionar): `loop/results.tsv`, `loop/survivors.txt`; resumen en
+  `loop/RESUMEN.md`. Los descartes quedan en `git stash list`.
+- Los tests nuevos llegan a `main` por **PR con revisión de Codex**, como cualquier otro cambio.
+- Para medir sin bucle: `python loop/metric.py --module src/<modulo>.py`.
+- Al acabar: `git worktree remove ../pdd-loop-mutation` y `git tag -d loop-base-mutation`.
