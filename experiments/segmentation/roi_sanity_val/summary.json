@@ -1,0 +1,146 @@
+{
+  "split": "val",
+  "n_images": 296,
+  "simulated_roi": "caja ajustada de la referencia; imagen ampliada con BORDER_REPLICATE",
+  "limitations": [
+    "El fondo replicado es una aproximaci\u00f3n: puede crear rayas si hay sombra u hoja en el borde.",
+    "El IoU de esta simulaci\u00f3n no es el rendimiento real del modo ROI con fotos propias."
+  ],
+  "reference_leaf_area_frac": {
+    "split": "train+val",
+    "p25": 0.376259,
+    "p75": 0.4737585,
+    "features_sha1": "59a6b908fc0d1d9dad45285096a3a27260dcb8e2"
+  },
+  "by_margin": {
+    "0.1": {
+      "median_leaf_area_frac": 0.4289724187713182,
+      "inconclusive_rate": 0.02364864864864865,
+      "clipped_rate": 0.0,
+      "median_iou": 0.8978278826270708
+    },
+    "0.2": {
+      "median_leaf_area_frac": 0.317194080578202,
+      "inconclusive_rate": 0.013513513513513514,
+      "clipped_rate": 0.0,
+      "median_iou": 0.897348086552877
+    },
+    "0.3": {
+      "median_leaf_area_frac": 0.24489974472990778,
+      "inconclusive_rate": 0.04054054054054054,
+      "clipped_rate": 0.0,
+      "median_iou": 0.8937478290760696
+    },
+    "0.4": {
+      "median_leaf_area_frac": 0.19403764449620425,
+      "inconclusive_rate": 0.24324324324324326,
+      "clipped_rate": 0.0,
+      "median_iou": 0.8879645436019162
+    },
+    "0.5": {
+      "median_leaf_area_frac": 0.15767654718137256,
+      "inconclusive_rate": 0.9594594594594594,
+      "clipped_rate": 0.0,
+      "median_iou": 0.891688207276006
+    }
+  },
+  "iou": [
+    {
+      "method": "kmeans",
+      "margin": null,
+      "binary_label": "diseased",
+      "median": 0.9710229694326279,
+      "mean": 0.9535448132003458,
+      "count": 148
+    },
+    {
+      "method": "kmeans",
+      "margin": null,
+      "binary_label": "healthy",
+      "median": 0.9593055527955796,
+      "mean": 0.9333296505052938,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.1,
+      "binary_label": "diseased",
+      "median": 0.9115803422710123,
+      "mean": 0.8862957222876228,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.1,
+      "binary_label": "healthy",
+      "median": 0.888702678042655,
+      "mean": 0.8853385532565523,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.2,
+      "binary_label": "diseased",
+      "median": 0.9104548188682833,
+      "mean": 0.884841610708244,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.2,
+      "binary_label": "healthy",
+      "median": 0.8881238547736805,
+      "mean": 0.8816610589557836,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.3,
+      "binary_label": "diseased",
+      "median": 0.9079336289223157,
+      "mean": 0.8798876801398298,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.3,
+      "binary_label": "healthy",
+      "median": 0.8819220379056062,
+      "mean": 0.8772699695039887,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.4,
+      "binary_label": "diseased",
+      "median": 0.8996310612904088,
+      "mean": 0.8771545113637084,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.4,
+      "binary_label": "healthy",
+      "median": 0.8801250571449653,
+      "mean": 0.875896778729636,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.5,
+      "binary_label": "diseased",
+      "median": 0.9051106527676722,
+      "mean": 0.878501430580214,
+      "count": 148
+    },
+    {
+      "method": "roi",
+      "margin": 0.5,
+      "binary_label": "healthy",
+      "median": 0.8840346368306953,
+      "mean": 0.8754842691490934,
+      "count": 148
+    }
+  ],
+  "chosen_margin": 0.1
+}

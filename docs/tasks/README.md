@@ -8,6 +8,7 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
 | T00 | Setup del repositorio, reglas para agentes y CI | Hecha | `main` |
+| [T00b](T00b-guardas-y-bucle-de-mutacion.md) | Guardas de Claude Code e infraestructura del bucle de mutación | En revisión | `t00b-guardas-claude` |
 | [T01](T01-descarga-y-auditoria.md) | Descarga y auditoría de los datos de tomate | Hecha | `t01-audit-dataset` |
 | [T02](T02-manifiesto-y-splits.md) | Mapeo de etiquetas, manifiesto y splits sin fugas | Hecha | `t02-prepare-dataset` (PR #2) |
 
@@ -33,11 +34,16 @@ Ciclo y prompts: [`../WORKFLOW.md`](../WORKFLOW.md).
 
 | ID | Tarea | Estado | Rama / PR |
 |---|---|---|---|
-| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | En revisión | `t06-plantdoc-external` |
+| [T06](T06-plantdoc-test-externo.md) | Test externo en PlantDoc y análisis de errores | Hecha | `t06-plantdoc-external` (PR #6) |
+
+## Fase 6 — Explicación visual e inferencia
+
+| ID | Tarea | Estado | Rama / PR |
+|---|---|---|---|
+| [T07](T07-inferencia-y-fotos-propias.md) | Herramienta de inferencia, ROI manual y test con fotos propias | Hecha | `t07-inference-own-photos` (PR #8) |
 
 ## Hoja de ruta (sin detallar a propósito)
 
 Cada fase se convierte en ficheros de tarea cuando la anterior está cerrada, con sus resultados reales delante.
 
-- **Fase 6 — Explicación visual e inferencia:** CLI de inferencia con máscaras, regiones sospechosas y estadísticas.
 - **Ampliaciones condicionadas:** patata/pimiento, enfermedades concretas, vídeo (CamShift/KLT), Streamlit.

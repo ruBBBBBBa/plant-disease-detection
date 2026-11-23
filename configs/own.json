@@ -1,0 +1,65 @@
+{
+  "_comment": "Protocolo del test con fotos propias (T07). Fijado antes de procesar las fotos; la sección roi la escribe scripts/check_roi_mode.py solo con PlantVillage.",
+  "backgrounds": [
+    "gris_oscuro",
+    "blanco",
+    "natural"
+  ],
+  "labels": [
+    "healthy",
+    "altered"
+  ],
+  "notes_keywords": [
+    "residuo",
+    "gotas",
+    "compuesta",
+    "fondo_incompleto"
+  ],
+  "default_variant": "B",
+  "variants": [
+    "B",
+    "A"
+  ],
+  "outcome": "fallo = no concluyente o falso positivo, sobre todas las unidades",
+  "hypotheses": {
+    "H4": {
+      "mode": "roi",
+      "compare": "background",
+      "worse": "natural",
+      "better": "gris_oscuro"
+    },
+    "H5": {
+      "mode": "roi",
+      "compare": "background",
+      "worse": "blanco",
+      "better": "gris_oscuro"
+    },
+    "H6": {
+      "compare": "mode",
+      "worse": "auto",
+      "better": "roi"
+    }
+  },
+  "bootstrap": {
+    "n_boot": 10000,
+    "seed": 42,
+    "unit": "leaf_id"
+  },
+  "roi": {
+    "margin": 0.1,
+    "candidate_margins": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ],
+    "rule": "menor margen con mediana de leaf_area_frac del recorte en [p25, p75] de train+val de PlantVillage (ROI simulada en val: caja ajustada, fondo replicado)",
+    "drawing_rule": "rectángulo pegado al folíolo, sin margen: el margen lo añade el recorte",
+    "reference_p25_p75": [
+      0.376259,
+      0.4737585
+    ],
+    "chosen_with": "experiments/segmentation/roi_sanity_val/summary.json"
+  }
+}
