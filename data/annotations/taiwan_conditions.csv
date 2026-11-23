@@ -1,0 +1,623 @@
+file,leaves,background
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs1.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs110.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs19.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs22.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs23.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs30.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs31.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs34.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs4.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs46.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs52.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs58.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs59.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs60.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs61.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs65.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs74.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs86.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs88.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs89.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs92.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs98.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm14.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm15.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm16.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm20.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm23.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm30.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm39.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm4.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm43.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm54.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm58.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm62.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm66.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/Black mold/Blm67.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls10.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls13.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls14.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls26.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls29.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls30.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls31.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls34.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls4.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls41.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls48.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls55.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls57.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls64.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls67.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls83.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls84.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb1.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb10.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb11.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb14.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb22.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb27.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb32.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb33.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb34.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb35.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb4.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb48.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb51.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb56.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb74.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb75.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb78.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb83.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb93.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/Late blight/Lb98.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h19.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h27.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h28.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h29.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h3.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h37.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h44.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h49.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h52.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h53.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h54.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h59.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h67.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h68.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h72.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h81.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h84.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h87.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/health/h9.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h91.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/health/h96.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/health/h97.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm100.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm104.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm109.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm118.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm12.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm124.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm125.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm126.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm134.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm147.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm148.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm150.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm152.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm155.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm156.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm25.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm32.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm38.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm42.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm43.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm55.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm6.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm64.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm66.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm75.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm8.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm80.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm88.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm89.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm91.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm95.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm97.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs10.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs100.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs101.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs102.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs103.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs104.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs105.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs106.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs107.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs108.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs109.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs11.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs111.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs12.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs13.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs14.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs15.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs16.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs17.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs18.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs2.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs21.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs24.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs25.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs26.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs27.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs28.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs29.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs3.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs32.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs33.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs35.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs36.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs37.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs38.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs39.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs40.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs41.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs42.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs43.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs44.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs45.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs47.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs48.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs49.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs5.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs50.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs51.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs53.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs54.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs55.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs56.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs57.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs6.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs62.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs63.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs64.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs66.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs67.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs68.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs69.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs7.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs70.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs71.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs72.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs73.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs75.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs76.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs77.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs78.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs79.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs8.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs80.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs81.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs82.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs83.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs84.JPG,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs85.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs87.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs9.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs90.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs91.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs93.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs94.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs95.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs96.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs97.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs99.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm1.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm10.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm11.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm12.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm13.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm17.jpg,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm18.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm19.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm2.jpg,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm21.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm22.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm24.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm25.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm26.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm27.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm28.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm29.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm3.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm31.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm32.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm33.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm34.JPG,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm35.JPG,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm36.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm37.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm38.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm40.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm41.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm42.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm44.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm45.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm46.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm47.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm48.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm49.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm5.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm50.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm51.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm52.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm53.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm55.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm56.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm57.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm59.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm6.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm60.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm61.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm63.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm64.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm65.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm7.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm8.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Black mold/Blm9.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls1.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls11.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls12.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls15.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls16.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls17.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls18.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls19.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls2.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls20.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls21.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls22.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls23.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls24.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls25.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls27.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls28.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls3.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls32.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls33.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls35.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls36.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls37.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls38.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls39.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls40.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls42.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls43.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls44.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls45.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls46.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls47.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls49.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls5.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls50.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls51.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls52.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls53.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls54.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls56.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls58.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls59.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls6.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls60.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls61.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls62.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls63.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls65.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls66.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls68.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls69.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls7.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls70.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls71.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls72.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls73.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls74.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls75.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls76.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls77.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls78.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls79.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls8.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls80.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls81.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls82.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls9.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb12.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb13.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb15.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb16.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb17.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb18.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb19.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb2.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb20.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb21.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb23.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb24.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb25.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb26.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb28.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb29.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb3.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb30.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb31.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb36.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb37.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb38.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb39.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb40.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb41.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb42.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb43.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb44.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb45.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb46.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb47.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb49.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb5.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb50.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb52.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb53.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb54.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb55.JPG,compound,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb57.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb58.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb59.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb6.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb60.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb61.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb62.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb63.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb64.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb65.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb66.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb67.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb68.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb69.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb7.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb70.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb71.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb72.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb73.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb76.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb77.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb79.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb8.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb80.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb81.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb82.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb84.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb85.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb86.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb87.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb88.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb89.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb9.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb90.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb91.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb92.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb94.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb95.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb96.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/Late blight/Lb97.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h1.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h10.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h100.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h101.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h102.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h103.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h104.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h105.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h106.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h11.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h12.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h13.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h14.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h15.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h16.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h17.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h18.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h2.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h20.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h21.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h22.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h23.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h24.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h25.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h26.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h30.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h31.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h32.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h33.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h34.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h35.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h36.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h38.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h39.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h4.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h40.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h41.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h42.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h43.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h45.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h46.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h47.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h48.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h5.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h50.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h51.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h55.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h56.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h57.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h58.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h6.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h60.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h61.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h62.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h63.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h64.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h65.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h66.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h69.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h7.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h70.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h71.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h73.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h74.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h75.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h76.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h77.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h78.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h79.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h8.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h80.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h82.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h83.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h85.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h86.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h88.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h89.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h90.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/health/h92.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h93.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h94.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h95.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/health/h98.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/health/h99.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm1.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm10.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm101.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm102.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm103.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm105.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm106.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm107.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm108.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm11.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm110.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm111.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm112.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm113.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm114.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm115.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm116.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm117.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm119.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm120.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm121.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm122.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm123.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm127.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm128.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm129.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm13.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm130.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm131.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm132.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm133.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm135.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm136.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm137.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm138.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm139.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm14.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm140.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm141.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm142.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm143.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm144.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm145.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm146.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm149.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm15.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm151.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm153.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm154.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm157.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm16.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm17.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm18.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm19.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm2.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm20.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm21.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm22.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm23.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm24.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm26.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm27.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm28.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm29.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm3.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm30.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm31.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm33.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm34.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm35.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm36.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm37.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm39.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm4.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm40.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm41.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm44.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm45.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm46.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm47.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm48.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm49.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm5.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm50.jpg,compound,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm51.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm52.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm53.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm54.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm56.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm57.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm58.jpg,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm59.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm60.JPG,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm61.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm62.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm63.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm65.JPG,multiple,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm67.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm68.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm69.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm7.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm70.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm71.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm72.JPG,multiple,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm73.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm74.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm76.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm77.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm78.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm79.JPG,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm81.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm82.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm83.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm84.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm85.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm86.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm87.JPG,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm9.jpg,compound,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm90.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm92.jpg,leaflet,simple
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm93.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm94.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm96.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm98.jpg,leaflet,complex
+data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm99.jpg,leaflet,complex
