@@ -66,6 +66,18 @@ las imágenes), y descargando una clase pequeña para probar el comando de desca
 duplicados, `color` ↔ `segmented` y agrupación por hoja en `reports/audit/*/summary.md` y en la
 «Entrega» de `docs/tasks/T01-descarga-y-auditoria.md`.
 
+### Taiwán — Mendeley Data, DOI 10.17632/ngdgg79rzb.1 (T08)
+
+- **Licencia: CC BY 4.0** (página del dataset en Mendeley Data). Permite este uso con atribución:
+  Huang, M.-L. y Chang, Y.-H. (2020). *Dataset of Tomato Leaves*. Mendeley Data, V1.
+- Descarga manual del archivo `taiwan.7z` desde la página del DOI, descomprimido en
+  `data/raw/taiwan/`. Solo contiene la parte de Taiwán (no la de PlantVillage).
+- `Preprocessed data/{Train,Test}/<clase>/`: **622 originales**, todas 227×227 y legibles, sin
+  duplicados exactos ni casi-duplicados frente a PlantVillage (`reports/audit/taiwan/summary.md`,
+  `reports/data/taiwan_summary.md`). Todas son `external_test`; el reparto Train/Test del dataset
+  solo se conserva en `original_split`.
+- `data augmentation/`: 4.976 copias transformadas de las originales. **No se leen.**
+
 ## Descarga (solo tomate, descarga parcial con git)
 
 Usa *sparse checkout* para bajar únicamente las carpetas de tomate en lugar del repositorio entero.
@@ -111,6 +123,8 @@ data/raw/plantvillage/raw/segmented/Tomato___<clase>/<fichero>_final_masked.jpg
 data/raw/plantvillage/leaf_grouping/ , leaf-map.json , data_distribution_for_SVM/*_mapping.txt
 data/raw/plantdoc/{train,test}/Tomato*/<fichero>
 data/metadata.csv            manifiesto generado por scripts/prepare_dataset.py (T02)
+data/raw/taiwan/Preprocessed data/{Train,Test}/<clase>/<fichero>.jpg|JPG
+data/taiwan_metadata.csv     manifiesto de Taiwán, scripts/prepare_taiwan.py (T08)
 ```
 
 ## Uso previsto de cada fuente
@@ -119,6 +133,7 @@ data/metadata.csv            manifiesto generado por scripts/prepare_dataset.py 
 - **PlantVillage `segmented`**: solo como **referencia para evaluar** nuestra segmentación de la
   hoja; nunca sustituye a la segmentación propia del pipeline.
 - **PlantDoc**: `external_test` (fondos e iluminación naturales). Nunca para entrenar ni ajustar.
+- **Taiwán**: segundo `external_test` (T08), una sola ejecución. Nunca para entrenar ni ajustar.
 - Fotos propias: pruebas cualitativas; cuantitativas solo con etiquetas fiables.
 
 ## Referencias de los datasets
@@ -127,4 +142,6 @@ data/metadata.csv            manifiesto generado por scripts/prepare_dataset.py 
   Disease Detection*. Frontiers in Plant Science, 7:1419. (Se cita por el dataset, no por el método.)
 - Singh, D., Jain, N., Jain, P., Kayal, P., Kumawat, S., Batra, N. (2020). *PlantDoc: A Dataset
   for Visual Plant Disease Detection*. CoDS-COMAD 2020.
+- Huang, M.-L. y Chang, Y.-H. (2020). *Dataset of Tomato Leaves*. Mendeley Data, V1.
+  DOI 10.17632/ngdgg79rzb.1. CC BY 4.0.
 - Licencias: ver `CITATION.cff` (PlantVillage) y `LICENSE.txt` (PlantDoc) tras la descarga.

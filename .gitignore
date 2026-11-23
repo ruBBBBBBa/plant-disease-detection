@@ -12,6 +12,7 @@ data/**/*.zip
 # Inventarios y manifiesto regenerables (> 2 MB): scripts/audit_dataset.py, scripts/prepare_dataset.py
 reports/**/inventory*.csv
 data/metadata.csv
+data/taiwan_metadata.csv
 
 # --- Modelos y cachés de características ---
 models/

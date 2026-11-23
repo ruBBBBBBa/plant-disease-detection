@@ -1,4 +1,4 @@
-"""Audita las imágenes de una especie en PlantVillage o PlantDoc (tarea T01).
+"""Audita las imágenes de una especie en PlantVillage, PlantDoc o Taiwán (T01, T08).
 
 Genera en ``--out``:
 - ``inventory.csv``: una fila por fichero (ruta, clase, split original, extensión, legible,
@@ -12,6 +12,8 @@ Suposición: carpeta = clase. El script solo lee ``--root``; nunca escribe en ``
 Ejemplos:
     python scripts/audit_dataset.py --source plantvillage
     python scripts/audit_dataset.py --source plantdoc \\
+        --compare-with reports/audit/plantvillage/inventory.csv
+    python scripts/audit_dataset.py --source taiwan \\
         --compare-with reports/audit/plantvillage/inventory.csv
 """
 
@@ -35,7 +37,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Auditoría de un dataset de hojas (carpeta = clase). Solo lee --root."
     )
-    parser.add_argument("--source", required=True, choices=["plantvillage", "plantdoc"])
+    parser.add_argument("--source", required=True, choices=["plantvillage", "plantdoc", "taiwan"])
     parser.add_argument(
         "--root", type=Path, help="Raíz del dataset (por defecto data/raw/<source>)."
     )

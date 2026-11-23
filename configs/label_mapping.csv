@@ -18,3 +18,9 @@ plantdoc,Tomato leaf mosaic virus,tomato,mosaic_virus,diseased,
 plantdoc,Tomato leaf yellow virus,tomato,yellow_virus,diseased,"nombre propio: correspondencia con yellow_leaf_curl_virus no confirmada (D010)"
 plantdoc,Tomato mold leaf,tomato,leaf_mold,diseased,
 plantdoc,Tomato two spotted spider mites leaf,tomato,spider_mites,diseased,solo 2 imágenes
+taiwan,health,tomato,healthy,healthy,
+taiwan,Bacterial spot,tomato,bacterial_spot,diseased,vista en el entrenamiento (PlantVillage)
+taiwan,Late blight,tomato,late_blight,diseased,vista en el entrenamiento (PlantVillage)
+taiwan,Black mold,tomato,black_mold,diseased,no vista en el entrenamiento
+taiwan,Gray spot,tomato,gray_spot,diseased,no vista en el entrenamiento
+taiwan,powdery mildew,tomato,powdery_mildew,diseased,no vista en el entrenamiento; manchas blancas como el residuo de T07
