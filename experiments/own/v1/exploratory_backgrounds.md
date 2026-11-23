@@ -37,22 +37,29 @@ folíolo solo se analizan las hojas con una ROI por foto; el resto, por hoja.
 | Hoja (mayoría de folíolos; puntuación media) | 10 | 10/10 | 3.27 | 1.83 | -0.02 |
 | Folíolo (solo hojas con una ROI por foto) | 4 | 4/4 | 3.62 | 0.51 | -0.46 |
 
-Puntuación media de B por hoja y fondo (folíolos concluyentes):
+**Solo un indicio.** Con n = 10 hojas (4 folíolos) y la compresión distinta de `h01`,
+el ICC no permite concluir nada; además trata el fondo como ruido aleatorio, cuando
+puede ser un efecto sistemático.
+
+Puntuación media de B por hoja y fondo (folíolos concluyentes) y fondo con la puntuación
+más alta en cada hoja (descriptivo, sin veredicto):
 
 ```
-background  blanco  gris_oscuro  natural
-leaf_id                                 
-c01          11.48         4.14     7.21
-c02           6.53         6.69     9.39
-c03          12.82         4.93     7.46
-c04          12.32         3.96     7.80
-c05           4.60         4.15     4.67
-c06           5.68         2.42     1.65
-h01          11.69         3.20     7.38
-h02          12.38         4.03     8.44
-h03          11.88         5.69     7.94
-h04          11.07         5.70     8.73
+background  blanco  gris_oscuro  natural fondo_max
+leaf_id                                           
+c01          11.48         4.14     7.21    blanco
+c02           6.53         6.69     9.39   natural
+c03          12.82         4.93     7.46    blanco
+c04          12.32         3.96     7.80    blanco
+c05           4.60         4.15     4.67   natural
+c06           5.68         2.42     1.65    blanco
+h01          11.69         3.20     7.38    blanco
+h02          12.38         4.03     8.44    blanco
+h03          11.88         5.69     7.94    blanco
+h04          11.07         5.70     8.73    blanco
 ```
+
+Recuento del fondo con la puntuación más alta: blanco 8, natural 2 (de 10 hojas).
 
 Folíolos emparejables (resultado y puntuación):
 

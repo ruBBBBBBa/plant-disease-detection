@@ -154,11 +154,20 @@ def main(argv: list[str] | None = None) -> int:
         f"{a_leaflet['same']}/{a_leaflet['n']} | {i_leaflet['sd_within']:.2f} | "
         f"{i_leaflet['sd_between']:.2f} | {i_leaflet['icc1']:.2f} |",
         "",
-        "Puntuación media de B por hoja y fondo (folíolos concluyentes):",
+        "**Solo un indicio.** Con n = 10 hojas (4 folíolos) y la compresión distinta de `h01`,",
+        "el ICC no permite concluir nada; además trata el fondo como ruido aleatorio, cuando",
+        "puede ser un efecto sistemático.",
+        "",
+        "Puntuación media de B por hoja y fondo (folíolos concluyentes) y fondo con la puntuación",
+        "más alta en cada hoja (descriptivo, sin veredicto):",
         "",
         "```",
-        leaf_score.to_string(**fmt),
+        leaf_score.assign(fondo_max=leaf_score.idxmax(axis=1)).to_string(**fmt),
         "```",
+        "",
+        "Recuento del fondo con la puntuación más alta: "
+        + ", ".join(f"{bg} {n}" for bg, n in leaf_score.idxmax(axis=1).value_counts().items())
+        + f" (de {len(leaf_score)} hojas).",
         "",
         "Folíolos emparejables (resultado y puntuación):",
         "",

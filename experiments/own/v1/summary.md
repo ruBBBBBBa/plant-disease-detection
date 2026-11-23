@@ -106,6 +106,10 @@ ningún experimento que aísle el color del residuo del tratamiento o de la cám
 - **Puntuación:** varía más dentro de la unidad, entre fondos, que entre unidades. Por hoja
   (n = 10), DT dentro 3,27 y entre 1,83, ICC(1) = −0,02. Por folíolo (n = 4), 3,62 y 0,51,
   ICC(1) = −0,46. La puntuación depende más de la foto (fondo, exposición) que de la hoja.
+  **Solo es un indicio:** con n = 10 hojas (4 folíolos) y la compresión distinta de `h01`, el ICC no
+  permite concluir nada.
+- **Fondo con la puntuación más alta en cada hoja** (descriptivo, sin veredicto): blanco en 8 de
+  10 hojas, natural en 2 (`c02`, `c05`) y gris oscuro en ninguna.
 - **b\* y `b_hist_07` por fondo:** no se pueden calcular. `contributions_B_roi.csv` solo guarda
   medias sobre todos los folíolos, no valores por folíolo.
 
