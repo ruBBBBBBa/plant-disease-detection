@@ -1,6 +1,6 @@
 # T08 — Segundo test externo: dataset de hojas de tomate de Taiwán
 
-- **Estado:** Pendiente (después de T07, o en paralelo si T07 está bloqueada esperando fotos)
+- **Estado:** En revisión
 - **Rama:** `t08-taiwan-external`
 - **Depende de:** T06 (`eval_external.py`, criterio de «no concluyente», variantes A/B y límite de
   validez D035) y T07 (resultado de las fotos propias, D044, del que sale la hipótesis H9)
@@ -140,13 +140,13 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 
 ## Criterios de aceptación
 
-- [ ] Licencia comprobada; subconjunto de PlantVillage excluido; casi-duplicados frente a PlantVillage
+- [x] Licencia comprobada; subconjunto de PlantVillage excluido; casi-duplicados frente a PlantVillage
       buscados y excluidos.
-- [ ] Condiciones anotadas por el alumno y versionadas **antes** del commit congelado.
-- [ ] Ejecución única registrada; predicciones guardadas; informe regenerable sin volver a predecir.
-- [ ] B′ entrenada solo con PlantVillage, con su BA de `val` junto a la de B, y congelada antes de procesar Taiwán.
-- [ ] Veredictos de H7, H8 y H9 con IC, sin forzar conclusiones.
-- [ ] `ruff` y `pytest` en verde; `data/raw/` intacto; nada pesado en git.
+- [x] Condiciones anotadas por el alumno y versionadas **antes** del commit congelado.
+- [x] Ejecución única registrada; predicciones guardadas; informe regenerable sin volver a predecir.
+- [x] B′ entrenada solo con PlantVillage, con su BA de `val` junto a la de B, y congelada antes de procesar Taiwán.
+- [x] Veredictos de H7, H8 y H9 con IC, sin forzar conclusiones.
+- [x] `ruff` y `pytest` en verde; `data/raw/` intacto; nada pesado en git.
 
 ## Decisiones que quedan para el alumno al cerrar T08
 
@@ -171,13 +171,35 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
   600 por encima de 10). 0 pares casi duplicados dentro de Taiwán (`reports/data/taiwan_summary.md`).
 - **Recuento por clase y por condición `leaves × background`:** por clase, 622 `external_test`:
   health 106, Bacterial spot 110, Late blight 98 (vistas); Black mold 67, Gray spot 84,
-  powdery mildew 157 (no vistas). Por condición: pendiente de la anotación del alumno.
-- **Commit congelado y registro de la ejecución:**
-- **Resultados (todas / solo concluyentes + cobertura), total y por condición:**
+  powdery mildew 157 (no vistas). Por condición (anotación del alumno, `c8afde9`): `leaflet` 442,
+  `compound` 116, `multiple` 64; `simple` 226, `complex` 396. Ninguna sana con fondo `simple`
+  (0 de 106) → H7 y H8 solo con enfermas (D054).
+- **Fase B — comandos ejecutados:**
+  `python scripts/eval_external.py --source taiwan --frozen-commit c673c1e67292d0b894c255ba3413d66bed6ee61d`
+  (una sola vez); `python scripts/report_taiwan.py`; `python scripts/plot_taiwan_grids.py --variant B`.
+  Antes, prueba en seco fuera del repo con 8 imágenes de `val` de PlantVillage: A, B y B′ reproducen
+  las predicciones guardadas de `val` (misma clase; puntuación con diferencia ≤ 2·10⁻⁵).
+- **Commit congelado y registro de la ejecución:** `c673c1e`;
+  `experiments/external/taiwan_v1/execution_c673c1e67292d0b894c255ba3413d66bed6ee61d.json` (sha1 de
+  configuración, anotaciones, modelos y predicciones). `report_taiwan.py` se amplió después (motivos
+  de «no concluyente»); no predice ni cambia nada de lo congelado.
+- **Resultados (todas / solo concluyentes + cobertura), total y por condición:** cobertura 36,0 %
+  (398 de 622 no concluyentes: 15 máscaras vacías, el resto por calidad de máscara). BA «todas» /
+  «solo concluyentes»: A 0,129 / 0,349, B 0,151 / 0,414, B′ 0,122 / 0,374. Entre las concluyentes,
+  B acierta 3 de 26 sanas. Por condición (B): cobertura 62,6 % en `leaflet + simple`, 68,2 % en
+  `compound + simple`, 17–24 % en las `complex`; BA solo existe en las `complex` (≤ 0,116). Detalle en
+  `experiments/external/taiwan_v1/summary.md` y `tables.md`.
 - **BA de `val` de B′ frente a B:** B′ 0,962838 (IC 95 % [0,926, 0,990]; C = 0,1; CV 0,9815) frente a
   B 0,945946 ([0,902, 0,976]). El procedimiento de `cv-val-variant` reproduce B exactamente con su CSV
   original (C = 1, 0,945946). Recall de sanas 0,986 frente a 0,946. Sin coste (D052).
-- **Veredicto H7–H9:**
-- **Enfermedades no vistas:**
-- **Decisiones tomadas durante la tarea:** D050 (exploratorio a posteriori de T07), D051 (manifiesto y casi-duplicados), D052 (B′ y su limitación), D053 (anotación ciega a la clase).
-- **Pendientes:**
+- **Veredicto H7–H9:** H7 **apoyada** (cobertura de enfermas, `leaflet + simple` − resto = 0,394
+  [0,310; 0,477]); H8 **apoyada** (recall de enfermas «todas», 0,237 [0,156; 0,319]; no es
+  independiente de H7); H9 **no concluyente** (BA B′ − B = −0,029 [−0,057; 0,002]; recall de sanas
+  +0,047 [0,000; 0,094], descriptivo).
+- **Enfermedades no vistas:** recall de B «todas» / «solo concluyentes»: black mold 0,358 / 0,706,
+  gray spot 0,262 / 0,786, powdery mildew 0,191 / 0,698; parecido a las vistas, pero con sanas casi
+  siempre llamadas enfermas no indica que se reconozcan.
+- **Decisiones tomadas durante la tarea:** D050 (exploratorio a posteriori de T07), D051 (manifiesto y casi-duplicados), D052 (B′ y su limitación), D053 (anotación ciega a la clase), D054 (H7/H8 solo con enfermas), D055 (protocolo congelado de la fase B).
+- **Pendientes:** las dos decisiones del alumno de arriba (redacción del límite de validez y trabajo
+  futuro). Fuera de alcance y sin hacer: reajustar umbrales para color normalizado; segmentación
+  para fondos complejos o negros; ROI manual.

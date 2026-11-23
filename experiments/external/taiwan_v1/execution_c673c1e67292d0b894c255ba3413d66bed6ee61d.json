@@ -1,0 +1,21 @@
+{
+  "commit": "c673c1e67292d0b894c255ba3413d66bed6ee61d",
+  "date": "2026-11-23T09:31:47.067762+00:00",
+  "status": "complete",
+  "source": "taiwan",
+  "n_images": 622,
+  "n_inconclusive": 398,
+  "config_sha1": "319b56af2d636b8f6181d1d60b6b4a81a61f1c93",
+  "taiwan_config_sha1": "8f7df784d324199547a26028578e8d8a13aa46e4",
+  "annotations_sha1": "6e0222a1a60545072532beb0321ed4008fdf28ba",
+  "predictions_sha1": {
+    "pred__A.csv.gz": "14a66891422b5e4b3febdee98ee2061685600a6a",
+    "pred__B.csv.gz": "2f3b02f0b2a753b3e6b0540e8e3794bb6a93f389",
+    "pred__B_prime.csv.gz": "5701ca2d46f8a3b2e822afea29d9a2ec8b54d9bf"
+  },
+  "pipelines_sha1": {
+    "exp2/combinadas__svm_lineal.joblib": "9d2fa3d167e260153085cf10b877b6d7d27cf209",
+    "exp2/color_manchas__svm_lineal.joblib": "64e8262604f42cb9036aff6015be65f4c28a2158",
+    "exp2_grayworld/color_manchas__svm_lineal.joblib": "dce49e900490130c4d5f45e71517f80bfe93e51f"
+  }
+}

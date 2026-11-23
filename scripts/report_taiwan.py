@@ -124,6 +124,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--metadata", type=Path, default=REPO_ROOT / "data/taiwan_metadata.csv")
     parser.add_argument(
+        "--features", type=Path, default=REPO_ROOT / "data/processed/features_taiwan_v1_plain.csv"
+    )
+    parser.add_argument("--external-config", type=Path, default=REPO_ROOT / "configs/external.json")
+    parser.add_argument(
         "--plantdoc", type=Path, default=REPO_ROOT / "experiments/external/plantdoc_v1/metrics.json"
     )
     args = parser.parse_args(argv)
@@ -333,6 +337,18 @@ def main(argv: list[str] | None = None) -> int:
         + ".",
         "",
     ]
+    if args.features.is_file():  # características guardadas por eval_external (no versionadas)
+        feats = pd.read_csv(args.features)
+        ranges = json.loads(args.external_config.read_text())["inconclusive"]["ranges"]
+        valid = ~feats["mask_empty"].astype(bool)
+        why = {"mask_empty": int((~valid).sum())}
+        for c, (lo, hi) in ranges.items():
+            why[c] = int(((feats[c] < lo) | (feats[c] > hi))[valid].sum())
+        why["cualquiera"] = int(ex.inconclusive_mask(feats, ranges).sum())
+        result["inconclusive_reasons"] = why
+        lines += [f"Motivos de «no concluyente» (imágenes de {len(feats)}; pueden solaparse): "]
+        lines[-1] += ", ".join(f"{k} {v}" for k, v in why.items()) + "."
+        lines += [""]
     (args.out_dir / "tables.md").write_text("\n".join(lines) + "\n")
     (args.out_dir / "metrics.json").write_text(json.dumps(result, indent=2, default=float) + "\n")
     print("\n".join(lines))
