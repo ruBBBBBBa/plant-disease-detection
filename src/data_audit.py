@@ -43,6 +43,9 @@ def find_class_dirs(root: Path, source: str, species: str) -> list[tuple[Path, s
 
     - PlantVillage: ``<root>/raw/color/<clase>/`` (sin split original → cadena vacía).
     - PlantDoc: ``<root>/{train,test}/<clase>/`` (el split original es el nombre de la carpeta).
+    - Taiwán: ``<root>/Preprocessed data/{Train,Test}/<clase>/``. ``data augmentation`` no se lee
+      (son copias transformadas de las originales). Todo es tomate, así que no se filtra por
+      ``species`` (las carpetas no lo nombran).
 
     Solo se conservan las clases cuyo nombre contiene ``species`` sin distinguir mayúsculas.
     """
@@ -50,6 +53,9 @@ def find_class_dirs(root: Path, source: str, species: str) -> list[tuple[Path, s
         parents = [(root / "raw" / "color", "")]
     elif source == "plantdoc":
         parents = [(root / "train", "train"), (root / "test", "test")]
+    elif source == "taiwan":
+        base = root / "Preprocessed data"
+        parents = [(base / "Train", "train"), (base / "Test", "test")]
     else:
         raise ValueError(f"Fuente desconocida: {source!r}")
 
@@ -58,7 +64,7 @@ def find_class_dirs(root: Path, source: str, species: str) -> list[tuple[Path, s
         if not parent.is_dir():
             continue
         for class_dir in sorted(p for p in parent.iterdir() if p.is_dir()):
-            if species.lower() in class_dir.name.lower():
+            if source == "taiwan" or species.lower() in class_dir.name.lower():
                 class_dirs.append((class_dir, split))
     return class_dirs
 

@@ -1,0 +1,2136 @@
+{
+  "variants": {
+    "A": {
+      "val_ba": 0.9594594594594594,
+      "todas/all": {
+        "confusion_matrix": [
+          [
+            2,
+            104
+          ],
+          [
+            393,
+            123
+          ]
+        ],
+        "tn": 2,
+        "fp": 104,
+        "fn": 393,
+        "tp": 123,
+        "accuracy": 0.20096463022508038,
+        "balanced_accuracy": 0.12862000877577887,
+        "precision_healthy": 0.005063291139240506,
+        "recall_healthy": 0.018867924528301886,
+        "f1_healthy": 0.007984031936127744,
+        "precision_diseased": 0.5418502202643172,
+        "recall_diseased": 0.23837209302325582,
+        "f1_diseased": 0.3310901749663526,
+        "roc_auc": 0.03166593535176246,
+        "reading": "all",
+        "n": 622,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.10761583196496989,
+            0.15307802485113964
+          ],
+          "recall_healthy": [
+            0.0,
+            0.04716981132075472
+          ],
+          "recall_diseased": [
+            0.20344664707293666,
+            0.2780952380952381
+          ],
+          "roc_auc": [
+            0.01960315763722308,
+            0.045701369285284364
+          ]
+        }
+      },
+      "todas/conclusive": {
+        "confusion_matrix": [
+          [
+            2,
+            24
+          ],
+          [
+            75,
+            123
+          ]
+        ],
+        "tn": 2,
+        "fp": 24,
+        "fn": 75,
+        "tp": 123,
+        "accuracy": 0.5580357142857143,
+        "balanced_accuracy": 0.3490675990675991,
+        "precision_healthy": 0.025974025974025976,
+        "recall_healthy": 0.07692307692307693,
+        "f1_healthy": 0.038834951456310676,
+        "precision_diseased": 0.8367346938775511,
+        "recall_diseased": 0.6212121212121212,
+        "f1_diseased": 0.7130434782608696,
+        "roc_auc": 0.33644133644133645,
+        "reading": "conclusive",
+        "n": 224,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.2926829268292683,
+            0.41842023172905524
+          ],
+          "recall_healthy": [
+            0.0,
+            0.19249999999999895
+          ],
+          "recall_diseased": [
+            0.5549738219895288,
+            0.6884442705329928
+          ],
+          "roc_auc": [
+            0.25463494289468364,
+            0.41686331283362743
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/all": {
+        "confusion_matrix": [
+          [
+            2,
+            104
+          ],
+          [
+            149,
+            59
+          ]
+        ],
+        "tn": 2,
+        "fp": 104,
+        "fn": 149,
+        "tp": 59,
+        "accuracy": 0.1942675159235669,
+        "balanced_accuracy": 0.15126088534107401,
+        "precision_healthy": 0.013245033112582781,
+        "recall_healthy": 0.018867924528301886,
+        "f1_healthy": 0.01556420233463035,
+        "precision_diseased": 0.3619631901840491,
+        "recall_diseased": 0.28365384615384615,
+        "f1_diseased": 0.31805929919137466,
+        "roc_auc": 0.030116110304789546,
+        "reading": "all",
+        "n": 314,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.12090671731316775,
+            0.1825297073863931
+          ],
+          "recall_healthy": [
+            0.0,
+            0.04807692307692308
+          ],
+          "recall_diseased": [
+            0.22579315845444878,
+            0.34300237940731126
+          ],
+          "roc_auc": [
+            0.016408204193634573,
+            0.04609700414753991
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/conclusive": {
+        "confusion_matrix": [
+          [
+            2,
+            24
+          ],
+          [
+            34,
+            59
+          ]
+        ],
+        "tn": 2,
+        "fp": 24,
+        "fn": 34,
+        "tp": 59,
+        "accuracy": 0.5126050420168067,
+        "balanced_accuracy": 0.3556658395368073,
+        "precision_healthy": 0.05555555555555555,
+        "recall_healthy": 0.07692307692307693,
+        "f1_healthy": 0.06451612903225806,
+        "precision_diseased": 0.7108433734939759,
+        "recall_diseased": 0.6344086021505376,
+        "f1_diseased": 0.6704545454545454,
+        "roc_auc": 0.2746071133167908,
+        "reading": "conclusive",
+        "n": 119,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.28843410326086955,
+            0.43071188501144164
+          ],
+          "recall_healthy": [
+            0.0,
+            0.19230769230769232
+          ],
+          "recall_diseased": [
+            0.5319148936170213,
+            0.7325581395348837
+          ],
+          "roc_auc": [
+            0.18736044657097287,
+            0.3719806763285024
+          ]
+        }
+      },
+      "by_disease/all": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.2909090909090909,
+          "n": 110
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.19402985074626866,
+          "n": 67
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.2619047619047619,
+          "n": 84
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.018867924528301886,
+          "n": 106
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.2755102040816326,
+          "n": 98
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.18471337579617833,
+          "n": 157
+        }
+      ],
+      "by_disease/conclusive": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.6037735849056604,
+          "n": 53
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.38235294117647056,
+          "n": 34
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.7857142857142857,
+          "n": 28
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.07692307692307693,
+          "n": 26
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.675,
+          "n": 40
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.6744186046511628,
+          "n": 43
+        }
+      ],
+      "by_condition": [
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "all",
+          "n": 94,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              0,
+              37
+            ],
+            [
+              50,
+              7
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 57,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.06140350877192982,
+          "recall_healthy": 0.0,
+          "recall_diseased": 0.12280701754385964,
+          "ci95": {
+            "balanced_accuracy": [
+              0.02341974431818182,
+              0.10714285714285714
+            ],
+            "recall_diseased": [
+              0.04683948863636364,
+              0.21428571428571427
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 16,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              0,
+              7
+            ],
+            [
+              2,
+              7
+            ]
+          ],
+          "n_healthy": 7,
+          "n_diseased": 9,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.3888888888888889,
+          "recall_healthy": 0.0,
+          "recall_diseased": 0.7777777777777778,
+          "ci95": {
+            "balanced_accuracy": [
+              0.25,
+              0.5
+            ],
+            "recall_diseased": [
+              0.5,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "all",
+          "n": 22,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              11,
+              11
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 22,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.5,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.31704545454545463,
+              0.7272727272727273
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 15,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              11
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 15,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.7333333333333333,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.5333333333333333,
+              0.9333333333333333
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "all",
+          "n": 244,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              1,
+              36
+            ],
+            [
+              173,
+              34
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 207,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.09563911737824782,
+          "recall_healthy": 0.02702702702702703,
+          "recall_diseased": 0.1642512077294686,
+          "ci95": {
+            "balanced_accuracy": [
+              0.0625,
+              0.13477872768418403
+            ],
+            "recall_diseased": [
+              0.11428571428571428,
+              0.2150077751196172
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 59,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              1,
+              10
+            ],
+            [
+              14,
+              34
+            ]
+          ],
+          "n_healthy": 11,
+          "n_diseased": 48,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.39962121212121215,
+          "recall_healthy": 0.09090909090909091,
+          "recall_diseased": 0.7083333333333334,
+          "ci95": {
+            "balanced_accuracy": [
+              0.3020833333333333,
+              0.5251572327044025
+            ],
+            "recall_diseased": [
+              0.5744582348305753,
+              0.8297872340425532
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "all",
+          "n": 198,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              129,
+              69
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 198,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.3484848484848485,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.2878787878787879,
+              0.41414141414141414
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 124,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              55,
+              69
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 124,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.5564516129032258,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.46774193548387094,
+              0.6451612903225806
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "all",
+          "n": 58,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              1,
+              31
+            ],
+            [
+              24,
+              2
+            ]
+          ],
+          "n_healthy": 32,
+          "n_diseased": 26,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.054086538461538464,
+          "recall_healthy": 0.03125,
+          "recall_diseased": 0.07692307692307693,
+          "ci95": {
+            "balanced_accuracy": [
+              0.0,
+              0.12634299089068812
+            ],
+            "recall_diseased": [
+              0.0,
+              0.2
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 10,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              1,
+              7
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "n_healthy": 8,
+          "n_diseased": 2,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.5625,
+          "recall_healthy": 0.125,
+          "recall_diseased": 1.0,
+          "ci95": {
+            "balanced_accuracy": [
+              0.5,
+              0.6875
+            ],
+            "recall_diseased": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "all",
+          "n": 6,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 6,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.0,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 0,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 0,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": NaN,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              NaN,
+              NaN
+            ]
+          }
+        }
+      ]
+    },
+    "B": {
+      "val_ba": 0.9459459459459459,
+      "todas/all": {
+        "confusion_matrix": [
+          [
+            3,
+            103
+          ],
+          [
+            375,
+            141
+          ]
+        ],
+        "tn": 3,
+        "fp": 103,
+        "fn": 375,
+        "tp": 141,
+        "accuracy": 0.2315112540192926,
+        "balanced_accuracy": 0.1507788503729706,
+        "precision_healthy": 0.007936507936507936,
+        "recall_healthy": 0.02830188679245283,
+        "f1_healthy": 0.012396694214876033,
+        "precision_diseased": 0.5778688524590164,
+        "recall_diseased": 0.27325581395348836,
+        "f1_diseased": 0.37105263157894736,
+        "roc_auc": 0.04927234167032323,
+        "reading": "all",
+        "n": 622,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.12661101925715088,
+            0.1770900177027057
+          ],
+          "recall_healthy": [
+            0.0,
+            0.06330460544034466
+          ],
+          "recall_diseased": [
+            0.23586698664901246,
+            0.3132553424529841
+          ],
+          "roc_auc": [
+            0.03140785170451159,
+            0.06870709929818059
+          ]
+        }
+      },
+      "todas/conclusive": {
+        "confusion_matrix": [
+          [
+            3,
+            23
+          ],
+          [
+            57,
+            141
+          ]
+        ],
+        "tn": 3,
+        "fp": 23,
+        "fn": 57,
+        "tp": 141,
+        "accuracy": 0.6428571428571429,
+        "balanced_accuracy": 0.4137529137529138,
+        "precision_healthy": 0.05,
+        "recall_healthy": 0.11538461538461539,
+        "f1_healthy": 0.06976744186046512,
+        "precision_diseased": 0.8597560975609756,
+        "recall_diseased": 0.7121212121212122,
+        "f1_diseased": 0.7790055248618785,
+        "roc_auc": 0.5235042735042734,
+        "reading": "conclusive",
+        "n": 224,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.3500949059052563,
+            0.490999268780788
+          ],
+          "recall_healthy": [
+            0.0,
+            0.25
+          ],
+          "recall_diseased": [
+            0.6502338026055863,
+            0.7727272727272727
+          ],
+          "roc_auc": [
+            0.4348358569587629,
+            0.6165402484154364
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/all": {
+        "confusion_matrix": [
+          [
+            3,
+            103
+          ],
+          [
+            143,
+            65
+          ]
+        ],
+        "tn": 3,
+        "fp": 103,
+        "fn": 143,
+        "tp": 65,
+        "accuracy": 0.21656050955414013,
+        "balanced_accuracy": 0.1704009433962264,
+        "precision_healthy": 0.02054794520547945,
+        "recall_healthy": 0.02830188679245283,
+        "f1_healthy": 0.023809523809523808,
+        "precision_diseased": 0.3869047619047619,
+        "recall_diseased": 0.3125,
+        "f1_diseased": 0.34574468085106386,
+        "roc_auc": 0.0595065312046444,
+        "reading": "all",
+        "n": 314,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.13750690905863322,
+            0.20561282235802109
+          ],
+          "recall_healthy": [
+            0.0,
+            0.06365095913261043
+          ],
+          "recall_diseased": [
+            0.2513082292925225,
+            0.37625028781947956
+          ],
+          "roc_auc": [
+            0.03683040048209461,
+            0.08531799083269673
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/conclusive": {
+        "confusion_matrix": [
+          [
+            3,
+            23
+          ],
+          [
+            28,
+            65
+          ]
+        ],
+        "tn": 3,
+        "fp": 23,
+        "fn": 28,
+        "tp": 65,
+        "accuracy": 0.5714285714285714,
+        "balanced_accuracy": 0.4071546732837056,
+        "precision_healthy": 0.0967741935483871,
+        "recall_healthy": 0.11538461538461539,
+        "f1_healthy": 0.10526315789473684,
+        "precision_diseased": 0.7386363636363636,
+        "recall_diseased": 0.6989247311827957,
+        "f1_diseased": 0.7182320441988951,
+        "roc_auc": 0.5425971877584781,
+        "reading": "conclusive",
+        "n": 119,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.33372737278110703,
+            0.4861111111111111
+          ],
+          "recall_healthy": [
+            0.0,
+            0.25
+          ],
+          "recall_diseased": [
+            0.6,
+            0.7888888888888889
+          ],
+          "roc_auc": [
+            0.43440503243937134,
+            0.6452749716371527
+          ]
+        }
+      },
+      "by_disease/all": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.34545454545454546,
+          "n": 110
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.3582089552238806,
+          "n": 67
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.2619047619047619,
+          "n": 84
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.02830188679245283,
+          "n": 106
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.2755102040816326,
+          "n": 98
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.1910828025477707,
+          "n": 157
+        }
+      ],
+      "by_disease/conclusive": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.7169811320754716,
+          "n": 53
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.7058823529411765,
+          "n": 34
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.7857142857142857,
+          "n": 28
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.11538461538461539,
+          "n": 26
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.675,
+          "n": 40
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.6976744186046512,
+          "n": 43
+        }
+      ],
+      "by_condition": [
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "all",
+          "n": 94,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              0,
+              37
+            ],
+            [
+              51,
+              6
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 57,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.05263157894736842,
+          "recall_healthy": 0.0,
+          "recall_diseased": 0.10526315789473684,
+          "ci95": {
+            "balanced_accuracy": [
+              0.017241379310344827,
+              0.09559214643304127
+            ],
+            "recall_diseased": [
+              0.034482758620689655,
+              0.19118429286608254
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 16,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              0,
+              7
+            ],
+            [
+              3,
+              6
+            ]
+          ],
+          "n_healthy": 7,
+          "n_diseased": 9,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.3333333333333333,
+          "recall_healthy": 0.0,
+          "recall_diseased": 0.6666666666666666,
+          "ci95": {
+            "balanced_accuracy": [
+              0.16666666666666666,
+              0.5
+            ],
+            "recall_diseased": [
+              0.3333333333333333,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "all",
+          "n": 22,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              9,
+              13
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 22,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.5909090909090909,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.36363636363636365,
+              0.8181818181818182
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 15,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              13
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 15,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.8666666666666667,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.6666666666666666,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "all",
+          "n": 244,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              2,
+              35
+            ],
+            [
+              170,
+              37
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 207,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.11639900770335553,
+          "recall_healthy": 0.05405405405405406,
+          "recall_diseased": 0.178743961352657,
+          "ci95": {
+            "balanced_accuracy": [
+              0.07523958475773736,
+              0.16568489695533534
+            ],
+            "recall_diseased": [
+              0.1262135922330097,
+              0.23005557856945588
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 59,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              2,
+              9
+            ],
+            [
+              11,
+              37
+            ]
+          ],
+          "n_healthy": 11,
+          "n_diseased": 48,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.47632575757575757,
+          "recall_healthy": 0.18181818181818182,
+          "recall_diseased": 0.7708333333333334,
+          "ci95": {
+            "balanced_accuracy": [
+              0.35294117647058826,
+              0.6164820075757576
+            ],
+            "recall_diseased": [
+              0.6457986111111111,
+              0.8809523809523809
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "all",
+          "n": 198,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              115,
+              83
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 198,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.41919191919191917,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.3484848484848485,
+              0.4898989898989899
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 124,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              41,
+              83
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 124,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.6693548387096774,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.5887096774193549,
+              0.75
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "all",
+          "n": 58,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              1,
+              31
+            ],
+            [
+              24,
+              2
+            ]
+          ],
+          "n_healthy": 32,
+          "n_diseased": 26,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.054086538461538464,
+          "recall_healthy": 0.03125,
+          "recall_diseased": 0.07692307692307693,
+          "ci95": {
+            "balanced_accuracy": [
+              0.0,
+              0.12261904761904763
+            ],
+            "recall_diseased": [
+              0.0,
+              0.2
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 10,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              1,
+              7
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "n_healthy": 8,
+          "n_diseased": 2,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.5625,
+          "recall_healthy": 0.125,
+          "recall_diseased": 1.0,
+          "ci95": {
+            "balanced_accuracy": [
+              0.5,
+              0.7
+            ],
+            "recall_diseased": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "all",
+          "n": 6,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 6,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.0,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 0,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 0,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": NaN,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              NaN,
+              NaN
+            ]
+          }
+        }
+      ]
+    },
+    "B_prime": {
+      "val_ba": 0.9628378378378378,
+      "todas/all": {
+        "confusion_matrix": [
+          [
+            8,
+            98
+          ],
+          [
+            429,
+            87
+          ]
+        ],
+        "tn": 8,
+        "fp": 98,
+        "fn": 429,
+        "tp": 87,
+        "accuracy": 0.1527331189710611,
+        "balanced_accuracy": 0.12203817463799913,
+        "precision_healthy": 0.018306636155606407,
+        "recall_healthy": 0.07547169811320754,
+        "f1_healthy": 0.029465930018416207,
+        "precision_diseased": 0.4702702702702703,
+        "recall_diseased": 0.1686046511627907,
+        "f1_diseased": 0.24821683309557774,
+        "roc_auc": 0.031245429281848758,
+        "reading": "all",
+        "n": 622,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.09300673526872928,
+            0.15378785133836687
+          ],
+          "recall_healthy": [
+            0.02857142857142857,
+            0.12844717958034332
+          ],
+          "recall_diseased": [
+            0.136,
+            0.20039302476065737
+          ],
+          "roc_auc": [
+            0.018084528059950637,
+            0.046676439709359016
+          ]
+        }
+      },
+      "todas/conclusive": {
+        "confusion_matrix": [
+          [
+            8,
+            18
+          ],
+          [
+            111,
+            87
+          ]
+        ],
+        "tn": 8,
+        "fp": 18,
+        "fn": 111,
+        "tp": 87,
+        "accuracy": 0.42410714285714285,
+        "balanced_accuracy": 0.3735431235431236,
+        "precision_healthy": 0.06722689075630252,
+        "recall_healthy": 0.3076923076923077,
+        "f1_healthy": 0.1103448275862069,
+        "precision_diseased": 0.8285714285714286,
+        "recall_diseased": 0.4393939393939394,
+        "f1_diseased": 0.5742574257425742,
+        "roc_auc": 0.33197358197358195,
+        "reading": "conclusive",
+        "n": 224,
+        "coverage": 0.360128617363344,
+        "ci95": {
+          "balanced_accuracy": [
+            0.28583333333333333,
+            0.4762175324675323
+          ],
+          "recall_healthy": [
+            0.14814814814814814,
+            0.5
+          ],
+          "recall_diseased": [
+            0.37185929648241206,
+            0.51
+          ],
+          "roc_auc": [
+            0.2436063296144738,
+            0.4266740481740481
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/all": {
+        "confusion_matrix": [
+          [
+            8,
+            98
+          ],
+          [
+            162,
+            46
+          ]
+        ],
+        "tn": 8,
+        "fp": 98,
+        "fn": 162,
+        "tp": 46,
+        "accuracy": 0.17197452229299362,
+        "balanced_accuracy": 0.14831277213352684,
+        "precision_healthy": 0.047058823529411764,
+        "recall_healthy": 0.07547169811320754,
+        "f1_healthy": 0.057971014492753624,
+        "precision_diseased": 0.3194444444444444,
+        "recall_diseased": 0.22115384615384615,
+        "f1_diseased": 0.26136363636363635,
+        "roc_auc": 0.040139695210449924,
+        "reading": "all",
+        "n": 314,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.11418348943373953,
+            0.18737974335143354
+          ],
+          "recall_healthy": [
+            0.02940462592804112,
+            0.12871287128712872
+          ],
+          "recall_diseased": [
+            0.16589749353714736,
+            0.27805510814542106
+          ],
+          "roc_auc": [
+            0.02302649833518313,
+            0.06156647663646542
+          ]
+        }
+      },
+      "vistas (sanas + vistas)/conclusive": {
+        "confusion_matrix": [
+          [
+            8,
+            18
+          ],
+          [
+            47,
+            46
+          ]
+        ],
+        "tn": 8,
+        "fp": 18,
+        "fn": 47,
+        "tp": 46,
+        "accuracy": 0.453781512605042,
+        "balanced_accuracy": 0.4011579818031431,
+        "precision_healthy": 0.14545454545454545,
+        "recall_healthy": 0.3076923076923077,
+        "f1_healthy": 0.19753086419753085,
+        "precision_diseased": 0.71875,
+        "recall_diseased": 0.4946236559139785,
+        "f1_diseased": 0.5859872611464968,
+        "roc_auc": 0.36600496277915634,
+        "reading": "conclusive",
+        "n": 119,
+        "coverage": 0.37898089171974525,
+        "ci95": {
+          "balanced_accuracy": [
+            0.30219428119349007,
+            0.5096249999999999
+          ],
+          "recall_healthy": [
+            0.13043478260869565,
+            0.4860714285714266
+          ],
+          "recall_diseased": [
+            0.3932308878607623,
+            0.5960062582345188
+          ],
+          "roc_auc": [
+            0.25701336920192386,
+            0.4787492512634928
+          ]
+        }
+      },
+      "by_disease/all": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.19090909090909092,
+          "n": 110
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.14925373134328357,
+          "n": 67
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.20238095238095238,
+          "n": 84
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.07547169811320754,
+          "n": 106
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.25510204081632654,
+          "n": 98
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.08917197452229299,
+          "n": 157
+        }
+      ],
+      "by_disease/conclusive": [
+        {
+          "disease_name": "bacterial_spot",
+          "recall": 0.39622641509433965,
+          "n": 53
+        },
+        {
+          "disease_name": "black_mold",
+          "recall": 0.29411764705882354,
+          "n": 34
+        },
+        {
+          "disease_name": "gray_spot",
+          "recall": 0.6071428571428571,
+          "n": 28
+        },
+        {
+          "disease_name": "healthy",
+          "recall": 0.3076923076923077,
+          "n": 26
+        },
+        {
+          "disease_name": "late_blight",
+          "recall": 0.625,
+          "n": 40
+        },
+        {
+          "disease_name": "powdery_mildew",
+          "recall": 0.32558139534883723,
+          "n": 43
+        }
+      ],
+      "by_condition": [
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "all",
+          "n": 94,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              2,
+              35
+            ],
+            [
+              51,
+              6
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 57,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.07965860597439545,
+          "recall_healthy": 0.05405405405405406,
+          "recall_diseased": 0.10526315789473684,
+          "ci95": {
+            "balanced_accuracy": [
+              0.03124962167070218,
+              0.13842992433258738
+            ],
+            "recall_diseased": [
+              0.034482758620689655,
+              0.19118429286608254
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 16,
+          "n_total": 94,
+          "n_healthy_total": 37,
+          "n_diseased_total": 57,
+          "confusion_matrix": [
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              6
+            ]
+          ],
+          "n_healthy": 7,
+          "n_diseased": 9,
+          "coverage": 0.17021276595744683,
+          "balanced_accuracy": 0.47619047619047616,
+          "recall_healthy": 0.2857142857142857,
+          "recall_diseased": 0.6666666666666666,
+          "ci95": {
+            "balanced_accuracy": [
+              0.25,
+              0.7092207792207785
+            ],
+            "recall_diseased": [
+              0.3333333333333333,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "all",
+          "n": 22,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              15,
+              7
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 22,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.3181818181818182,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.13636363636363635,
+              0.5454545454545454
+            ]
+          }
+        },
+        {
+          "leaves": "compound",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 15,
+          "n_total": 22,
+          "n_healthy_total": 0,
+          "n_diseased_total": 22,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              8,
+              7
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 15,
+          "coverage": 0.6818181818181819,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.4666666666666667,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.2,
+              0.7333333333333333
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "all",
+          "n": 244,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              4,
+              33
+            ],
+            [
+              181,
+              26
+            ]
+          ],
+          "n_healthy": 37,
+          "n_diseased": 207,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.11685598642120382,
+          "recall_healthy": 0.10810810810810811,
+          "recall_diseased": 0.12560386473429952,
+          "ci95": {
+            "balanced_accuracy": [
+              0.06467282521092418,
+              0.17888072453861925
+            ],
+            "recall_diseased": [
+              0.08095238095238096,
+              0.1722488038277512
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 59,
+          "n_total": 244,
+          "n_healthy_total": 37,
+          "n_diseased_total": 207,
+          "confusion_matrix": [
+            [
+              4,
+              7
+            ],
+            [
+              22,
+              26
+            ]
+          ],
+          "n_healthy": 11,
+          "n_diseased": 48,
+          "coverage": 0.24180327868852458,
+          "balanced_accuracy": 0.45265151515151514,
+          "recall_healthy": 0.36363636363636365,
+          "recall_diseased": 0.5416666666666666,
+          "ci95": {
+            "balanced_accuracy": [
+              0.30219002695417796,
+              0.6222691710463448
+            ],
+            "recall_diseased": [
+              0.4,
+              0.68
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "all",
+          "n": 198,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              152,
+              46
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 198,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.23232323232323232,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.17676767676767677,
+              0.29292929292929293
+            ]
+          }
+        },
+        {
+          "leaves": "leaflet",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 124,
+          "n_total": 198,
+          "n_healthy_total": 0,
+          "n_diseased_total": 198,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              78,
+              46
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 124,
+          "coverage": 0.6262626262626263,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.3709677419354839,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.2903225806451613,
+              0.45161290322580644
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "all",
+          "n": 58,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              2,
+              30
+            ],
+            [
+              24,
+              2
+            ]
+          ],
+          "n_healthy": 32,
+          "n_diseased": 26,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.06971153846153846,
+          "recall_healthy": 0.0625,
+          "recall_diseased": 0.07692307692307693,
+          "ci95": {
+            "balanced_accuracy": [
+              0.01427579365079365,
+              0.15024195075757574
+            ],
+            "recall_diseased": [
+              0.0,
+              0.2
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "complex",
+          "reading": "conclusive",
+          "n": 10,
+          "n_total": 58,
+          "n_healthy_total": 32,
+          "n_diseased_total": 26,
+          "confusion_matrix": [
+            [
+              2,
+              6
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          "n_healthy": 8,
+          "n_diseased": 2,
+          "coverage": 0.1724137931034483,
+          "balanced_accuracy": 0.625,
+          "recall_healthy": 0.25,
+          "recall_diseased": 1.0,
+          "ci95": {
+            "balanced_accuracy": [
+              0.5,
+              0.7857142857142857
+            ],
+            "recall_diseased": [
+              1.0,
+              1.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "all",
+          "n": 6,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 6,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": 0.0,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "leaves": "multiple",
+          "background": "simple",
+          "reading": "conclusive",
+          "n": 0,
+          "n_total": 6,
+          "n_healthy_total": 0,
+          "n_diseased_total": 6,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              0
+            ]
+          ],
+          "n_healthy": 0,
+          "n_diseased": 0,
+          "coverage": 0.0,
+          "balanced_accuracy": NaN,
+          "recall_healthy": NaN,
+          "recall_diseased": NaN,
+          "ci95": {
+            "balanced_accuracy": [
+              NaN,
+              NaN
+            ],
+            "recall_diseased": [
+              NaN,
+              NaN
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "hypotheses": {
+    "H7": {
+      "variant": "B",
+      "metric": "coverage",
+      "subset": "diseased",
+      "better": "focus",
+      "worse": "rest",
+      "diff": 0.393558223746903,
+      "ci95": [
+        0.31036782923575373,
+        0.47685582237469015
+      ],
+      "verdict": "apoyada",
+      "n_focus": 198,
+      "n_rest": 318,
+      "focus_mean": 0.6262626262626263,
+      "rest_mean": 0.23270440251572327
+    },
+    "H8": {
+      "variant": "B",
+      "metric": "recall_diseased_all",
+      "subset": "diseased",
+      "better": "focus",
+      "worse": "rest",
+      "diff": 0.23680198208500094,
+      "ci95": [
+        0.1555150562226034,
+        0.31875357347055466
+      ],
+      "verdict": "apoyada",
+      "n_focus": 198,
+      "n_rest": 318,
+      "focus_mean": 0.41919191919191917,
+      "rest_mean": 0.18238993710691823
+    },
+    "H9": {
+      "metric": "balanced_accuracy_all",
+      "better": "B_prime",
+      "worse": "B",
+      "paired": true,
+      "diff": -0.028740675734971466,
+      "ci95": [
+        -0.05718151307911948,
+        0.0018277922791591975
+      ],
+      "verdict": "no concluyente"
+    }
+  },
+  "descriptive": {
+    "H9_recall_healthy_diff": {
+      "diff": 0.04716981132075471,
+      "ci95": [
+        0.0,
+        0.09433962264150944
+      ]
+    },
+    "compound_simple_diseased": {
+      "n": 22,
+      "coverage": 0.6818181818181818,
+      "recall_diseased_all": 0.5909090909090909
+    },
+    "H7_H8_by_disease": {
+      "('n', True)": {
+        "bacterial_spot": 70,
+        "black_mold": 54,
+        "gray_spot": 20,
+        "late_blight": 30,
+        "powdery_mildew": 24
+      },
+      "('n', False)": {
+        "bacterial_spot": 40,
+        "black_mold": 13,
+        "gray_spot": 64,
+        "late_blight": 68,
+        "powdery_mildew": 133
+      },
+      "('coverage', True)": {
+        "bacterial_spot": 0.6285714286,
+        "black_mold": 0.5740740741,
+        "gray_spot": 0.55,
+        "late_blight": 0.6333333333,
+        "powdery_mildew": 0.7916666667
+      },
+      "('coverage', False)": {
+        "bacterial_spot": 0.225,
+        "black_mold": 0.2307692308,
+        "gray_spot": 0.265625,
+        "late_blight": 0.3088235294,
+        "powdery_mildew": 0.1804511278
+      },
+      "('recall', True)": {
+        "bacterial_spot": 0.4142857143,
+        "black_mold": 0.4074074074,
+        "gray_spot": 0.3,
+        "late_blight": 0.3333333333,
+        "powdery_mildew": 0.6666666667
+      },
+      "('recall', False)": {
+        "bacterial_spot": 0.225,
+        "black_mold": 0.1538461538,
+        "gray_spot": 0.25,
+        "late_blight": 0.25,
+        "powdery_mildew": 0.1052631579
+      }
+    }
+  },
+  "inconclusive_reasons": {
+    "mask_empty": 15,
+    "leaf_area_frac": 282,
+    "border_touch_frac": 142,
+    "mask_solidity": 119,
+    "cualquiera": 398
+  }
+}

@@ -339,6 +339,69 @@ def cmd_cv_val(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_cv_val_variant(args: argparse.Namespace) -> int:
+    """Un solo grupo × modelo con el mismo procedimiento que ``cv-val`` (B′ de T08).
+
+    Misma rejilla, CV agrupada por hoja en ``train`` (StratifiedGroupKFold, ``--cv-folds``,
+    ``--seed``), reentreno en todo ``train`` y evaluación en ``val``. Solo cambia el CSV de
+    características (p. ej. con gray world). Escribe el modelo en ``models/<out>/``, las
+    predicciones de ``val`` y ``results.json`` en ``--out``. No toca ``test``.
+    """
+    import joblib
+
+    df = pd.read_csv(args.features)
+    if set(df["split"]) - {"train", "val"}:
+        sys.exit(f"Error: {args.features} contiene splits distintos de train/val")
+    train_df = df[df["split"] == "train"].reset_index(drop=True)
+    val_df = df[df["split"] == "val"].reset_index(drop=True)
+    X_train, y_train, g_train, feat_cols = prepare_xy(train_df, args.group)
+    X_val, y_val, g_val, _ = prepare_xy(val_df, args.group, False)
+    base_est, grid = tr.get_models_and_grids(args.seed)[args.model]
+    cv_res = tr.cv_grouped(
+        X_train, y_train, g_train, args.model, base_est, grid, args.cv_folds, args.seed
+    )
+    model = tr.train_full(X_train, y_train, args.model, base_est, cv_res["best_params"], args.seed)
+    empty = val_df["mask_empty"].to_numpy(bool)
+    val_metrics = tr.evaluate_model(model, X_val, y_val, g_val, empty)
+
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    model_dir = REPO_ROOT / "models" / out_dir.name
+    model_dir.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, model_dir / f"{args.group}__{args.model}.joblib")
+    pred, score = tr.predict_with_empty(model, X_val, y_val, empty)
+    predictions = val_df[ID_COLUMNS].copy()
+    predictions["y_true"], predictions["y_pred"], predictions["score"] = y_val, pred, score
+    predictions["mask_empty"] = empty
+    predictions.to_csv(
+        out_dir / f"val__{args.group}__{args.model}.csv.gz",
+        index=False,
+        compression={"method": "gzip", "mtime": 0},
+    )
+    results = {
+        "commit": tr.get_git_commit_hash(),
+        "features_csv": Path(args.features).name,
+        "features_sha1": tr.sha1_file(Path(args.features)),
+        "group": args.group,
+        "model": args.model,
+        "seed": args.seed,
+        "cv_folds": args.cv_folds,
+        "n_train": int(len(X_train)),
+        "n_val": int(len(X_val)),
+        "cv_best_params": cv_res["best_params"],
+        "cv_best_score": cv_res["best_score"],
+        "val_metrics": val_metrics,
+    }
+    (out_dir / "results.json").write_text(
+        json.dumps(results, indent=2, ensure_ascii=False, default=float) + "\n"
+    )
+    print(
+        f"{args.group} + {args.model}: CV BA {cv_res['best_score']:.6f} "
+        f"({cv_res['best_params']}); val BA {val_metrics['balanced_accuracy']:.6f}"
+    )
+    return 0
+
+
 def cmd_choose_best(args: argparse.Namespace) -> int:
     """Elige la mejor config según val (mayor balanced_acc) y guarda en configs."""
     results_file = Path(args.out) / "cv_val_results.pkl"
@@ -394,6 +457,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p_cv.add_argument("--seed", type=int, default=42)
     p_cv.add_argument("--out", type=Path, default=REPO_ROOT / "experiments/classification/exp1")
 
+    p_var = sub.add_parser("cv-val-variant", help="Un grupo × modelo con otro CSV (B′, T08)")
+    p_var.add_argument("--features", type=Path, required=True)
+    p_var.add_argument("--group", default="color_manchas")
+    p_var.add_argument("--model", default="svm_lineal")
+    p_var.add_argument("--cv-folds", type=int, default=5)
+    p_var.add_argument("--seed", type=int, default=42)
+    p_var.add_argument("--out", type=Path, required=True)
+
     p_choose = sub.add_parser(
         "choose-best", help="Elige mejor config según val y guarda en configs/classification.json"
     )
@@ -410,6 +481,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_generate_blur(args)
     elif args.command == "cv-val":
         return cmd_cv_val(args)
+    elif args.command == "cv-val-variant":
+        return cmd_cv_val_variant(args)
     elif args.command == "choose-best":
         return cmd_choose_best(args)
     else:

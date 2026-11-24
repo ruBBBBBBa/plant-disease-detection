@@ -6,6 +6,9 @@ características de ``val`` y ``test``: se usarán en la fase 4.
 
 - ``--subset-only``: imágenes ``in_subset`` de los ``--splits`` (por defecto train val test).
 - ``--full-test``: todo el ``test`` de PlantVillage (para el análisis por enfermedad, D014).
+- ``--gray-world`` (B′, T08): color, textura y manchas sobre la imagen normalizada con gray
+  world; la máscara y la calidad, sobre la original. Solo ``train`` y ``val``: B′ no se evalúa en
+  el test interno.
 
 El CSV (``data/processed/``, no versionado) no incluye tiempos, para que dos ejecuciones den el
 mismo SHA-1. El tiempo medio por imagen y el SHA-1 se anotan en ``reports/features/extraction.md``.
@@ -13,6 +16,7 @@ mismo SHA-1. El tiempo medio por imagen y el SHA-1 se anotan en ``reports/featur
 Ejemplos:
     python scripts/extract_features.py --subset-only
     python scripts/extract_features.py --full-test
+    python scripts/extract_features.py --subset-only --splits train val --gray-world
 """
 
 from __future__ import annotations
@@ -49,8 +53,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--config", type=Path, default=REPO_ROOT / "configs/features.json")
     parser.add_argument("--out", type=Path, help="CSV de salida (por defecto en data/processed/).")
     parser.add_argument("--log", type=Path, default=REPO_ROOT / "reports/features/extraction.md")
+    parser.add_argument("--gray-world", action="store_true", help="B′: color normalizado (T08)")
     args = parser.parse_args(argv)
     name = "subset" if args.subset_only else "test_full"
+    if args.gray_world:
+        if args.full_test or "test" in args.splits:
+            parser.error("--gray-world solo con --subset-only --splits train val (sin test)")
+        name = f"grayworld_{name}"
     args.name = name
     args.out = args.out or REPO_ROOT / f"data/processed/features_{VERSION}_{name}.csv"
     if args.full_test and args.splits != ["train", "val", "test"]:
@@ -110,7 +119,8 @@ def main(argv: list[str] | None = None) -> int:
         image = seg.read_image(REPO_ROOT / row.image_path)
         start = time.perf_counter()
         mask = ft.leaf_mask(image, seg_config)
-        feats = ft.extract_features(image, mask, config)
+        colour = ft.gray_world(image) if args.gray_world else None
+        feats = ft.extract_features(image, mask, config, feature_image=colour)
         elapsed += time.perf_counter() - start
         records.append(
             {
@@ -128,6 +138,8 @@ def main(argv: list[str] | None = None) -> int:
     n_features = len(table.columns) - len(ID_COLUMNS)
     counts = table["split"].value_counts().sort_index().to_dict()
     flag = "--subset-only" if args.subset_only else "--full-test"
+    if args.gray_world:
+        flag += " --splits " + " ".join(args.splits) + " --gray-world"
     update_log(
         args.log,
         args.name,

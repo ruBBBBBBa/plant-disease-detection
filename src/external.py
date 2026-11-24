@@ -62,11 +62,21 @@ def inconclusive_mask(table: pd.DataFrame, ranges: dict) -> np.ndarray:
     return np.array([is_inconclusive_range(r, ranges) for r in table.to_dict("records")])
 
 
-def extract_image(path: Path, seg_config: dict, config: dict, sigma: float, long_side: int):
+def extract_image(
+    path: Path,
+    seg_config: dict,
+    config: dict,
+    sigma: float,
+    long_side: int,
+    gray_world: bool = False,
+):
     """Normalización → segmentación T03 → características T04, para una imagen.
 
     Devuelve ``(características, características con textura suavizada)``. Si la imagen no se
     puede leer, se devuelve un vector vacío con ``mask_empty=True`` y ``read_error=True``.
+    Con ``gray_world`` (B′, T08) el color, la textura y las manchas salen de la imagen normalizada
+    con gray world; la máscara y la calidad, de la original (D052). La textura suavizada se
+    calcula siempre sobre la original (B′ no la usa).
     """
     image = read_bgr(path)
     if image is None:
@@ -74,7 +84,8 @@ def extract_image(path: Path, seg_config: dict, config: dict, sigma: float, long
         return {**empty, "read_error": True}, {**empty, "read_error": True}
     image = normalize_size(image, long_side)
     mask = ft.leaf_mask(image, seg_config)
-    feats = ft.extract_features(image, mask, config) | {"read_error": False}
+    feature_image = ft.gray_world(image) if gray_world else None
+    feats = ft.extract_features(image, mask, config, feature_image) | {"read_error": False}
     blurred = {**feats}
     if not feats["mask_empty"]:
         # Mismo suavizado que en T05 (generate_v1_blur): solo cambia la textura.
@@ -207,6 +218,31 @@ def verdict(ci95: list[float]) -> str:
     if ci95[1] < 0:
         return "no apoyada (efecto contrario)"
     return "no concluyente"
+
+
+def unpaired_bootstrap_diff(
+    a: np.ndarray, b: np.ndarray, n_boot: int = 10000, seed: int = 42
+) -> dict:
+    """Bootstrap **no emparejado** de mean(a) − mean(b), con veredicto (H7, H8 de T08).
+
+    ``a`` y ``b`` son vectores 0/1 de dos grupos distintos de imágenes (p. ej. concluyente sí/no):
+    cada grupo se remuestrea por separado, con su propio tamaño.
+    """
+    rng = np.random.default_rng(seed)
+    a, b = np.asarray(a, float), np.asarray(b, float)
+    reps = a[rng.integers(0, len(a), (n_boot, len(a)))].mean(axis=1) - b[
+        rng.integers(0, len(b), (n_boot, len(b)))
+    ].mean(axis=1)
+    ci = [float(x) for x in np.percentile(reps, [2.5, 97.5])]
+    return {"diff": float(a.mean() - b.mean()), "ci95": ci, "verdict": verdict(ci)}
+
+
+def size_rule(result: dict, counts: dict[str, int], min_n: int = 20) -> dict:
+    """«No concluyente por tamaño» si alguna celda tiene menos de ``min_n`` imágenes (D053)."""
+    small = {k: n for k, n in counts.items() if n < min_n}
+    if small:
+        return result | {"verdict": "no concluyente por tamaño", "small_cells": small}
+    return result
 
 
 def evaluate_hypothesis(worse: dict, better: dict, n_boot: int = 10000, seed: int = 42) -> dict:

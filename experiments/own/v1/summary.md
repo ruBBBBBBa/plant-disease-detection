@@ -92,6 +92,27 @@ ningún experimento que aísle el color del residuo del tratamiento o de la cám
   (no por hoja), en B-ROI: con `gotas` 34/36 fallos y sin ellas 61/61; con `compuesta` 83/85 y sin
   ella 12/12. Diferencias de una o dos unidades: sin lectura.
 
+## Análisis exploratorio a posteriori: salida de B según el fondo (D050)
+
+**Exploratorio y a posteriori**, hecho en T08 tras ver los resultados: no cambia ningún veredicto
+(H4–H6 siguen «no concluyentes»), umbral ni modelo. Solo usa `predictions.csv.gz`; detalle en
+`exploratory_backgrounds.md` (`python scripts/explore_own_backgrounds.py`).
+
+- **Emparejamiento:** el mismo `leaflet_id` en los tres fondos no se puede verificar sin mirar las
+  fotos y la geometría de las ROI no cuadra en todas las hojas (`c01` tiene 6/5/5 ROI). Por eso,
+  por folíolo solo se analizan las 4 hojas con una ROI por foto (`h01`–`h04`); el resto, por hoja.
+- **Acuerdo:** las 10 hojas (mayoría de folíolos) y los 4 folíolos emparejables dan el mismo
+  resultado en los tres fondos: `diseased`. Es el efecto techo, no estabilidad.
+- **Puntuación:** varía más dentro de la unidad, entre fondos, que entre unidades. Por hoja
+  (n = 10), DT dentro 3,27 y entre 1,83, ICC(1) = −0,02. Por folíolo (n = 4), 3,62 y 0,51,
+  ICC(1) = −0,46. La puntuación depende más de la foto (fondo, exposición) que de la hoja.
+  **Solo es un indicio:** con n = 10 hojas (4 folíolos) y la compresión distinta de `h01`, el ICC no
+  permite concluir nada.
+- **Fondo con la puntuación más alta en cada hoja** (descriptivo, sin veredicto): blanco en 8 de
+  10 hojas, natural en 2 (`c02`, `c05`) y gris oscuro en ninguna.
+- **b\* y `b_hist_07` por fondo:** no se pueden calcular. `contributions_B_roi.csv` solo guarda
+  medias sobre todos los folíolos, no valores por folíolo.
+
 ## Hoja alterada (`a01`, descriptivo)
 
 | Foto | Modo automático | Modo ROI (B) | Modo ROI (A) |

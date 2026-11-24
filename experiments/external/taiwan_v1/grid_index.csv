@@ -1,0 +1,80 @@
+variant,leaves,background,cell,outcome,image_id,image_path
+B,compound,complex,1,NC,tw_f2383ad03ca7,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm144.jpg
+B,compound,complex,2,NC,tw_ef92627b4799,data/raw/taiwan/Preprocessed data/Test/Black mold/Blm14.jpg
+B,compound,complex,3,NC,tw_5a51af698f8c,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls27.jpg
+B,compound,complex,4,NC,tw_c8a4ddd6c0e4,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm65.JPG
+B,compound,complex,5,NC,tw_104dbbe5a0d4,data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm109.jpg
+B,compound,complex,6,FP,tw_19fb841649a8,data/raw/taiwan/Preprocessed data/Train/health/h94.jpg
+B,compound,complex,7,NC,tw_3a2c5b213e78,data/raw/taiwan/Preprocessed data/Test/health/h84.jpg
+B,compound,complex,8,NC,tw_3fd01fcd5b82,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs102.JPG
+B,compound,complex,9,OK,tw_8519ec736f5e,data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm95.jpg
+B,compound,complex,10,OK,tw_9b18cb81090c,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs103.JPG
+B,compound,complex,11,OK,tw_1dd5b34027f1,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb95.JPG
+B,compound,complex,12,OK,tw_dc47b5d5fce3,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs78.JPG
+B,compound,complex,13,OK,tw_bee5cc2016fe,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls81.JPG
+B,compound,complex,14,OK,tw_aa6863dd9196,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls39.jpg
+B,compound,simple,1,FN,tw_ec098f5cac33,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb46.JPG
+B,compound,simple,2,NC,tw_c130601a4e8b,data/raw/taiwan/Preprocessed data/Test/Gray spot/Gls14.jpg
+B,compound,simple,3,FN,tw_8b4b4beb879f,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm52.JPG
+B,compound,simple,4,NC,tw_fef450993fa0,data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs74.JPG
+B,compound,simple,5,NC,tw_233bca61ec4b,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm50.jpg
+B,compound,simple,6,NC,tw_28c6dfcda68d,data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm91.jpg
+B,compound,simple,7,NC,tw_b127a8f4caf3,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs45.JPG
+B,compound,simple,8,NC,tw_0fa45ff2c01f,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs12.JPG
+B,compound,simple,9,OK,tw_dbc7403b763f,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb29.JPG
+B,compound,simple,10,OK,tw_5b33063acd0b,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls40.jpg
+B,compound,simple,11,OK,tw_6be4d57b251f,data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs98.JPG
+B,compound,simple,12,OK,tw_05809be2beba,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls16.JPG
+B,compound,simple,13,OK,tw_2dc311ac650d,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs80.JPG
+B,compound,simple,14,OK,tw_6df7d318a993,data/raw/taiwan/Preprocessed data/Test/Late blight/Lb27.JPG
+B,compound,simple,15,OK,tw_6b132b712543,data/raw/taiwan/Preprocessed data/Test/Late blight/Lb1.JPG
+B,compound,simple,16,OK,tw_0fb79914081a,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb55.JPG
+B,leaflet,complex,1,NC,tw_fe76f8c8fa95,data/raw/taiwan/Preprocessed data/Test/health/h28.jpg
+B,leaflet,complex,2,NC,tw_5238cbd61525,data/raw/taiwan/Preprocessed data/Test/Late blight/Lb10.JPG
+B,leaflet,complex,3,NC,tw_a7d2eb910e54,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb70.JPG
+B,leaflet,complex,4,NC,tw_e76d3dcb8eb4,data/raw/taiwan/Preprocessed data/Train/health/h6.jpg
+B,leaflet,complex,5,NC,tw_6b9ae4ac061e,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls6.jpg
+B,leaflet,complex,6,NC,tw_6ede3ad4fea9,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb63.JPG
+B,leaflet,complex,7,FN,tw_09419f3f8134,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm127.jpg
+B,leaflet,complex,8,NC,tw_2e8554969a97,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm13.jpg
+B,leaflet,complex,9,OK,tw_42aa34285931,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm136.jpg
+B,leaflet,complex,10,OK,tw_8b1f48578631,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm53.jpg
+B,leaflet,complex,11,OK,tw_a0a470aed295,data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm156.JPG
+B,leaflet,complex,12,OK,tw_d147bb1d1938,data/raw/taiwan/Preprocessed data/Train/Gray spot/Gls50.JPG
+B,leaflet,complex,13,OK,tw_b9283d9afd08,data/raw/taiwan/Preprocessed data/Train/health/h8.jpg
+B,leaflet,complex,14,OK,tw_c066ee2faea3,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb8.JPG
+B,leaflet,complex,15,OK,tw_0d5e582ff748,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs109.JPG
+B,leaflet,complex,16,OK,tw_4ff754a5f591,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb82.JPG
+B,leaflet,simple,1,NC,tw_ccc3dcd88546,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm6.jpg
+B,leaflet,simple,2,FN,tw_d91a9722b6f7,data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs34.JPG
+B,leaflet,simple,3,FN,tw_071ccea262d2,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs33.JPG
+B,leaflet,simple,4,FN,tw_0ddface74d16,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm38.JPG
+B,leaflet,simple,5,NC,tw_e96cdc075a27,data/raw/taiwan/Preprocessed data/Test/Black mold/Blm23.jpg
+B,leaflet,simple,6,NC,tw_020aa44ffc96,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs44.JPG
+B,leaflet,simple,7,FN,tw_ee5e6dbbcab6,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm40.JPG
+B,leaflet,simple,8,NC,tw_4b033f0ae120,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm28.jpg
+B,leaflet,simple,9,OK,tw_6323c1fdd9a5,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs62.JPG
+B,leaflet,simple,10,OK,tw_c597c9e34578,data/raw/taiwan/Preprocessed data/Test/Bacterial spot/Bs31.JPG
+B,leaflet,simple,11,OK,tw_b08c54784606,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs41.JPG
+B,leaflet,simple,12,OK,tw_b3f57b677550,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs67.JPG
+B,leaflet,simple,13,OK,tw_f9e397a70123,data/raw/taiwan/Preprocessed data/Test/Late blight/Lb56.JPG
+B,leaflet,simple,14,OK,tw_4b4ac3322fa9,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs55.JPG
+B,leaflet,simple,15,OK,tw_f05ac3e48d2c,data/raw/taiwan/Preprocessed data/Test/Black mold/Blm39.JPG
+B,leaflet,simple,16,OK,tw_e19168a04d22,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm59.JPG
+B,multiple,complex,1,NC,tw_0d9b4086fdf3,data/raw/taiwan/Preprocessed data/Train/health/h60.jpg
+B,multiple,complex,2,NC,tw_394f083a1c53,data/raw/taiwan/Preprocessed data/Test/health/h37.jpg
+B,multiple,complex,3,NC,tw_82da506eb102,data/raw/taiwan/Preprocessed data/Train/health/h62.jpg
+B,multiple,complex,4,NC,tw_6ef766949f4c,data/raw/taiwan/Preprocessed data/Test/powdery mildew/pm64.JPG
+B,multiple,complex,5,NC,tw_28e216ace154,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb79.JPG
+B,multiple,complex,6,NC,tw_e408ec103d8f,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm5.JPG
+B,multiple,complex,7,FP,tw_b8c57887e0ca,data/raw/taiwan/Preprocessed data/Train/health/h83.jpg
+B,multiple,complex,8,NC,tw_0017e94b9588,data/raw/taiwan/Preprocessed data/Train/health/h33.jpg
+B,multiple,complex,9,OK,tw_ab233fe3328c,data/raw/taiwan/Preprocessed data/Train/Late blight/Lb13.JPG
+B,multiple,complex,10,OK,tw_c33fb2f7022c,data/raw/taiwan/Preprocessed data/Train/health/h13.jpg
+B,multiple,complex,11,OK,tw_ca1fa9144d2f,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm62.JPG
+B,multiple,simple,1,NC,tw_9565d3b01dd6,data/raw/taiwan/Preprocessed data/Train/Bacterial spot/Bs84.JPG
+B,multiple,simple,2,NC,tw_8b4aabe06248,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm17.jpg
+B,multiple,simple,3,NC,tw_5f98c24aaafa,data/raw/taiwan/Preprocessed data/Train/powdery mildew/pm72.JPG
+B,multiple,simple,4,NC,tw_82b38fe60264,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm2.jpg
+B,multiple,simple,5,NC,tw_4805f93394d8,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm35.JPG
+B,multiple,simple,6,NC,tw_5300fcac1336,data/raw/taiwan/Preprocessed data/Train/Black mold/Blm34.JPG

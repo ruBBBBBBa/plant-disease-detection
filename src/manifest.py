@@ -138,6 +138,24 @@ def near_duplicate_pairs(hashes: list[str], threshold: int, chunk: int = 500) ->
     return np.concatenate(found) if found else np.empty((0, 3), dtype=int)
 
 
+def hamming_matrix(query: list[str], reference: list[str]) -> np.ndarray:
+    """Distancias de Hamming entre cada *hash* de ``query`` y cada uno de ``reference``."""
+    q = np.array([np.frombuffer(bytes.fromhex(h), dtype=np.uint8) for h in query])
+    r = np.array([np.frombuffer(bytes.fromhex(h), dtype=np.uint8) for h in reference])
+    return _POPCOUNT[q[:, None, :] ^ r[None, :, :]].sum(axis=2, dtype=np.int32)
+
+
+def cross_near_duplicates(query: list[str], reference: list[str], threshold: int) -> np.ndarray:
+    """Pares ``(i, j, distancia)``: ``query[i]`` a Hamming ``<= threshold`` de ``reference[j]``.
+
+    Igual que ``near_duplicate_pairs`` pero entre dos conjuntos (p. ej. un test externo frente a
+    PlantVillage), sin comparar cada conjunto consigo mismo.
+    """
+    dist = hamming_matrix(query, reference)
+    i, j = np.nonzero(dist <= threshold)
+    return np.column_stack([i, j, dist[i, j]])
+
+
 class UnionFind:
     """Estructura *union-find* (conjuntos disjuntos) para fusionar grupos."""
 
@@ -309,5 +327,5 @@ def check_leakage(manifest: pd.DataFrame, threshold: int) -> list[str]:
 
 def image_id(source: str, image_path: str) -> str:
     """Identificador estable: prefijo de fuente + 12 hex del SHA-1 de la ruta relativa."""
-    prefix = {"plantvillage": "pv", "plantdoc": "pd"}[source]
+    prefix = {"plantvillage": "pv", "plantdoc": "pd", "taiwan": "tw"}[source]
     return f"{prefix}_{hashlib.sha1(image_path.encode('utf-8')).hexdigest()[:12]}"
