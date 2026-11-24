@@ -1,6 +1,6 @@
 # T08 — Segundo test externo: dataset de hojas de tomate de Taiwán
 
-- **Estado:** En revisión
+- **Estado:** Hecha (PR #9)
 - **Rama:** `t08-taiwan-external`
 - **Depende de:** T06 (`eval_external.py`, criterio de «no concluyente», variantes A/B y límite de
   validez D035) y T07 (resultado de las fotos propias, D044, del que sale la hipótesis H9)
@@ -203,8 +203,11 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
     cobertura. No es evidencia independiente de buena clasificación.
   - **Limitación principal de T08:** ninguna sana tiene fondo `simple`, así que la especificidad en la
     condición válida (`leaflet + simple`) no se ha podido medir.
-  - **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26):
-    el mismo sesgo hacia «enferma» que en T07.
+  - **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26);
+    el sesgo de T07 se repite, pero depende de la condición: en `leaflet + simple`, B clasifica como
+    sanas 41 de 124 enfermas concluyentes; con fondo complejo, casi todas las sanas salen enfermas
+    (23 de 26 sanas concluyentes). Lectura descriptiva (la mezcla de enfermedades cambia entre
+    condiciones): las decisiones siguen las condiciones de captura más que los síntomas.
   - **H9:** no concluyente, con punto estimado negativo. Gray world con los umbrales de T04 no corrige
     el sesgo.
   - **Autoría de la anotación:** las etiquetas de `data/annotations/taiwan_conditions.csv` son de
@@ -212,9 +215,9 @@ datasets encontrados (Bangladesh, Pakistán), que quedan como trabajo futuro.
 - **Enfermedades no vistas:** recall de B «todas» / «solo concluyentes»: black mold 0,358 / 0,706,
   gray spot 0,262 / 0,786, powdery mildew 0,191 / 0,698; parecido a las vistas, pero con sanas casi
   siempre llamadas enfermas no indica que se reconozcan.
-- **Decisiones tomadas durante la tarea:** D050 (exploratorio a posteriori de T07), D051 (manifiesto y casi-duplicados), D052 (B′ y su limitación), D053 (anotación ciega a la clase), D054 (H7/H8 solo con enfermas), D055 (protocolo congelado de la fase B).
-- **Pendientes:** las dos decisiones del alumno de arriba (redacción del límite de validez y trabajo
-  futuro). Fuera de alcance y sin hacer: reajustar umbrales para color normalizado; segmentación
+- **Decisiones tomadas durante la tarea:** D050 (exploratorio a posteriori de T07), D051 (manifiesto y casi-duplicados), D052 (B′ y su limitación), D053 (anotación ciega a la clase), D054 (H7/H8 solo con enfermas), D055 (protocolo congelado de la fase B), D056 (límite de validez) y D057 (trabajo futuro), decididas por el alumno al cerrar.
+- **Pendientes:** ninguno de T08; las dos decisiones del alumno quedan registradas en D056 (límite
+  de validez) y D057 (trabajo futuro). Fuera de alcance y sin hacer: reajustar umbrales para color normalizado; segmentación
   para fondos complejos o negros; ROI manual.
 
 

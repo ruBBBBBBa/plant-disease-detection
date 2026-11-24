@@ -29,8 +29,11 @@ Tablas completas en [`tables.md`](tables.md). Lo esencial:
   máscara fuera de los rangos de PlantVillage (motivos solapables: área de hoja 282, contacto con el
   borde 142, solidez 119). B y B′ tienen la misma cobertura porque comparten máscara.
 - Incluso entre las concluyentes, la BA de las tres variantes está **por debajo de 0,5**: de las 26
-  sanas concluyentes, B solo acierta 3 (recall de sanas 0,115). Es el mismo patrón que en T07: casi
-  todo lo sano se llama «enfermo».
+  sanas concluyentes, B solo acierta 3 (recall de sanas 0,115). Matiz:
+  El sesgo de T07 se repite, pero depende de la condición: en `leaflet + simple`, B clasifica como
+  sanas 41 de 124 enfermas concluyentes; con fondo complejo, casi todas las sanas salen enfermas (23
+  de 26 sanas concluyentes). Lectura descriptiva (la mezcla de enfermedades cambia entre
+  condiciones): las decisiones siguen las condiciones de captura más que los síntomas.
 - BA de `val` en PlantVillage (referencia): A 0,959, B 0,946, B′ 0,963.
 
 ## Por condición `leaves × background` (ambas lecturas)
@@ -104,8 +107,11 @@ Matices, sin cambiar los veredictos:
   cobertura. No es evidencia independiente de buena clasificación.
 - **Limitación principal de T08:** ninguna sana tiene fondo `simple`, así que la especificidad en la
   condición válida (`leaflet + simple`) no se ha podido medir.
-- **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26):
-  el mismo sesgo hacia «enferma» que en T07.
+- **B en «solo concluyentes» (BA 0,414) está por debajo del azar** por el recall de sanas (3/26);
+  el sesgo de T07 se repite, pero depende de la condición: en `leaflet + simple`, B clasifica como
+  sanas 41 de 124 enfermas concluyentes; con fondo complejo, casi todas las sanas salen enfermas (23
+  de 26 sanas concluyentes). Lectura descriptiva (la mezcla de enfermedades cambia entre
+  condiciones): las decisiones siguen las condiciones de captura más que los síntomas.
 - **H9:** no concluyente, con punto estimado negativo. Gray world con los umbrales de T04 no corrige
   el sesgo.
 - **Autoría de la anotación:** las etiquetas de `data/annotations/taiwan_conditions.csv` son de

@@ -129,3 +129,5 @@ BA de val de PlantVillage (referencia): A 0.959, B 0.946, B_prime 0.963.
 
 Motivos de «no concluyente» (imágenes de 622; pueden solaparse): mask_empty 15, leaf_area_frac 282, border_touch_frac 142, mask_solidity 119, cualquiera 398.
 
+Nota: en la lectura «todas», la casilla FN de las matrices incluye las enfermas no concluyentes, y la FP, las sanas no concluyentes (cuentan como error); en la lectura «solo concluyentes», no.
+

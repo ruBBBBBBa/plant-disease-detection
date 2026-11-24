@@ -373,6 +373,12 @@ def main(argv: list[str] | None = None) -> int:
         lines += [f"Motivos de «no concluyente» (imágenes de {len(feats)}; pueden solaparse): "]
         lines[-1] += ", ".join(f"{k} {v}" for k, v in why.items()) + "."
         lines += [""]
+    lines += [
+        "Nota: en la lectura «todas», la casilla FN de las matrices incluye las enfermas no "
+        "concluyentes, y la FP, las sanas no concluyentes "
+        "(cuentan como error); en la lectura «solo concluyentes», no.",
+        "",
+    ]
     (args.out_dir / "tables.md").write_text("\n".join(lines) + "\n")
     (args.out_dir / "metrics.json").write_text(json.dumps(result, indent=2, default=float) + "\n")
     print("\n".join(lines))
